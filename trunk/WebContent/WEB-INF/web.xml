@@ -5,7 +5,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
 	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	
-	<display-name>CookieCloaker</display-name>
+	<display-name>gwt-ftp-browser</display-name>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
@@ -17,7 +17,7 @@
 	
 	<filter>
 		<filter-name>all</filter-name>
-		<filter-class>com.cookiecloaker.server.dev.RequestProxy</filter-class>
+		<filter-class>com.jonosoft.ftpbrowser.server.dev.RequestProxy</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>all</filter-name>
