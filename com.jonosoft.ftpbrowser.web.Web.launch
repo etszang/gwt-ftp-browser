@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launchConfiguration type="com.googlipse.gwt.gwtLaunchConfigurationType">
+<intAttribute key="com.googlipse.gwt.launchAttrStyle" value="2"/>
+<booleanAttribute key="com.googlipse.gwt.launchAttrUseDefaultUrl" value="false"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.jonosoft.ftpbrowser.web.Web"/>
+<booleanAttribute key="com.googlipse.gwt.launchAttrHeadless" value="false"/>
+<stringAttribute key="com.googlipse.gwt.launchAttrPort" value="8888"/>
+<stringAttribute key="com.googlipse.gwt.launchAttrUrl" value="http://localhost:8080/gwt-ftp-browser/Web.html"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="4"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="gwt-ftp-browser"/>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
+</listAttribute>
+<intAttribute key="com.googlipse.gwt.launchAttrLogLevel" value="2"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/gwt-ftp-browser"/>
+</listAttribute>
+<booleanAttribute key="com.googlipse.gwt.launchAttrUseEmbeddedServer" value="false"/>
+</launchConfiguration>
