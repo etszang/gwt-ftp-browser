@@ -103,9 +103,11 @@ public class FTPConnection {
 		public void onCompletion(String responseText) {
 			JSONResponse jsonResponse = JSONResponse.newInstance(responseText);
 			JSONArray dirs = (JSONArray) jsonResponse.getResult().get("dirs");
-			
-			if (this.callback != null)
+			JSONArray files = (JSONArray) jsonResponse.getResult().get("files");
+			if (this.callback != null){
 				this.callback.onSuccess(getListFromJSONArrayOfJSONStrings(dirs));
+				this.callback.onSuccess(getListFromJSONArrayOfJSONStrings(files));
+			}
 		}
 	}
 	
