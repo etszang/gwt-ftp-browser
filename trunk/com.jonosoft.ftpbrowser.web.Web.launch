@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launchConfiguration type="com.googlipse.gwt.gwtLaunchConfigurationType">
-<intAttribute key="com.googlipse.gwt.launchAttrStyle" value="2"/>
+<intAttribute key="com.googlipse.gwt.launchAttrStyle" value="0"/>
 <booleanAttribute key="com.googlipse.gwt.launchAttrUseDefaultUrl" value="false"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.jonosoft.ftpbrowser.web.Web"/>
 <booleanAttribute key="com.googlipse.gwt.launchAttrHeadless" value="false"/>

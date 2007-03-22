@@ -18,6 +18,7 @@ public class FTPBrowser extends Composite {
 	
 	public FTPBrowser() {
 		initWidget(panel);
+		new FTPDirectoryBrowser();
 	}
 	
 	private class FTPDirectoryBrowser extends Composite implements ClickListener {
