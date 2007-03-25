@@ -8,18 +8,19 @@ import com.google.gwt.user.client.ui.*;
 
 /**
  * @author Jkelling
- *
+ * 
  */
 public class FTPTree extends Composite implements TreeListener {
-	private final Tree ftpTree = new Tree(); 
+	private final Tree ftpTree = new Tree();
 	private final VerticalPanel myPan = new VerticalPanel();
 	private final Tree tempTree = new Tree();
 	private FTPConnection ftpConnection = null;
-	//private String fileExtension[];
+	// private String fileExtension[];
 	private ArrayList myList;
+
 	public FTPTree() {
 		initWidget(ftpTree);
-		
+
 		ftpConnection = new FTPConnection();
 		ftpConnection.setServer("cookiecloaker.com");
 		ftpConnection.setPort(21);
@@ -32,73 +33,76 @@ public class FTPTree extends Composite implements TreeListener {
 		rootItem.setState(true);
 		ftpConnection.getList(rootItem.getPath(), new FTPGetDirectoryContentsResponseHandler(rootItem));
 		rootItem.setData();
-			
+
 	}
-	
+
 	public void setRootPath() {
 		ftpTree.addTreeListener(this);
 	}
-	public void extenList(ArrayList iList){
+
+	public void extenList(ArrayList iList) {
 		myList = iList;
 	}
+
 	public void onTreeItemSelected(TreeItem item) {
 		final FTPTreeItem ftpItem = (FTPTreeItem) item;
-		if( ftpItem.hasData()==false ){
+		if (ftpItem.hasData() == false) {
 			ftpConnection.getList(ftpItem.getPath(), new FTPGetDirectoryContentsResponseHandler(ftpItem));
 			ftpItem.setData();
 		}
-		if(myPan != null){
+		if (myPan != null) {
 			myPan.clear();
 		}
-		for(int i = 0; i<ftpItem.getChildCount();i++){
+		for (int i = 0; i < ftpItem.getChildCount(); i++) {
 			String[] test = (ftpItem.getChild(i).getText().split("\\."));
-			if(test.length>1){
+			if (test.length > 1) {
 				System.out.println(myList);
-				if(myList.contains(test[1])){
+				if (myList.contains(test[1])) {
 					CheckBox temp = new CheckBox(ftpItem.getChild(i).getText());
 					temp.setVisible(true);
 					myPan.add(temp);
-				}
-				else{
+				} else {
 					CheckBox temp = new CheckBox(ftpItem.getChild(i).getText());
 					temp.setVisible(false);
 					myPan.add(temp);
 				}
-			}
-			else{
+			} else {
 				CheckBox temp = new CheckBox(ftpItem.getChild(i).getText());
 				temp.setVisible(true);
 				myPan.add(temp);
 			}
 		}
 	}
-	public VerticalPanel myPanel(){
+
+	public VerticalPanel myPanel() {
 		return myPan;
 	}
+
 	public void onTreeItemStateChanged(TreeItem item) {
 		if (item instanceof FTPTreeItem) {
-			//onFTPTreeItemStateChanged((FTPTreeItem) item);
+			// onFTPTreeItemStateChanged((FTPTreeItem) item);
 		}
 	}
-	
+
 	private void onFTPTreeItemStateChanged(FTPTreeItem item) {
 		if (item.getState()) {
-			//ftpConnection.getList(item.getPath(), new FTPGetDirectoryContentsResponseHandler(item));
+			// ftpConnection.getList(item.getPath(), new
+			// FTPGetDirectoryContentsResponseHandler(item));
 		}
 	}
-	
-	protected class FTPGetDirectoryContentsResponseHandler implements FTPAsyncCallback {
+
+	protected class FTPGetDirectoryContentsResponseHandler implements
+			FTPAsyncCallback {
 		private FTPTreeItem parentTreeItem = null;
-		
+
 		public FTPGetDirectoryContentsResponseHandler(FTPTreeItem parentTreeItem) {
 			this.parentTreeItem = parentTreeItem;
 		}
-		
+
 		public void onFailure(Throwable caught) {
 			try {
 				throw caught;
-			}
-			catch (Throwable ignoredException) {
+			} catch (Throwable ignoredException) {
 			}
 		}
 
@@ -109,21 +113,19 @@ public class FTPTree extends Composite implements TreeListener {
 				final Iterator i = ar.iterator();
 				while (i.hasNext()) {
 					String dir = (String) i.next();
-					if(!dir.equals(".") && !dir.equals("..") ){
-						 String[] test = dir.split ("\\.");
-						 if(test.length > 1){
-							 ftpTreeItem = new FTPTreeItem(dir);
-							 System.out.println();
-						 }
-						 else{
-							 ftpTreeItem = new FTPTreeItem(dir, parentTreeItem);
-						 }
-							parentTreeItem.addItem(ftpTreeItem);
+					if (!dir.equals(".") && !dir.equals("..")) {
+						String[] test = dir.split("\\.");
+						if (test.length > 1) {
+							ftpTreeItem = new FTPTreeItem(dir);
+							System.out.println();
+						} else {
+							ftpTreeItem = new FTPTreeItem(dir, parentTreeItem);
 						}
+						parentTreeItem.addItem(ftpTreeItem);
+					}
 				}
-				}
-			else{
-			
+			} else {
+
 			}
 		}
 	}
