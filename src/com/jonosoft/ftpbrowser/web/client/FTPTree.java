@@ -26,12 +26,17 @@ public class FTPTree extends Composite implements TreeListener {
 		ftpConnection.setPort(21);
 		ftpConnection.setUsername("u39984585-cookies");
 		ftpConnection.setPassword("haberman");
+		
 		ftpTree.addTreeListener(this);
 		tempTree.addTreeListener(this);
+		
 		FTPTreeItem rootItem = new FTPTreeItem("/");
-		ftpTree.addItem(rootItem);
 		rootItem.setState(true);
+		
+		ftpTree.addItem(rootItem);
+		
 		ftpConnection.getList(rootItem.getPath(), new FTPGetDirectoryContentsResponseHandler(rootItem));
+		
 		rootItem.setData();
 
 	}
