@@ -127,6 +127,20 @@ function phpftp_list($phpftp_user,$phpftp_passwd,$phpftp_dir) {
 	}
 }
 
+function phpftp_get($phpftp_user,$phpftp_passwd,$phpftp_dir,$select_file) {
+	global $phpftp_host;
+	
+	$ftp = @phpftp_connect($phpftp_user,$phpftp_passwd);
+	
+	if (!$ftp) {
+		// FTP Login failed!
+	} else {
+		
+		
+		ftp_quit($ftp);
+	}
+}
+
 function getJSONResult($result) {
 	return json_encode(array("result" => $result));
 }
