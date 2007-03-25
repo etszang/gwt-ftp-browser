@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.HTTPRequest;
 import com.google.gwt.user.client.ResponseTextHandler;
@@ -16,10 +17,31 @@ import com.google.gwt.user.client.ResponseTextHandler;
  *
  */
 public class FTPConnection {
+	private int ftpSiteId;
 	private String server = null;
 	private int port = 21;
 	private String username = null;
 	private String password = null;
+	
+	public static FTPConnection getInstance(JSONObject jsonObject) {
+		FTPConnection conn = new FTPConnection();
+		
+		conn.setFtpSiteId(Integer.parseInt(((JSONString) jsonObject.get("ftp_site_id")).stringValue()));
+		conn.setServer(((JSONString) jsonObject.get("host")).stringValue());
+		conn.setPort(Integer.parseInt(((JSONString) jsonObject.get("port")).stringValue()));
+		conn.setUsername(((JSONString) jsonObject.get("username")).stringValue());
+		conn.setPassword(((JSONString) jsonObject.get("password")).stringValue());
+
+		return conn;
+	}
+	
+	public int getFtpSiteId() {
+		return ftpSiteId;
+	}
+	
+	public void setFtpSiteId(int ftpSiteId) {
+		this.ftpSiteId = ftpSiteId;
+	}
 	
 	public String getPassword() {
 		return password;
