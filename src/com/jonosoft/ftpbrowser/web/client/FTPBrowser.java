@@ -28,9 +28,12 @@ public class FTPBrowser extends Composite {
 		private final Button openDirectoryButton = new Button("Open selection");
 		private final SelectionChangedListenerCollection listenerCollection = new SelectionChangedListenerCollection();
 		
+		private final FTPConnectionsMenuBar ftpConnectionsMenuBar = new FTPConnectionsMenuBar();
+		
 		public FTPDirectoryBrowser() {
 			initWidget(directoryBrowserPanel);
 			
+			directoryBrowserPanel.add(ftpConnectionsMenuBar);
 			directoryBrowserPanel.add(parentLevelButton);
 			directoryBrowserPanel.add(directoryListPanel);
 			directoryBrowserPanel.add(openDirectoryButton);

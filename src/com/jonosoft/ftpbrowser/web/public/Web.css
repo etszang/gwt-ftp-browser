@@ -1,0 +1,36 @@
+body,td,a,div,.p {
+	font-family: arial, sans-serif;
+	font-size: 73%;
+}
+
+div,td {
+	color: #000000;
+}
+
+a:link,.w,.w a:link {
+	color: #0000cc;
+}
+
+a:visited {
+	color: #551a8b;
+}
+
+a:active {
+	color: #ff0000;
+}
+
+.ftpconnections-menubar {
+	width: 200px;
+	cursor: pointer;
+}
+
+.ftpconnections-menuitem {
+}
+
+.ftpconnections-submenubar {
+	background-color: #e2e2e2;
+	border-width: 1px;
+	border-color: black;
+	border-style: solid;
+	cursor: pointer;
+}

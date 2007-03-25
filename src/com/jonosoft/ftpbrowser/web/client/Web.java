@@ -13,20 +13,23 @@ import com.google.gwt.user.client.ui.*;
  */
 public class Web implements EntryPoint {
 	private final HorizontalPanel directoryBrowserPanel = new HorizontalPanel();
-	/* (non-Javadoc)
-	 * @see com.google.gwt.core.client.EntryPoint#onModuleLoad()
-	 */
 	private final FTPTree myTree = new FTPTree();
 	private final TextBox tb = new TextBox();
 	private final Label myLabel = new Label();
-    private CheckFile myCheck ;
+    //private CheckFile myCheck ;
 	
+	/* (non-Javadoc)
+	 * @see com.google.gwt.core.client.EntryPoint#onModuleLoad()
+	 */
 	public void onModuleLoad() {
 	
-	
-		myCheck = new CheckFile(myTree.myPanel());
+		/*
+		 * Commented out the following 3/24/07 because I didn't have the CheckFile class
+		 */
+		/*myCheck = new CheckFile(myTree.myPanel());
 		myTree.extenList(myCheck.getList());
-		directoryBrowserPanel.add(myCheck);
+		directoryBrowserPanel.add(myCheck);*/
+		directoryBrowserPanel.add(new FTPConnectionsMenuBar());
 		 directoryBrowserPanel.add(myTree);
 		 directoryBrowserPanel.add(myTree.myPanel());
 		 directoryBrowserPanel.setBorderWidth(10);
