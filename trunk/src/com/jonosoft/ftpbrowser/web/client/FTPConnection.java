@@ -107,10 +107,12 @@ public class FTPConnection {
 		return sb.toString();
 	}
 	
-	private static List getListFromJSONArrayOfJSONStrings(JSONArray jsonArray) {
+	private static List getListFromJSONArrayOfJSONStrings(JSONArray jsonArray, String type) {
 		final List ar = new ArrayList();
+		String name = null;
 		for (int i = 0; i < jsonArray.size(); i++) {
-			ar.add(((JSONString) jsonArray.get(i)).stringValue());
+			name = ((JSONString) jsonArray.get(i)).stringValue();
+			ar.add(new FTPFileItem(name, type));
 		}
 		return ar;
 	}
@@ -127,8 +129,8 @@ public class FTPConnection {
 			JSONArray dirs = (JSONArray) jsonResponse.getResult().get("dirs");
 			JSONArray files = (JSONArray) jsonResponse.getResult().get("files");
 			if (this.callback != null){
-				this.callback.onSuccess(getListFromJSONArrayOfJSONStrings(dirs));
-				this.callback.onSuccess(getListFromJSONArrayOfJSONStrings(files));
+				this.callback.onSuccess(getListFromJSONArrayOfJSONStrings(dirs, "d"));
+				this.callback.onSuccess(getListFromJSONArrayOfJSONStrings(files, "f"));
 			}
 		}
 	}
