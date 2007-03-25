@@ -108,20 +108,25 @@ public class FTPTree extends Composite implements TreeListener {
 
 		public void onSuccess(Object result) {
 			FTPTreeItem ftpTreeItem = null;
+			
 			if (result instanceof List) {
 				final List ar = (List) result;
 				final Iterator i = ar.iterator();
+				
 				while (i.hasNext()) {
-					String dir = (String) i.next();
-					if (!dir.equals(".") && !dir.equals("..")) {
-						String[] test = dir.split("\\.");
-						if (test.length > 1) {
-							ftpTreeItem = new FTPTreeItem(dir);
-							System.out.println();
-						} else {
-							ftpTreeItem = new FTPTreeItem(dir, parentTreeItem);
+					FTPFileItem ftpFileItem = (FTPFileItem) i.next();
+					
+					if (ftpFileItem.getType().equals("d")) {
+						if (!ftpFileItem.getName().equals(".") && !ftpFileItem.getName().equals("..")) {
+							String[] test = ftpFileItem.getName().split("\\.");
+							if (test.length > 1) {
+								ftpTreeItem = new FTPTreeItem(ftpFileItem.getName());
+								System.out.println();
+							} else {
+								ftpTreeItem = new FTPTreeItem(ftpFileItem.getName(), parentTreeItem);
+							}
+							parentTreeItem.addItem(ftpTreeItem);
 						}
-						parentTreeItem.addItem(ftpTreeItem);
 					}
 				}
 			} else {
