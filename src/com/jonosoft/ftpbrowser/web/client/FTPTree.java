@@ -20,8 +20,8 @@ public class FTPTree extends Composite implements TreeListener {
 
 	public FTPTree() {
 		initWidget(ftpTree);
-
-		ftpConnection = new FTPConnection();
+		
+		FTPConnection ftpConnection = new FTPConnection();
 		ftpConnection.setServer("cookiecloaker.com");
 		ftpConnection.setPort(21);
 		ftpConnection.setUsername("u39984585-cookies");
@@ -30,6 +30,13 @@ public class FTPTree extends Composite implements TreeListener {
 		ftpTree.addTreeListener(this);
 		tempTree.addTreeListener(this);
 		
+		setFTPConnection(ftpConnection);
+	}
+	
+	public void setFTPConnection(FTPConnection ftpConnection) {
+		this.ftpConnection = ftpConnection;
+		ftpTree.clear();
+
 		FTPTreeItem rootItem = new FTPTreeItem("/");
 		rootItem.setState(true);
 		
@@ -38,7 +45,6 @@ public class FTPTree extends Composite implements TreeListener {
 		ftpConnection.getList(rootItem.getPath(), new FTPGetDirectoryContentsResponseHandler(rootItem));
 		
 		rootItem.setData();
-
 	}
 
 	public void setRootPath() {
