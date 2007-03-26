@@ -38,7 +38,7 @@ public class FTPTree extends Composite implements TreeListener {
 		ftpTree.clear();
 
 		FTPTreeItem rootItem = new FTPTreeItem("/");
-		rootItem.setState(true);
+		//rootItem.setState(true);
 		
 		ftpTree.addItem(rootItem);
 		
@@ -91,14 +91,18 @@ public class FTPTree extends Composite implements TreeListener {
 
 	public void onTreeItemStateChanged(TreeItem item) {
 		if (item instanceof FTPTreeItem) {
-			// onFTPTreeItemStateChanged((FTPTreeItem) item);
+			onFTPTreeItemStateChanged((FTPTreeItem) item);
 		}
 	}
 
 	private void onFTPTreeItemStateChanged(FTPTreeItem item) {
-		if (item.getState()) {
-			// ftpConnection.getList(item.getPath(), new
-			// FTPGetDirectoryContentsResponseHandler(item));
+		if (item.getState() && ! item.hasData() && item.getNeedsToLoad()) {
+			// if item.getNeedsToLoad() is true, then there should be a temporary child
+			// TreeItem that needs to be removed, but it's safe to remove them all anyway
+			//item.removeItems();
+			ftpConnection.getList(item.getPath(), new FTPGetDirectoryContentsResponseHandler(item));
+			item.setData();
+			item.setNeedsToLoad(false);
 		}
 	}
 
@@ -123,6 +127,8 @@ public class FTPTree extends Composite implements TreeListener {
 			if (result instanceof List) {
 				final List ar = (List) result;
 				final Iterator i = ar.iterator();
+				
+				parentTreeItem.removeItems();
 				
 				while (i.hasNext()) {
 					FTPFileItem ftpFileItem = (FTPFileItem) i.next();
