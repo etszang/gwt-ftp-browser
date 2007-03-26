@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.*;
  */
 public class Web implements EntryPoint {
 	private final HorizontalPanel directoryBrowserPanel = new HorizontalPanel();
-	private final FTPTree myTree = new FTPTree();
+	private static final FTPTree myTree = new FTPTree();
 	private final TextBox tb = new TextBox();
 	private final Label myLabel = new Label();
     //private CheckFile myCheck ;
@@ -41,6 +41,10 @@ public class Web implements EntryPoint {
 		 
 
 		
+	}
+	
+	public static FTPTree getFTPTree() {
+		return myTree;
 	}
 
 }
