@@ -1,7 +1,5 @@
 package com.jonosoft.ftpbrowser.web.client;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.TreeItem;
 
 public class FTPTreeItem extends TreeItem {
