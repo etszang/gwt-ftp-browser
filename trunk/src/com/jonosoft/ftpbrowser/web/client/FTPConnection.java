@@ -129,8 +129,9 @@ public class FTPConnection {
 			JSONArray dirs = (JSONArray) jsonResponse.getResult().get("dirs");
 			JSONArray files = (JSONArray) jsonResponse.getResult().get("files");
 			if (this.callback != null){
-				this.callback.onSuccess(getListFromJSONArrayOfJSONStrings(dirs, "d"));
-				this.callback.onSuccess(getListFromJSONArrayOfJSONStrings(files, "f"));
+				List items = getListFromJSONArrayOfJSONStrings(dirs, "d");
+				items.addAll(getListFromJSONArrayOfJSONStrings(files, "f"));
+				this.callback.onSuccess(items);
 			}
 		}
 	}
