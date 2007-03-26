@@ -61,9 +61,7 @@ public class FTPConnectionsMenuBar extends Composite {
 			
 			addItem("Connect", new Command() {
 				public void execute() {
-					// TODO Auto-generated method stub
-					// Clear tree and set to use new connection
-					Window.alert("TODO: Clear tree and set to use new connection. " + ftpConnection.getServer());
+					Web.getFTPTree().setFTPConnection(ftpConnection);
 				}
 			});
 			
