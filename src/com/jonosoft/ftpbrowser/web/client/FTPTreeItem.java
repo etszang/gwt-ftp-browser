@@ -24,7 +24,10 @@ public class FTPTreeItem extends TreeItem {
 
 	public FTPTreeItem(String path, FTPTreeItem parent) {
 		// TODO Should strip "/" from the end of parent.getPath() if it exists
-		setPath(parent.getPath() + "/" + path);
+		if (parent.getPath().endsWith("/"))
+			setPath(parent.getPath() + path);
+		else
+			setPath(parent.getPath() + "/" + path);
 		setText(path);
 	}
 
