@@ -29,15 +29,14 @@ public class Web implements EntryPoint {
 		/*myCheck = new CheckFile(myTree.myPanel());
 		myTree.extenList(myCheck.getList());
 		directoryBrowserPanel.add(myCheck);*/
-		directoryBrowserPanel.add(new FTPConnectionsMenuBar());
-		 directoryBrowserPanel.add(myTree);
-		 directoryBrowserPanel.add(myTree.myPanel());
-		 directoryBrowserPanel.setBorderWidth(10);
-		 
-		 
 		
-		 RootPanel.get().add(new FTPBrowser());
-		 RootPanel.get().add(directoryBrowserPanel);
+		directoryBrowserPanel.add(new FTPConnectionsMenuBar());
+		directoryBrowserPanel.add(myTree);
+		directoryBrowserPanel.add(myTree.myPanel());
+		directoryBrowserPanel.setBorderWidth(10);
+		RootPanel.get().add(new FTPBrowser());
+	//	
+		RootPanel.get().add(directoryBrowserPanel);
 		 
 
 		

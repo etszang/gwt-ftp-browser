@@ -26,7 +26,12 @@ public class FTPConnectionSettingsPopupPanel extends PopupOverlayPanel {
 	public void addFTPConnectionSettingsListener(FTPConnectionSettingsListener listener) {
 		formPanel.addFTPConnectionSettingsListener(listener);
 	}
-	
+	public void getSettings(FTPConnection conn){
+		formPanel.setFTPConnection(conn);
+	}
+	public void setSettings(FTPConnection conn){
+		formPanel.getFTPConnection(conn);
+	}
 	public void removeFTPConnectionSettingsListener(FTPConnectionSettingsListener listener) {
 		formPanel.removeFTPConnectionSettingsListener(listener);
 	}

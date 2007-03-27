@@ -17,21 +17,32 @@ import com.google.gwt.user.client.ui.MenuItem;
  * @author Jkelling
  *
  */
-public class FTPConnectionsMenuBar extends Composite {
+public class FTPConnectionsMenuBar extends Composite implements FTPConnectionSettingsListener   {
 	
 	private final MenuBar connectionsMenu = new MenuBar(true);
-	
+	private final FTPConnectionSettingsPopupPanel myFtp = new FTPConnectionSettingsPopupPanel(true);
+	private  FTPConnection myConnect;
 	public FTPConnectionsMenuBar() {
 		initWidget(connectionsMenu);
-		
 		connectionsMenu.setAutoOpen(true);
 		connectionsMenu.addStyleName("ftpconnections-menubar");
-		
+		myFtp.addFTPConnectionSettingsListener(this);
 		refreshListFromServer();
 	}
-	
+	public void onFTPConnectionSettingsSave(FTPConnection result){
+		
+		myConnect.setUsername(result.getUsername());
+		myConnect.setPort(result.getPort());
+		myConnect.setPassword(result.getPassword());
+		myConnect.setServer(result.getServer());
+		myFtp.hide();
+	}
+	public void onFTPConnectionSettingsCancel(){
+		myFtp.hide();
+	}
 	private void refreshListFromServer() {
 		HTTPRequest.asyncGet(CookieCloaker.DEFAULT_INSTANCE.ftpConnectionListURL(), new ListBuilder());
+		//HTTPRequest.asyncGet(CookieCloaker.DEFAULT_INSTANCE.ftpConnectionListURL()+"FTPSiteDB::setUserId(this.com)", new Save());
 	}
 	
 	private class ListBuilder implements ResponseTextHandler {
@@ -62,6 +73,8 @@ public class FTPConnectionsMenuBar extends Composite {
 			addItem("Connect", new Command() {
 				public void execute() {
 					Web.getFTPTree().setFTPConnection(ftpConnection);
+					
+				//	new FTPConnectionSettingsPopupPanel(true).show();
 				}
 			});
 			
@@ -69,7 +82,10 @@ public class FTPConnectionsMenuBar extends Composite {
 				public void execute() {
 					// TODO Auto-generated method stub
 					// Settings window (at this time) doesn't work as an "edit" only a "new"
-					Window.alert("TODO: Settings window (at this time) doesn't work as an \"edit\" only a \"new\"");
+					myFtp.show();
+					myFtp.getSettings(ftpConnection);
+					myConnect = ftpConnection;
+					//Window.alert("TODO: Settings window (at this time) doesn't work as an \"edit\" only a \"new\"");
 				}
 			});
 			
@@ -77,6 +93,10 @@ public class FTPConnectionsMenuBar extends Composite {
 				public void execute() {
 					// TODO Auto-generated method stub
 					// Should add a new connection and automatically bring up settings window
+					connectionsMenu.addItem(new ConnectionMenuItem(ftpConnection));
+					myFtp.show();
+					myFtp.getSettings(ftpConnection);
+					myConnect = ftpConnection;
 					Window.alert("TODO: Should add a new connection (PHP) and automatically bring up settings window");
 				}
 			});
@@ -85,7 +105,9 @@ public class FTPConnectionsMenuBar extends Composite {
 				public void execute() {
 					// TODO Auto-generated method stub
 					// obviously should have a confirmation
-					Window.alert("TODO: Use PHP to delete. obviously should have a confirmation");
+					if(Window.confirm("Delete Ftp Connection?")){
+						
+					}
 				}
 			});
 		}

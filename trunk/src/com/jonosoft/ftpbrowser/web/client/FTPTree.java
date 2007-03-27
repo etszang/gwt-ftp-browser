@@ -20,7 +20,9 @@ public class FTPTree extends Composite implements TreeListener {
 
 	public FTPTree() {
 		initWidget(ftpTree);
-		
+		myList = new ArrayList();
+		myList.add("php");
+		myList.add("css");
 		FTPConnection ftpConnection = new FTPConnection();
 		ftpConnection.setServer("cookiecloaker.com");
 		ftpConnection.setPort(21);
@@ -65,6 +67,10 @@ public class FTPTree extends Composite implements TreeListener {
 			myPan.clear();
 		}
 		for (int i = 0; i < ftpItem.getChildCount(); i++) {
+			CheckBox temp = new CheckBox(ftpItem.getChild(i).getText());
+			temp.setVisible(true);
+			myPan.add(temp);
+			/*
 			String[] test = (ftpItem.getChild(i).getText().split("\\."));
 			if (test.length > 1) {
 				System.out.println(myList);
@@ -81,7 +87,7 @@ public class FTPTree extends Composite implements TreeListener {
 				CheckBox temp = new CheckBox(ftpItem.getChild(i).getText());
 				temp.setVisible(true);
 				myPan.add(temp);
-			}
+			}*/
 		}
 	}
 
@@ -133,7 +139,7 @@ public class FTPTree extends Composite implements TreeListener {
 				while (i.hasNext()) {
 					FTPFileItem ftpFileItem = (FTPFileItem) i.next();
 					
-					if (ftpFileItem.getType().equals("d")) {
+					//if (ftpFileItem.getType().equals("d")) {
 						if (!ftpFileItem.getName().equals(".") && !ftpFileItem.getName().equals("..")) {
 							String[] test = ftpFileItem.getName().split("\\.");
 							if (test.length > 1) {
@@ -145,7 +151,7 @@ public class FTPTree extends Composite implements TreeListener {
 							parentTreeItem.addItem(ftpTreeItem);
 						}
 					}
-				}
+				//}
 			} else {
 
 			}
