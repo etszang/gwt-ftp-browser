@@ -48,7 +48,12 @@ public class FTPConnectionSettingsFormPanel extends Composite implements ClickLi
 		
 		layoutPanel.add(buttonsPanel);
 	}
-	
+	public void setFTPConnection(FTPConnection conn){
+		fieldsGrid.setFTPConnection(conn);
+	}
+	public void getFTPConnection(FTPConnection conn){
+		fieldsGrid.getFTPConnection(conn);
+	}
 	public void addFTPConnectionSettingsListener(FTPConnectionSettingsListener listener) {
 		ftpConnectionSettingsListenerCollection.add(listener);
 	}
@@ -61,7 +66,9 @@ public class FTPConnectionSettingsFormPanel extends Composite implements ClickLi
 		for (Iterator it = ftpConnectionSettingsListenerCollection.iterator(); it.hasNext();) {
 			FTPConnectionSettingsListener listener = (FTPConnectionSettingsListener) it.next();
 			listener.onFTPConnectionSettingsSave(fieldsGrid.getFTPConnection());
+			
 		}
+		System.out.println("save");
 	}
 	
 	private void fireFTPConnectionSettingsCancel() {
@@ -75,9 +82,11 @@ public class FTPConnectionSettingsFormPanel extends Composite implements ClickLi
 		if (sender.equals(saveButton))
 		{
 			fireFTPConnectionSettingsSave();
+		//fieldsGrid.getFTPConnection();
 		}
 		else if (sender.equals(cancelButton))
 		{
+			//layoutPanel.setVisible(false);
 			fireFTPConnectionSettingsCancel();
 		}
 	}
@@ -108,7 +117,12 @@ public class FTPConnectionSettingsFormPanel extends Composite implements ClickLi
 			getFTPConnection(conn);
 			return conn;
 		}
-		
+		public void setFTPConnection(FTPConnection conn){
+		//host.setText(conn.getPort());
+			password.setText(conn.getPassword());
+			host.setText(conn.getServer());
+			username.setText(conn.getUsername());
+		}
 		public void getFTPConnection(FTPConnection conn) {
 			conn.setServer(host.getText());
 			conn.setPort(Integer.parseInt(port.getText()));
