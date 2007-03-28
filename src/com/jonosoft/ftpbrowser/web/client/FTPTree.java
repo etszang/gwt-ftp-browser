@@ -20,9 +20,13 @@ public class FTPTree extends Composite implements TreeListener {
 
 	public FTPTree() {
 		initWidget(ftpTree);
+		
+		addStyleName("gwt-ftptree");
+		
 		myList = new ArrayList();
 		myList.add("php");
 		myList.add("css");
+		
 		FTPConnection ftpConnection = new FTPConnection();
 		ftpConnection.setServer("cookiecloaker.com");
 		ftpConnection.setPort(21);
@@ -132,14 +136,25 @@ public class FTPTree extends Composite implements TreeListener {
 			
 			if (result instanceof List) {
 				final List ar = (List) result;
-				final Iterator i = ar.iterator();
+				final Iterator it = ar.iterator();
+				ItemSelectGrid selectGrid = Web.getFTPFileItemSelectGrid();
 				
 				parentTreeItem.removeItems();
+				selectGrid.clear();
+				selectGrid.resizeRows(1);
 				
-				while (i.hasNext()) {
-					FTPFileItem ftpFileItem = (FTPFileItem) i.next();
+				for (int i = 0; i < selectGrid.getRowCount(); i++) {
+					for (int h = 0; h < selectGrid.getColumnCount(); h++) {
+						selectGrid.clearCell(i, h);
+					}
+				}
+				
+				Web.getFTPFileItemSelectGrid().resizeRows(1);
+				
+				while (it.hasNext()) {
+					FTPFileItem ftpFileItem = (FTPFileItem) it.next();
 					
-					//if (ftpFileItem.getType().equals("d")) {
+					if (ftpFileItem.getType().equals("d")) {
 						if (!ftpFileItem.getName().equals(".") && !ftpFileItem.getName().equals("..")) {
 							String[] test = ftpFileItem.getName().split("\\.");
 							if (test.length > 1) {
@@ -151,9 +166,11 @@ public class FTPTree extends Composite implements TreeListener {
 							parentTreeItem.addItem(ftpTreeItem);
 						}
 					}
-				//}
+					else {
+						selectGrid.addItem((FTPFileItem) ftpFileItem);
+					}
+				}
 			} else {
-
 			}
 		}
 	}

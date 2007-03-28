@@ -33,6 +33,8 @@ public class FTPBrowser extends Composite {
 		public FTPDirectoryBrowser() {
 			initWidget(directoryBrowserPanel);
 			
+			addStyleName("gwt-ftpbrowser");
+			
 			directoryBrowserPanel.add(ftpConnectionsMenuBar);
 			directoryBrowserPanel.add(parentLevelButton);
 			directoryBrowserPanel.add(directoryListPanel);
