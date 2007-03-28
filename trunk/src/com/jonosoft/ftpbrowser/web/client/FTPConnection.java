@@ -6,6 +6,7 @@ package com.jonosoft.ftpbrowser.web.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
@@ -77,7 +78,7 @@ public class FTPConnection {
 	
 	public void getList(String path, FTPAsyncCallback callback) {
 		String params = getFTPAndURLQueryParamsAsString(this, path, "dir", null);
-		HTTPRequest.asyncGet(FTP.DEFAULT_INSTANCE.phpFtpJsonUrlBase()+params, new FTPResponseHandler(callback));
+		HTTPRequest.asyncGet(GWT.getModuleBaseURL()+FTP.DEFAULT_INSTANCE.phpFtpJsonUrlBase()+params, new FTPResponseHandler(callback));
 	}
 	
 	private static String getFTPAndURLQueryParamsAsString(FTPConnection conn, String path, String function, final String [] params) {
