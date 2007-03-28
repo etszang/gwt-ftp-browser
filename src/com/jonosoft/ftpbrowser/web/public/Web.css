@@ -34,3 +34,29 @@ a:active {
 	border-style: solid;
 	cursor: pointer;
 }
+
+.gwt-ftptree {
+	width: 350px;
+}
+
+.gwt-itemselectgrid {
+	cursor: pointer;
+}
+
+.ftp-itemselectgrid {
+	width: 150px;
+}
+
+.gwt-itemselectgrid-item-hover {
+	background-color: lightgray;
+}
+
+.gwt-itemselectgrid-item-selected {
+	background-color: highlight;
+	color: highlighttext;
+}
+
+.gwt-itemselectgrid-item-selected td {
+{
+	color: highlighttext;
+}
