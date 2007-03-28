@@ -3,6 +3,7 @@
  */
 package com.jonosoft.ftpbrowser.web.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.Command;
@@ -22,27 +23,32 @@ public class FTPConnectionsMenuBar extends Composite implements FTPConnectionSet
 	private final MenuBar connectionsMenu = new MenuBar(true);
 	private final FTPConnectionSettingsPopupPanel myFtp = new FTPConnectionSettingsPopupPanel(true);
 	private  FTPConnection myConnect;
+	
 	public FTPConnectionsMenuBar() {
 		initWidget(connectionsMenu);
+		
 		connectionsMenu.setAutoOpen(true);
 		connectionsMenu.addStyleName("ftpconnections-menubar");
+		
 		myFtp.addFTPConnectionSettingsListener(this);
+		
 		refreshListFromServer();
 	}
-	public void onFTPConnectionSettingsSave(FTPConnection result){
-		
+	
+	public void onFTPConnectionSettingsSave(FTPConnection result) {
 		myConnect.setUsername(result.getUsername());
 		myConnect.setPort(result.getPort());
 		myConnect.setPassword(result.getPassword());
 		myConnect.setServer(result.getServer());
 		myFtp.hide();
 	}
-	public void onFTPConnectionSettingsCancel(){
+	
+	public void onFTPConnectionSettingsCancel() {
 		myFtp.hide();
 	}
+	
 	private void refreshListFromServer() {
-		HTTPRequest.asyncGet(CookieCloaker.DEFAULT_INSTANCE.ftpConnectionListURL(), new ListBuilder());
-		//HTTPRequest.asyncGet(CookieCloaker.DEFAULT_INSTANCE.ftpConnectionListURL()+"FTPSiteDB::setUserId(this.com)", new Save());
+		HTTPRequest.asyncGet(GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.ftpConnectionListURL(), new ListBuilder());
 	}
 	
 	private class ListBuilder implements ResponseTextHandler {
@@ -73,8 +79,6 @@ public class FTPConnectionsMenuBar extends Composite implements FTPConnectionSet
 			addItem("Connect", new Command() {
 				public void execute() {
 					Web.getFTPTree().setFTPConnection(ftpConnection);
-					
-				//	new FTPConnectionSettingsPopupPanel(true).show();
 				}
 			});
 			
