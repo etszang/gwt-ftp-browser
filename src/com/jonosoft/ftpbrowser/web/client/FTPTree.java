@@ -141,15 +141,6 @@ public class FTPTree extends Composite implements TreeListener {
 				
 				parentTreeItem.removeItems();
 				selectGrid.clear();
-				selectGrid.resizeRows(1);
-				
-				for (int i = 0; i < selectGrid.getRowCount(); i++) {
-					for (int h = 0; h < selectGrid.getColumnCount(); h++) {
-						selectGrid.clearCell(i, h);
-					}
-				}
-				
-				Web.getFTPFileItemSelectGrid().resizeRows(1);
 				
 				while (it.hasNext()) {
 					FTPFileItem ftpFileItem = (FTPFileItem) it.next();
