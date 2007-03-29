@@ -15,8 +15,8 @@ import com.google.gwt.user.client.ui.PopupPanel;
  */
 public class PopupOverlayPanel extends PopupPanel {
 	
-	private static int	defaultOverlayOpacity			= 75;
-	private static String	defaultOverlayBackgroundColor	= "#999";
+	private static int	defaultOverlayOpacity			= 70;
+	private static String	defaultOverlayBackgroundColor	= "#e2e2e2";
 	
 	private final Element	overlayDiv	= DOM.createElement("div");
 	private int	overlayOpacity			= defaultOverlayOpacity;
