@@ -22,7 +22,7 @@ public class Web implements EntryPoint {
 	private final Label myLabel = new Label();
     //private CheckFile myCheck ;
 	
-	/* (non-Javadoc)
+	/**
 	 * @see com.google.gwt.core.client.EntryPoint#onModuleLoad()
 	 */
 	public void onModuleLoad() {
@@ -79,6 +79,12 @@ public class Web implements EntryPoint {
 
 		RootPanel.get().add(new FTPBrowser());
 		RootPanel.get().add(vertPanel);
+		
+		RootPanel.get().add(new Button("Clear", new ClickListener() {
+			public void onClick(Widget sender) {
+				selectGrid.clear();
+			}
+		}));
 	}
 	
 	public static FTPFileItemSelectGrid getFTPFileItemSelectGrid() {
@@ -93,7 +99,7 @@ public class Web implements EntryPoint {
 		public void onItemsSelectStateChanged(ItemSelectGrid sender, Collection items, boolean state) {
 			if (! state) {
 				for (Iterator it = items.iterator(); it.hasNext();)
-					savedItemGrid.removeItemAndRow((FTPFileItem) it.next());
+					savedItemGrid.removeItem((FTPFileItem) it.next());
 			}
 			else {
 				for (Iterator it = items.iterator(); it.hasNext();)
