@@ -336,7 +336,7 @@ public class ItemSelectGrid extends Grid {
 					public void onBrowserEvent(Event event) {
 						switch (DOM.eventGetType(event)) {
 						case Event.ONMOUSEOVER:
-							if (! isItemSelected(rowElement))
+							if (! isRowSelected(rowElement))
 								getRowFormatter().addStyleName(rowIndex, STYLE_NAME_PREFIX + "-item-hover");
 							break;
 	
@@ -355,7 +355,7 @@ public class ItemSelectGrid extends Grid {
 										// We don't need to change the state of the mouseDownRow
 										// since that was done on the ONMOUSEDOWN event, but we will
 										// use it's current state to determine the DragMode.
-										if (isItemSelected(mouseDownRow) || ! isMultipleSelect())
+										if (isRowSelected(mouseDownRow) || ! isMultipleSelect())
 											dragMode = DragMode.SELECT;
 										else
 											dragMode = DragMode.DESELECT;
@@ -396,7 +396,7 @@ public class ItemSelectGrid extends Grid {
 								dragMode = DragMode.OFF;
 								previousSelectedRows.clear();
 								previousSelectedRows.addAll(selectedRows);
-								setItemSelected(rowElement, ! isItemSelected(rowElement));
+								setItemSelected(rowElement, ! isRowSelected(rowElement));
 								// TODO: Save existing sunk events and event listener if they exist and restore on mouseup
 								DOM.sinkEvents(RootPanel.getBodyElement(), Event.ONMOUSEUP);
 								DOM.setEventListener(RootPanel.getBodyElement(), this);
