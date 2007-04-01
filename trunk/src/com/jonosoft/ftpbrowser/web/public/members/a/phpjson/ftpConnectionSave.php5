@@ -13,24 +13,28 @@ session_start();
 //
 if (!isset($_SESSION['ccuserid'])) { $_SESSION['ccuserid'] = 7; }
 
-$phpftp_host = $_REQUEST["server"];
-$phpftp_port = $_REQUEST["port"];
-$phpftp_user = $_REQUEST["username"];
-$phpftp_passwd = $_REQUEST["password"];
-$phpftp_function = $_REQUEST["Function"];
+$ftpSite = new FTPSite();
+
+$ftpSite->setUserId($_SESSION["ccuserid"]);
+$ftpSite->setFtpSiteId($_REQUEST["ftpSiteId"]);
+$ftpSite->setServer($_REQUEST["server"]);
+$ftpSite->setPort($_REQUEST["port"]);
+$ftpSite->setUsername($_REQUEST["username"]);
+$ftpSite->setPassword($_REQUEST["password"]);
 
 if (!$_SESSION['ccuserid']) {
 	echo getJSONError(array(1, "Not logged in"));
 }
+else if (strlen(trim($ftpSite->getServer())) == 0) {
+	echo getJSONError(array(11, "Host required for FTP site"));
+}
 else {
-	
-	$rsConnections = FTPSiteDB::retrieveForUserId($_SESSION['ccuserid']);
-	$arConnections = array();
-	for ($i = 0; $i < sizeof($rsConnections); $i++) {
-		array_push($arConnections, $rsConnections[$i]->toHasMap());
+	if (FTPSiteDB::save($ftpSite)) {
+		echo getJSONResult(array("ftpSite" => $ftpSite->toArray()));
 	}
-	
-	echo getJSONResult(array("connectionList" => $arConnections));
+	else {
+		echo getJSONError(array(2, "Error saving record"));
+	}
 }
 
 function getJSONResult($result) {
