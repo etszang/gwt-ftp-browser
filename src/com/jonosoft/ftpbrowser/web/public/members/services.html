@@ -1,0 +1,251 @@
+<html>
+
+	<head>
+		<base href="http://www.cookiecloaker.com/">
+		<meta http-equiv="Content-Language" content="en-us">
+		<meta http-equiv="Content-Type"
+			content="text/html; charset=windows-1252">
+		<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+		<meta name="ProgId" content="FrontPage.Editor.Document">
+		<LINK href="inf1.css" type=text/css rel=stylesheet>
+		
+		<script language="javascript" type="text/javascript">
+		
+		window.setInterval("glowButton('startCookieCloakerButton')", 25);
+		window.setInterval("glowButton('startLinkCloaker')", 25);
+		
+		
+		function glowButton(id) {
+			var maxGlow = 35;
+			var button = document.getElementById(id);
+			
+			if (button.glowValue == null) {
+				button.glowValue = 0;
+				button.goingUp = true;
+				button.originalRRGGBB = button.style.backgroundColor;
+			}
+			
+			var rrggbb = "#" + addToRGB(button.glowValue, button.originalRRGGBB);
+			
+			button.style.backgroundColor = rrggbb;
+			
+			if (button.glowValue >= maxGlow || rrggbb == "#ffffff") {
+				button.glowValue = (button.glowValue > maxGlow) ? maxGlow : button.glowValue;
+				button.goingUp = false;
+			}
+			else if (button.glowValue <= 0 || rrggbb == "#000000") {
+				button.glowValue = (button.glowValue < 0) ? 0 : button.glowValue;
+				button.goingUp = true;
+			}
+			
+			button.goingUp ? 
+				button.glowValue++:
+				button.glowValue--;
+		}
+		
+		function addToRGB(amountToAdd, rgb) {
+			var re = new RegExp("^.+?(\\d+),\\s*?(\\d+),\\s*?(\\d+).+");
+			
+			var r = parseInt(rgb.replace(re, "$1")) + amountToAdd;
+			var g = parseInt(rgb.replace(re, "$2")) + amountToAdd;
+			var b = parseInt(rgb.replace(re, "$3")) + amountToAdd;
+			
+			r = (r >= 255) ? 255 : ((r <= 0) ? 0 : r);
+			g = (g >= 255) ? 255 : ((g <= 0) ? 0 : g);
+			b = (b >= 255) ? 255 : ((b <= 0) ? 0 : b);
+			
+			return getRGBHex(r, g, b);
+		}
+		
+		function getRGBHex(r, g, b) {
+			var rr = d2h(r);
+			var gg = d2h(g);
+			var bb = d2h(b);
+			
+			return rr.toString() + gg.toString() + bb.toString();
+		}
+		
+		function addToRRGGBB(amountToAdd, rrggbb) {
+			rrggbb = rrggbb.replace("#", "");
+			
+			var intRR = h2d(rrggbb.substring(0, 2)) + amountToAdd;
+			var intGG = h2d(rrggbb.substring(2, 4)) + amountToAdd;
+			var intBB = h2d(rrggbb.substring(4, 6)) + amountToAdd;
+			
+			return getRGBHex(intRR, intGG, intBB);
+		}
+		
+		function d2h(d) {return d.toString(16);}
+		function h2d(h) {return parseInt(h,16);}
+		
+		</script>
+	</head>
+
+	<body topmargin="0" leftmargin="0" bgcolor="#EBEBEB">
+
+		<div align="center">
+			<center>
+				<table border="0" cellpadding="0" cellspacing="0"
+					style="border:1px solid #3333CC; padding:0; border-collapse: collapse"
+					bordercolor="#111111" width="726" id="AutoNumber1"
+					bgcolor="#FFFFFF">
+					<tr>
+						<td width="726" valign="top" colspan="2">
+							<img border="0" src="images/header.jpg" width="725" height="140">
+						</td>
+					</tr>
+					<tr>
+						<td width="726" valign="top" height="36" align="center"
+							style="vertical-align: middle" background="images/b24.gif"
+							colspan="2">
+							<div align="center">
+								<center>
+									<table border="1" cellpadding="0" cellspacing="0"
+										style="border-collapse: collapse" bordercolor="#111111"
+										width="94%" height="23" id="AutoNumber2">
+										<tr>
+											<td width="16%" class="off" onmouseover="className='on'"
+												onmouseout="className='off'" align="center"
+												style="vertical-align: middle">
+												<a class="black" href="index.html">Home</a>
+											</td>
+											<td width="38%" class="off" onmouseover="className='on'"
+												onmouseout="className='off'" align="center"
+												style="vertical-align: middle">
+												<a class="black" href="tools.html">Included Tools and
+													Resources</a>
+											</td>
+											<td width="15%" class="off" onmouseover="className='on'"
+												onmouseout="className='off'" align="center"
+												style="vertical-align: middle">
+												<a class="black" href="faq.html">FAQ</a>
+											</td>
+											<td width="15%" class="off" onmouseover="className='on'"
+												onmouseout="className='off'" align="center"
+												style="vertical-align: middle">
+												<a class="black" href="news.html">News</a>
+											</td>
+											<td width="16%" class="off" onmouseover="className='on'"
+												onmouseout="className='off'" align="center"
+												style="vertical-align: middle">
+												<a class="black" href="members.html">Members</a>
+											</td>
+										</tr>
+									</table>
+								</center>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td width="726" valign="top" colspan="2">
+							<p align="center" style="margin-left: 10; margin-right: 10">
+								<br>
+								<i><b><font size="5" color="#FF6600">Cookie
+											Cloaker</font> </b> </i>
+							</p>
+							<p align="center" style="margin-left: 10px; margin-right: 10px;">
+								<b> <font size="4">The ultimate affiliate tools,
+										tricks, and resources lie within.</font> </b>
+							</p>
+							<p align="center" style="margin-left: 10px; margin-right: 10px;">
+								<b><font size="4"><br> </font> </b>
+							</p>
+							<hr>
+							<div align="left">
+								<table width="100%" style="margin: 0 5px">
+									<tbody>
+										<tr>
+											<td nowrap="nowrap" valign="top" style="padding-right: 20px;">
+												<b><font size="4" color="#ff6600">Affiliate
+														Cookie Stuffer<br> <br> </font> </b><a
+													href="cookiestuffer.php5" id="startCookieCloakerButton"
+													style="border: 2px outset blue; padding: 5px; font-family: Verdana; font-size: 12px; text-decoration: none; color: darkblue; background-color: #d2d2ee;">Start
+													Using Cookie Stuffer</a>
+											</td>
+											<td valign="top" style="padding-right: 20px;">
+												&nbsp;Lorem ipsum dolor sit amet, consectetuer adipiscing
+												elit. Proin quis purus mollis massa scelerisque aliquet.
+												Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+												Proin quis purus mollis massa scelerisque aliquet. Lorem
+												ipsum dolor sit amet, consectetuer adipiscing elit. Proin
+												quis purus mollis massa scelerisque aliquet.
+												<br>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">
+												<hr>
+											</td>
+										</tr>
+										<tr>
+											<td nowrap="nowrap" valign="top" style="padding-right: 20px;">
+												<b><font size="4" color="#ff6600">Link Cloaker<br> <br> </font> </b><a
+													href="cookiestuffer.php5" id="startLinkCloaker"
+													style="border: 2px outset blue; padding: 5px; font-family: Verdana; font-size: 12px; text-decoration: none; color: darkblue; background-color: #d2d2ee;">Start
+													Using Link Cloaker</a>
+											</td>
+											<td valign="top" style="padding-right: 20px;">
+												&nbsp;Lorem ipsum dolor sit amet, consectetuer adipiscing
+												elit. Proin quis purus mollis massa scelerisque aliquet.
+												Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+												Proin quis purus mollis massa scelerisque aliquet. Lorem
+												ipsum dolor sit amet, consectetuer adipiscing elit. Proin
+												quis purus mollis massa scelerisque aliquet.
+												<br>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												&nbsp;
+											</td>
+											<td>
+												&nbsp;
+											</td>
+										</tr>
+										<tr>
+											<td>
+												&nbsp;
+											</td>
+											<td>
+												&nbsp;
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td width="726" valign="top" colspan="2">
+							<p align="justify" style="margin-left: 10; margin-right: 10">
+								&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td width="101" valign="top" rowspan="2">
+							<img border="0" src="images/footer1.jpg" width="101" height="68">
+						</td>
+						<td width="625" valign="top">
+							<p align="center">
+								<a class="blue" href="tos.html">TOS</a>
+								<b> <font color="#3333CC">|</font> </b>
+								<a class="blue" href="privacy.html"> Privacy Policy</a>
+								<b><font color="#3333CC">|</font> </b>
+								<a class="blue" href="disclaimer.html">Disclaimer</a>
+								<b> <font color="#3333CC">|</font> </b>
+								<a class="blue" href="contact.html"> Contact Us</a>
+						</td>
+					</tr>
+					<tr>
+						<td width="625" valign="top" style="vertical-align: bottom"
+							height="39">
+							<img border="0" src="images/footer.jpg" width="624" height="39">
+						</td>
+					</tr>
+				</table>
+			</center>
+		</div>
+
+	</body>
+
+</html>
