@@ -50,20 +50,27 @@ public class FTPTree extends Composite implements TreeListener, SourcesTreeEvent
 		this.ftpConnection = ftpConnection;
 		ftpTree.clear();
 		//ftpConnection.getList("/", new FTPGetDirectoryContentsResponseHandler((HasTreeItems) ftpTree));
-		FTPTreeItem ftpTreeItem = new FTPTreeItem(new FTPFileItem(ftpConnection, "/", "d", "/"));
+		final FTPTreeItem ftpTreeItem = new FTPTreeItem(new FTPFileItem(ftpConnection, "/" + ftpConnection.getServer(), "d", "/"));
 		ftpTreeItem.setData();
 		ftpTreeItem.setNeedsToLoad(false);
 		ftpTree.addItem(ftpTreeItem);
 		ftpConnection.getList("/", new FTPGetDirectoryContentsResponseHandler((HasTreeItems) ftpTreeItem));
+		DeferredCommand.add(new Command() {
+			// When setFTPConnection is called from the constructor isAttached() won't be true right away
+			public void execute() {
+				if (isAttached())
+					ftpTreeItem.setState(true);
+			}
+		});
 	}
 
 	public void setRootPath() {
 		ftpTree.addTreeListener(this);
 	}
 
-	public void extenList(ArrayList iList) {
+	/*public void extenList(ArrayList iList) {
 		myList = iList;
-	}
+	}*/
 
 	public void onTreeItemSelected(com.google.gwt.user.client.ui.TreeItem item) {
 		if (item instanceof FTPTreeItem) {
