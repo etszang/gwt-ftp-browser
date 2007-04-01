@@ -4,6 +4,7 @@
 package com.jonosoft.ftpbrowser.web.client;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -78,7 +79,8 @@ public class FTPConnection {
 	
 	public void getList(String path, FTPAsyncCallback callback) {
 		String params = getFTPAndURLQueryParamsAsString(this, path, "dir", null);
-		HTTPRequest.asyncGet(GWT.getModuleBaseURL()+FTP.DEFAULT_INSTANCE.phpFtpJsonUrlBase()+params, new FTPResponseHandler(callback));
+		System.out.println("Requesting: " + path);
+		HTTPRequest.asyncGet(GWT.getModuleBaseURL()+FTP.DEFAULT_INSTANCE.phpFtpJsonUrlBase()+params, new FTPResponseHandler(this, path, callback));
 	}
 	
 	private static String getFTPAndURLQueryParamsAsString(FTPConnection conn, String path, String function, final String [] params) {
@@ -108,20 +110,24 @@ public class FTPConnection {
 		return sb.toString();
 	}
 	
-	private static List getListFromJSONArrayOfJSONStrings(JSONArray jsonArray, String type) {
+	private static List getListFromJSONArrayOfJSONStrings(FTPConnection ftpConnection, String path, JSONArray jsonArray, String type) {
 		final List ar = new ArrayList();
 		String name = null;
 		for (int i = 0; i < jsonArray.size(); i++) {
 			name = ((JSONString) jsonArray.get(i)).stringValue();
-			ar.add(new FTPFileItem(name, type));
+			ar.add(new FTPFileItem(ftpConnection, name, type, path));
 		}
 		return ar;
 	}
 	
 	private static class FTPResponseHandler implements ResponseTextHandler {
+		private FTPConnection ftpConnection = null;
 		private FTPAsyncCallback callback = null;
+		private String path = null;
 		
-		public FTPResponseHandler(FTPAsyncCallback callback) {
+		public FTPResponseHandler(FTPConnection ftpConnection, String path, FTPAsyncCallback callback) {
+			this.ftpConnection = ftpConnection;
+			this.path = path;
 			this.callback = callback;
 		}
 		
@@ -130,8 +136,11 @@ public class FTPConnection {
 			JSONArray dirs = (JSONArray) jsonResponse.getResult().get("dirs");
 			JSONArray files = (JSONArray) jsonResponse.getResult().get("files");
 			if (this.callback != null){
-				List items = getListFromJSONArrayOfJSONStrings(dirs, "d");
-				items.addAll(getListFromJSONArrayOfJSONStrings(files, "f"));
+				List items = getListFromJSONArrayOfJSONStrings(ftpConnection, path, dirs, "d");
+				items.addAll(getListFromJSONArrayOfJSONStrings(ftpConnection, path, files, "f"));
+				for (Iterator it = items.iterator(); it.hasNext();)
+					if (((FTPFileItem) it.next()).getName().matches("^[\\.]{1,2}$"))
+						it.remove();
 				this.callback.onSuccess(items);
 			}
 		}

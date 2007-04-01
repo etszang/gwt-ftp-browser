@@ -78,7 +78,7 @@ public class FTPConnectionsMenuBar extends Composite implements FTPConnectionSet
 			
 			addItem("Connect", new Command() {
 				public void execute() {
-					Web.getFTPTree().setFTPConnection(ftpConnection);
+					Web.getFTPBrowser().getFTPTree().setFTPConnection(ftpConnection);
 				}
 			});
 			
