@@ -1,52 +1,38 @@
 package com.jonosoft.ftpbrowser.web.client;
 
-import com.google.gwt.user.client.ui.TreeItem;
+import java.util.Collection;
+import java.util.Vector;
 
 public class FTPTreeItem extends TreeItem {
-	private String path = null;
+	private FTPFileItem ftpFileItem = null;
 	private boolean hasData = false;
-	private boolean isFile = false;
 	private boolean needsToLoad = true;
-	
-	public FTPTreeItem(String path) {
-		setPath(path);
-		setText(path);
-		//isFile = true;
-		
-		setupTempSubItem();
-	}
-	
-	public FTPTreeItem(String path, FTPTreeItem parent) {
-		// TODO Should strip "/" from the end of parent.getPath() if it exists
-		if (parent.getPath().endsWith("/"))
-			setPath(parent.getPath() + path);
-		else
-			setPath(parent.getPath() + "/" + path);
-		setText(path);
-		//isFile = true;
-		
-		setupTempSubItem();
-	}
+	private final Collection fileItems = new Vector();
 
+	public FTPTreeItem(FTPFileItem ftpFileItem) {
+		super();
+		
+		setFTPFileItem(ftpFileItem);
+		setText(ftpFileItem.getName());
+		
+		if (ftpFileItem.getType().equals("d"))
+			setupTempSubItem();
+		
+		addStyleName("gwt-ftptreeitem");
+		addStyleName("gwt-ftptreeitem-" + getFTPFileItem().getType());
+	}
+	
 	private void setupTempSubItem() {
 		setNeedsToLoad(true);
 		addItem("loading...");
 	}
 
-	public String FTPItemName() {
-		return path;
+	public FTPFileItem getFTPFileItem() {
+		return this.ftpFileItem;
 	}
 
-	public String getPath() {
-		return this.path;
-	}
-
-	public boolean isFile() {
-		return isFile;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
+	public void setFTPFileItem(FTPFileItem ftpFileItem) {
+		this.ftpFileItem = ftpFileItem;
 	}
 
 	public void setData() {
@@ -67,5 +53,34 @@ public class FTPTreeItem extends TreeItem {
 	
 	public void setNeedsToLoad(boolean needsToLoad) {
 		this.needsToLoad = needsToLoad;
+	}
+	
+	public Collection getFileItems() {
+		return fileItems;
+	}
+	
+	/**
+	 * This is sort of a hack, just so that 
+	 * 
+	 * @see com.google.gwt.user.client.ui.TreeItem#addItem(com.google.gwt.user.client.ui.TreeItem)
+	 */
+	public void addItem(com.google.gwt.user.client.ui.TreeItem item) {
+		if (item instanceof FTPTreeItem) {
+			FTPTreeItem ftpTreeItem = (FTPTreeItem) item;
+			if (ftpTreeItem.getFTPFileItem().getType().equals("f")) {
+				fileItems.add(ftpTreeItem);
+				return;
+			}
+			super.addItem(ftpTreeItem);
+		}
+		super.addItem(item);
+	}
+	
+	/**
+	 * @see com.google.gwt.user.client.ui.TreeItem#removeItem(com.google.gwt.user.client.ui.TreeItem)
+	 */
+	public void removeItem(TreeItem item) {
+		fileItems.remove(item);
+		super.removeItem(item);
 	}
 }

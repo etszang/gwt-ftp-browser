@@ -93,6 +93,10 @@ public class ItemSelectGrid extends Grid {
 	public void clear() {
 		while (numRows > 0)
 			removeRow(--numRows);
+		itemsByRow.clear();
+		rowsByItem.clear();
+		selectedRows.clear();
+		previousSelectedRows.clear();
 	}
 	
 	public void setItem(int row, Object item) {
