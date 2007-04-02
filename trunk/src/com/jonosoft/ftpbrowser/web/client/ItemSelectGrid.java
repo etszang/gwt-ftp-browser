@@ -3,10 +3,11 @@
  */
 package com.jonosoft.ftpbrowser.web.client;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.user.client.DOM;
@@ -107,6 +108,10 @@ public class ItemSelectGrid extends Grid {
 	
 	public Object getItem(int row) {
 		return itemsByRow.get(getRowFormatter().getElement(row));
+	}
+	
+	public Set getItems() {
+		return rowsByItem.keySet();
 	}
 	
 	public boolean isItemSelected(Object item) {
@@ -237,8 +242,8 @@ public class ItemSelectGrid extends Grid {
 			setRowSelectedFromPreviousSelectState(getRowFormatter().getElement(i), matchPreviousSelectState);
 	}
 	
-	private void setMultipleRowsSelectedFromPreviousSelectState(Collection rows, boolean matchPreviousSelectState) {
-		Collection safeRows = getSafeSelectedRowsList(rows);
+	private void setMultipleRowsSelectedFromPreviousSelectState(List rows, boolean matchPreviousSelectState) {
+		List safeRows = getSafeSelectedRowsList(rows);
 		for (Iterator it = safeRows.iterator(); it.hasNext();)
 			setRowSelectedFromPreviousSelectState((Element) it.next(), matchPreviousSelectState);
 	}
@@ -254,17 +259,17 @@ public class ItemSelectGrid extends Grid {
 			setItemSelected(getRowFormatter().getElement(i), state);
 	}
 	
-	private void setMultipleItemsSelected(Collection rows, boolean state) {
-		Collection safeRows = getSafeSelectedRowsList(rows);
+	private void setMultipleItemsSelected(List rows, boolean state) {
+		List safeRows = getSafeSelectedRowsList(rows);
 		for (Iterator it = safeRows.iterator(); it.hasNext();)
 			setItemSelected((Element) it.next(), state);
 	}
 	
-	private Collection getSafeSelectedRowsList(Collection rows) {
+	private List getSafeSelectedRowsList(List rows) {
 		if (! rows.equals(selectedRows))
 			return rows;
 		else {
-			Collection safeRows = new Vector();
+			List safeRows = new Vector();
 			safeRows.addAll(rows);
 			return safeRows;
 		}
@@ -272,7 +277,7 @@ public class ItemSelectGrid extends Grid {
 	
 	private void onBeforeSelectRow(Element row) {
 		if (! isMultipleSelect()) {
-			Collection otherSelectedItems = new Vector();
+			List otherSelectedItems = new Vector();
 			otherSelectedItems.addAll(selectedRows);
 			otherSelectedItems.remove(row);
 			setMultipleItemsSelected(otherSelectedItems, false);
@@ -288,14 +293,14 @@ public class ItemSelectGrid extends Grid {
 
 	private void fireSelectStateChange() {
 		if (listeners.size() > 0) {
-			Collection selectedItemsClone = (Collection) selectedRows.clone();
-			Collection previousSelectedItemsClone = (Collection) previousSelectedRows.clone();
+			Set selectedItemsClone = (Set) selectedRows.clone();
+			Set previousSelectedItemsClone = (Set) previousSelectedRows.clone();
 			
 			selectedItemsClone.removeAll(previousSelectedRows);
 			previousSelectedItemsClone.removeAll(selectedRows);
 			
-			Collection added = new Vector();
-			Collection removed = new Vector();
+			List added = new Vector();
+			List removed = new Vector();
 
 			for (Iterator it = selectedItemsClone.iterator(); it.hasNext();)
 				added.add(itemsByRow.get(it.next()));
@@ -315,7 +320,7 @@ public class ItemSelectGrid extends Grid {
 	 * @param sender
 	 *            the widget sending the event.
 	 */
-	private void fireSelectStateChange(ItemSelectGrid sender, Collection items, boolean state) {
+	private void fireSelectStateChange(ItemSelectGrid sender, List items, boolean state) {
 		for (Iterator it = listeners.iterator(); it.hasNext();)
 			((ItemSelectGridListener) it.next()).onItemsSelectStateChanged(this, items, state);
 	}

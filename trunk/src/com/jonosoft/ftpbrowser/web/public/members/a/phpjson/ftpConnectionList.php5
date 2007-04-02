@@ -27,7 +27,7 @@ else {
 	$rsConnections = FTPSiteDB::retrieveForUserId($_SESSION['ccuserid']);
 	$arConnections = array();
 	for ($i = 0; $i < sizeof($rsConnections); $i++) {
-		array_push($arConnections, $rsConnections[$i]->toHasMap());
+		array_push($arConnections, $rsConnections[$i]->toHashMap());
 	}
 	
 	echo getJSONResult(array("connectionList" => $arConnections));
