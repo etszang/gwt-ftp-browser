@@ -41,7 +41,11 @@ public class FTPFileItem implements IsSerializable {
 	}
 	
 	public Object clone() {
-		return new FTPFileItem(getFTPConnection(), getName(), getType(), getFullPath());
+		FTPFileItem ftpFileItem = new FTPFileItem(getFTPConnection());
+		ftpFileItem.name = getName();
+		ftpFileItem.type = getType();
+		ftpFileItem.fullPath = getFullPath();
+		return ftpFileItem;
 	}
 	
 	public String getName() {

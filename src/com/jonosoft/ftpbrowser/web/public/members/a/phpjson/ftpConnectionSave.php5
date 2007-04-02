@@ -30,7 +30,7 @@ else if (strlen(trim($ftpSite->getServer())) == 0) {
 }
 else {
 	if (FTPSiteDB::save($ftpSite)) {
-		echo getJSONResult(array("ftpSite" => $ftpSite->toArray()));
+		echo getJSONResult(array("ftpSite" => $ftpSite->toHashMap()));
 	}
 	else {
 		echo getJSONError(array(2, "Error saving record"));

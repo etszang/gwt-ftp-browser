@@ -34,16 +34,8 @@ public class FTPTree extends Composite implements TreeListener, SourcesTreeEvent
 		myList.add("php");
 		myList.add("css");
 		
-		FTPConnection ftpConnection = new FTPConnection();
-		ftpConnection.setServer("cookiecloaker.com");
-		ftpConnection.setPort(21);
-		ftpConnection.setUsername("u39984585-cookies");
-		ftpConnection.setPassword("haberman");
-		
 		ftpTree.addTreeListener(this);
 		tempTree.addTreeListener(this);
-		
-		setFTPConnection(ftpConnection);
 	}
 	
 	public void setFTPConnection(FTPConnection ftpConnection) {

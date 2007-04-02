@@ -1,13 +1,13 @@
 package com.jonosoft.ftpbrowser.web.client;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 
 public class FTPTreeItem extends TreeItem {
 	private FTPFileItem ftpFileItem = null;
 	private boolean hasData = false;
 	private boolean needsToLoad = true;
-	private final Collection fileItems = new Vector();
+	private final List fileItems = new Vector();
 
 	public FTPTreeItem(FTPFileItem ftpFileItem) {
 		super();
@@ -55,7 +55,7 @@ public class FTPTreeItem extends TreeItem {
 		this.needsToLoad = needsToLoad;
 	}
 	
-	public Collection getFileItems() {
+	public List getFileItems() {
 		return fileItems;
 	}
 	

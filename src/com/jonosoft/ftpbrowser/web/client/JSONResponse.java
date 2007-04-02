@@ -6,6 +6,7 @@ package com.jonosoft.ftpbrowser.web.client;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONString;
 
 /**
  * TODO Add description JSONResponse (com.macroleads.web.client.json.JSONResponse)
@@ -17,9 +18,14 @@ public class JSONResponse {
 	private JSONObject jsonObject = null;
 	
 	public static JSONResponse newInstance(String jsonString) {
-		JSONResponse jsonResponse = new JSONResponse();
-		jsonResponse.jsonObject = (JSONObject) JSONParser.parse(jsonString);
-		return jsonResponse;
+		try {
+			JSONResponse jsonResponse = new JSONResponse();
+			jsonResponse.jsonObject = (JSONObject) JSONParser.parse(jsonString);
+			return jsonResponse;
+		}
+		catch (Throwable e) {
+			throw new RuntimeException("JSONResponse couldn't parse text: " + jsonString, e);
+		}
 	}
 	
 	public com.google.gwt.json.client.JSONArray getErrors() {
@@ -42,6 +48,16 @@ public class JSONResponse {
 	
 	public JSONObject getJSONObject() {
 		return jsonObject;
+	}
+	
+	/**
+	 * Throws a RuntimeException if this JSONResponse has any errors.
+	 * 
+	 * TODO Create custom Exception
+	 */
+	public void handleErrors() {
+		if (hasErrors())
+			throw new RuntimeException(((JSONString) getErrors().get(0)).stringValue());
 	}
 	
 }

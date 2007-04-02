@@ -61,7 +61,13 @@ public class RequestProxy implements Filter {
     		for (int i = 0; i < request.getContentLength(); i++)
     			postData.append((char) br.read());
     		
-    		((PostMethod) method).addParameter("json", URLEncoder.encode(postData.toString(), UTF8));
+    		//((PostMethod) method).addParameter("json", URLEncoder.encode(postData.toString(), UTF8));
+    		
+    		String[] sp = postData.toString().split("[&=]");
+    		
+    		for (int i = 0; i < sp.length; i+=2) {
+    			((PostMethod) method).addParameter(URLEncoder.encode(sp[i], UTF8), URLEncoder.encode(sp[i+1], UTF8));
+    		}
 		} else {
 			System.out.println(url + "?" + request.getQueryString());
     		method = new GetMethod(url + "?" + request.getQueryString());

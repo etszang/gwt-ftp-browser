@@ -1,6 +1,6 @@
 package com.jonosoft.ftpbrowser.web.client;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Jkelling
@@ -8,6 +8,6 @@ import java.util.Collection;
  */
 public interface ItemSelectGridListener {
 	
-	void onItemsSelectStateChanged(ItemSelectGrid sender, Collection items, boolean state);
+	void onItemsSelectStateChanged(ItemSelectGrid sender, List items, boolean state);
 	
 }
