@@ -37,6 +37,14 @@ public class FTPConnection {
 		return conn;
 	}
 	
+	public boolean equals(Object arg0) {
+		if (arg0 instanceof FTPConnection) {
+			FTPConnection ftpConnection = (FTPConnection) arg0;
+			return getFtpSiteId() == ftpConnection.getFtpSiteId();
+		}
+		return false;
+	}
+	
 	public int getFtpSiteId() {
 		return ftpSiteId;
 	}

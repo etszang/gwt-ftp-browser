@@ -50,19 +50,19 @@ public class PopupOverlayPanel extends PopupPanel {
 	
 	public void show() {
 		super.show();
-
+		DOM.setStyleAttribute(getElement(), "zIndex", "99999");
+		
+		DOM.insertChild(DOM.getParent(getElement()), overlayDiv, DOM.getChildIndex(DOM.getParent(getElement()), getElement()));
+		
 		DOM.setStyleAttribute(overlayDiv, "position", "absolute");
 		DOM.setStyleAttribute(overlayDiv, "zIndex", "99998");
 		DOM.setStyleAttribute(overlayDiv, "top", "0px");
 		DOM.setStyleAttribute(overlayDiv, "left", "0px");
-		DOM.setStyleAttribute(overlayDiv, "opacity", Integer.toString(overlayOpacity/100));
+		DOM.setStyleAttribute(overlayDiv, "opacity", "0.70");
 		DOM.setStyleAttribute(overlayDiv, "backgroundColor", overlayBackgroundColor);
 		DOM.setStyleAttribute(overlayDiv, "width", Integer.toString(Window.getClientWidth()));
 		DOM.setStyleAttribute(overlayDiv, "height", Integer.toString(Window.getClientHeight()));
 		DOM.setStyleAttribute(overlayDiv, "filter", "alpha(opacity="+overlayOpacity+")");
-		DOM.setStyleAttribute(getElement(), "zIndex", "99999");
-		
-		DOM.insertChild(DOM.getParent(getElement()), overlayDiv, DOM.getChildIndex(DOM.getParent(getElement()), getElement()));
 	}
 	
 	private class OverlayPopupListener implements PopupListener {
