@@ -10,4 +10,6 @@ public interface ItemSelectGridListener {
 	
 	void onItemsSelectStateChanged(ItemSelectGrid sender, List items, boolean state);
 	
+	void onItemAdded(ItemSelectGrid sender, Object item);
+	
 }

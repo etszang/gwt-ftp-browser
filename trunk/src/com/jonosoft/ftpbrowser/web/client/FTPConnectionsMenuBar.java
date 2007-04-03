@@ -89,7 +89,7 @@ public class FTPConnectionsMenuBar extends Composite implements FTPConnectionSet
 					myFtp.show();
 					myFtp.getSettings(ftpConnection);
 					myConnect = ftpConnection;
-					//Window.alert("TODO: Settings window (at this time) doesn't work as an \"edit\" only a \"new\"");
+					//Window.alert("TODO Settings window (at this time) doesn't work as an \"edit\" only a \"new\"");
 				}
 			});
 			

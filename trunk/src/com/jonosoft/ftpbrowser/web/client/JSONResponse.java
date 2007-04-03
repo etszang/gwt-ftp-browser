@@ -17,14 +17,14 @@ import com.google.gwt.json.client.JSONString;
 public class JSONResponse {
 	private JSONObject jsonObject = null;
 	
-	public static JSONResponse newInstance(String jsonString) {
+	public static JSONResponse newInstance(String responseText) {
 		try {
 			JSONResponse jsonResponse = new JSONResponse();
-			jsonResponse.jsonObject = (JSONObject) JSONParser.parse(jsonString);
+			jsonResponse.jsonObject = (JSONObject) JSONParser.parse(responseText);
 			return jsonResponse;
 		}
 		catch (Throwable e) {
-			throw new RuntimeException("JSONResponse couldn't parse text: " + jsonString, e);
+			throw new RuntimeException("JSONResponse couldn't parse text: " + responseText, e);
 		}
 	}
 	

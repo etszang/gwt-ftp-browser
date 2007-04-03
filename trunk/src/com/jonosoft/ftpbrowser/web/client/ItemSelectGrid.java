@@ -49,7 +49,7 @@ public class ItemSelectGrid extends Grid {
 	private Element mouseDownRow = null;
 	private int mouseDownRowIndex;
 	private int mouseMoveRowIndex;
-	private boolean multipleSelect = true; // TODO: Implement allowMultipleSelect field
+	private boolean multipleSelect = true;
 	
 	private static interface DragMode {
 		int OFF = 0;
@@ -76,6 +76,7 @@ public class ItemSelectGrid extends Grid {
 			return;
 		resizeRows(getRowCount()+1);
 		setItem(getRowCount()-1, item);
+		fireItemAdded(item);
 	}
 	
 	/**
@@ -175,6 +176,10 @@ public class ItemSelectGrid extends Grid {
 	 */
 	public void removeItem(int row) {
 		removeItem(itemsByRow.get(getRowFormatter().getElement(row)));
+	}
+	
+	public void setItemSelected(Object item, boolean state) {
+		setItemSelected((Element) rowsByItem.get(item), state);
 	}
 
 	public void setItemSelected(Element row, boolean state) {
@@ -313,6 +318,12 @@ public class ItemSelectGrid extends Grid {
 				fireSelectStateChange(this, added, true);
 		}
 	}
+
+	private void fireItemAdded(Object item) {
+		for (Iterator it = listeners.iterator(); it.hasNext();) {
+			((ItemSelectGridListener) it.next()).onItemAdded(this, item);
+		}
+	}
 	
 	/**
 	 * Fires a select state change event to all listeners.
@@ -406,7 +417,6 @@ public class ItemSelectGrid extends Grid {
 								previousSelectedRows.clear();
 								previousSelectedRows.addAll(selectedRows);
 								setItemSelected(rowElement, ! isRowSelected(rowElement));
-								// TODO: Save existing sunk events and event listener if they exist and restore on mouseup
 								DOM.sinkEvents(RootPanel.getBodyElement(), Event.ONMOUSEUP);
 								DOM.setEventListener(RootPanel.getBodyElement(), this);
 							}

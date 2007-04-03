@@ -95,3 +95,7 @@ a:active {
 .gwt-itemselectgrid-item-selected td {
 	color: highlighttext;
 }
+
+.cc-filegroupwidget td {
+	font-family: Monaco, ProFontWindows, "lucida console", monospace;
+}
