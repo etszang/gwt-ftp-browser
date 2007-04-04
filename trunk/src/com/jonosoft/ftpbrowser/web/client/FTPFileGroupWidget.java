@@ -106,6 +106,7 @@ public class FTPFileGroupWidget extends Composite {
 						}
 					}
 					catch (Throwable e) {
+						GWTErrorLogger.logError(e);
 						e.printStackTrace();
 					}
 				}
@@ -183,6 +184,7 @@ public class FTPFileGroupWidget extends Composite {
 		
 		private class SaveResponseHandler implements RequestCallback {
 			public void onError(Request request, Throwable exception) {
+				GWTErrorLogger.logError(exception);
 				Window.alert("Failed to save FTP file data");
 			}
 
@@ -194,6 +196,7 @@ public class FTPFileGroupWidget extends Composite {
 					jsonResponse.handleErrors();
 				}
 				catch (Throwable caught) {
+					GWTErrorLogger.logError(caught);
 					GWT.log("Saving FTPFileGroup contents failed", caught);
 					// TODO Display some kind of error to the user
 				}

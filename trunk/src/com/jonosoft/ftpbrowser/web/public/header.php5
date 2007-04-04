@@ -15,6 +15,9 @@
 		<meta name="gwt:module" content="com.jonosoft.ftpbrowser.web.Web">
 
 		<link rel="stylesheet" href="Web.css">
+		
+		<script src="/javascripts/prototype.js" type="text/javascript"></script>
+		<script src="/javascripts/scriptaculous.js" type="text/javascript"></script>
 	</head>
 
 	<body topmargin="0" leftmargin="0" marginwidth="0" marginheight="0">
