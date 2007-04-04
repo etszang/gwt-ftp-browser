@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.Command;
@@ -119,7 +124,12 @@ public class FTPFileGroupWidget extends Composite {
 				return;
 			}
 			isSaveInProgress = true;
-			saveNow();
+			try {
+				saveNow();
+			}
+			catch (RequestException e) {
+				Window.alert("Failed to save FTP file data");
+			}
 			delaySave();
 		}
 		
@@ -138,7 +148,7 @@ public class FTPFileGroupWidget extends Composite {
 			}.schedule(SAVE_DELAY);
 		}
 		
-		private void saveNow() {
+		private void saveNow() throws RequestException {
 			Map paramStringBySiteId = new HashMap();
 			Iterator it = fileGrid.getItems().iterator();
 			StringBuffer queryParams = new StringBuffer();
@@ -146,6 +156,7 @@ public class FTPFileGroupWidget extends Composite {
 			String pathsAsBase64 = null;
 			Integer ftpSiteId = null;
 			FTPFileItem ftpFileItem = null;
+			JSRequestBuilder requestBuilder = new JSRequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.ftpPathSaveURL());
 			
 			while (it.hasNext()) {
 				ftpFileItem = (FTPFileItem) it.next();
@@ -164,20 +175,30 @@ public class FTPFileGroupWidget extends Composite {
 				ftpSiteId = (Integer) it.next();
 				sb = (StringBuffer) paramStringBySiteId.get(ftpSiteId);
 				pathsAsBase64 = Base64Util.encode(sb.toString());
+				requestBuilder.addParameter(ftpSiteId.toString(), pathsAsBase64);
 				HTTPRequestUtil.addKeyValuePair(queryParams, ftpSiteId.toString(), pathsAsBase64);
 			}
 			
-			System.out.println(queryParams.toString());
+			System.out.println(requestBuilder.getRequestDataAsString());
 			
-			HTTPRequest.asyncPost(GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.ftpPathSaveURL(), queryParams.toString(), new SaveResponseHandler());
+			requestBuilder.setTimeoutMillis(10000);
+			requestBuilder.sendRequest(new SaveResponseHandler());
+			
+			/*HTTPRequest.asyncPost(GWT.getModuleBaseURL()
+					+ CookieCloaker.DEFAULT_INSTANCE.ftpPathSaveURL(),
+					queryParams.toString(), new SaveResponseHandler());*/
 		}
 		
-		private class SaveResponseHandler implements ResponseTextHandler {
-			public void onCompletion(String responseText) {
+		private class SaveResponseHandler implements RequestCallback {
+			public void onError(Request request, Throwable exception) {
+				Window.alert("Failed to save FTP file data");
+			}
+
+			public void onResponseReceived(Request request, Response response) {
 				isSaveInProgress = false;
 				
 				try {
-					JSONResponse jsonResponse = JSONResponse.newInstance(responseText);
+					JSONResponse jsonResponse = JSONResponse.newInstance(response.getText());
 					jsonResponse.handleErrors();
 				}
 				catch (Throwable caught) {

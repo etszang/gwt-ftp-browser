@@ -5,6 +5,8 @@ package com.jonosoft.ftpbrowser.web.client;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.TreeListener;
@@ -39,10 +41,16 @@ public class FTPBrowser extends Composite {
 		sc1.setPixelSize(350, 300);
 		sc2.setPixelSize(200, 300);
 		
+		final MenuBar ftpBrowserMenuBar = new MenuBar(false);
+		final MenuItem ftpSitesMenuItem = new MenuItem("FTP Sites", (MenuBar) ftpConnectionsMenuBar);
+		ftpBrowserMenuBar.addStyleName("ftpbrowser-menubar");
+		ftpSitesMenuItem.addStyleName("ftpbrowser-menuitem");
+		ftpBrowserMenuBar.addItem(ftpSitesMenuItem);
+		
+		vertPanel.add(ftpBrowserMenuBar);
 		vertPanel.add(directoryBrowserPanel);
 		vertPanel.add(fileGroupWidget);
 
-		directoryBrowserPanel.add(ftpConnectionsMenuBar);
 		directoryBrowserPanel.add(sc1);
 		directoryBrowserPanel.add(sc2);
 
