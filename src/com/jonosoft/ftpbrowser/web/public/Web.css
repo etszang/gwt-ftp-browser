@@ -59,20 +59,34 @@ a:active {
 	border-style: solid;
 }
 
+.gwt-MenuBar {
+	cursor: pointer;
+	background-color: rgb(236, 233, 216); /* Windows menubar color */
+	border-width: 1px;
+	border-color: rgb(172, 168, 153); /* Windows menubar border color */;
+	border-style: solid;
+}
+
+.ftpbrowser-menubar {
+}
+
+.ftpbrowser-menuitem {
+	background-image: url('images/black-down-arrow.gif');
+	background-position: right center;
+	background-repeat: no-repeat;
+	padding-right: 14px;
+}
+
 .ftpconnections-menubar {
 	width: 125px;
-	cursor: pointer;
+	background-color: white;
 }
 
 .ftpconnections-menuitem {
 }
 
 .ftpconnections-submenubar {
-	background-color: #e2e2e2;
-	border-width: 1px;
-	border-color: black;
-	border-style: solid;
-	cursor: pointer;
+	background-color: white;
 }
 
 .gwt-itemselectgrid {

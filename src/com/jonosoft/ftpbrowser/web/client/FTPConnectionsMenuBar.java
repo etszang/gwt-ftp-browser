@@ -7,10 +7,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.HTTPRequest;
 import com.google.gwt.user.client.ResponseTextHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
@@ -18,17 +20,16 @@ import com.google.gwt.user.client.ui.MenuItem;
  * @author Jkelling
  *
  */
-public class FTPConnectionsMenuBar extends Composite implements FTPConnectionSettingsListener   {
+public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSettingsListener   {
 	
-	private final MenuBar connectionsMenu = new MenuBar(true);
 	private final FTPConnectionSettingsPopupPanel myFtp = new FTPConnectionSettingsPopupPanel(true);
 	private  FTPConnection myConnect;
 	
 	public FTPConnectionsMenuBar() {
-		initWidget(connectionsMenu);
+		super(true);
 		
-		connectionsMenu.setAutoOpen(true);
-		connectionsMenu.addStyleName("ftpconnections-menubar");
+		setAutoOpen(true);
+		addStyleName("ftpconnections-menubar");
 		
 		myFtp.addFTPConnectionSettingsListener(this);
 		
@@ -59,7 +60,7 @@ public class FTPConnectionsMenuBar extends Composite implements FTPConnectionSet
 			
 			for (int i = 0; i < connections.size(); i++) {
 				conn = FTPConnection.getInstance((JSONObject) connections.get(i));
-				connectionsMenu.addItem(new ConnectionMenuItem(conn));
+				addItem(new ConnectionMenuItem(conn));
 			}
 		}
 	}
@@ -97,7 +98,7 @@ public class FTPConnectionsMenuBar extends Composite implements FTPConnectionSet
 				public void execute() {
 					// TODO Auto-generated method stub
 					// Should add a new connection and automatically bring up settings window
-					connectionsMenu.addItem(new ConnectionMenuItem(ftpConnection));
+					addItem(new ConnectionMenuItem(ftpConnection));
 					myFtp.show();
 					myFtp.getSettings(ftpConnection);
 					myConnect = ftpConnection;
