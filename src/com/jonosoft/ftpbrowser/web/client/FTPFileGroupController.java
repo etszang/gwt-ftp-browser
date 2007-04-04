@@ -48,6 +48,7 @@ public class FTPFileGroupController {
 				callback.onSuccess(list);
 			}
 			catch (Throwable caught) {
+				GWTErrorLogger.logError(caught);
 				callback.onFailure(caught);
 			}
 		}

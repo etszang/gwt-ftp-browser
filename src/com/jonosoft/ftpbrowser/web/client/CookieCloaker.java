@@ -42,4 +42,9 @@ public interface CookieCloaker extends Constants {
 	 * @gwt.key cookiecloaker.phpjson.ftpFileGroupSave.url
 	 */
 	String ftpFileGroupSaveURL();
+	
+	/**
+	 * @gwt.key cookiecloaker.phpjson.gwtErrorSave.url
+	 */
+	String gwtErrorSaveURL();
 }
