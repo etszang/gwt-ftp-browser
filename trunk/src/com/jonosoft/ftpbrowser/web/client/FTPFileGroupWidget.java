@@ -151,9 +151,7 @@ public class FTPFileGroupWidget extends Composite {
 		private void saveNow() throws RequestException {
 			Map paramStringBySiteId = new HashMap();
 			Iterator it = fileGrid.getItems().iterator();
-			StringBuffer queryParams = new StringBuffer();
 			StringBuffer sb = null;
-			String pathsAsBase64 = null;
 			Integer ftpSiteId = null;
 			FTPFileItem ftpFileItem = null;
 			JSRequestBuilder requestBuilder = new JSRequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.ftpPathSaveURL());
@@ -174,19 +172,13 @@ public class FTPFileGroupWidget extends Composite {
 			for (it = paramStringBySiteId.keySet().iterator(); it.hasNext();) {
 				ftpSiteId = (Integer) it.next();
 				sb = (StringBuffer) paramStringBySiteId.get(ftpSiteId);
-				pathsAsBase64 = Base64Util.encode(sb.toString());
-				requestBuilder.addParameter(ftpSiteId.toString(), pathsAsBase64);
-				HTTPRequestUtil.addKeyValuePair(queryParams, ftpSiteId.toString(), pathsAsBase64);
+				requestBuilder.addParameter(ftpSiteId.toString(), sb.toString());
 			}
 			
 			System.out.println(requestBuilder.getRequestDataAsString());
 			
 			requestBuilder.setTimeoutMillis(10000);
 			requestBuilder.sendRequest(new SaveResponseHandler());
-			
-			/*HTTPRequest.asyncPost(GWT.getModuleBaseURL()
-					+ CookieCloaker.DEFAULT_INSTANCE.ftpPathSaveURL(),
-					queryParams.toString(), new SaveResponseHandler());*/
 		}
 		
 		private class SaveResponseHandler implements RequestCallback {
