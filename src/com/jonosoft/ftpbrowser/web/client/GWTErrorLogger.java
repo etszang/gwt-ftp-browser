@@ -9,8 +9,6 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 
 /**
  * @author Jkelling
@@ -21,23 +19,22 @@ public class GWTErrorLogger {
 	public static void logError(Throwable e) {
 		final JSRequestBuilder requestBuilder = new JSRequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.gwtErrorSaveURL());
 		
-		requestBuilder.addParameter("stack_trace", e.getMessage());
+		requestBuilder.addParameter("stack_trace", e.toString());
 		
-		DeferredCommand.add(new Command() {
-			public void execute() {
-				try {
-					requestBuilder.sendRequest(new RequestCallback() {
-						public void onError(Request request, Throwable exception) {
-						}
-						
-						public void onResponseReceived(Request request, Response response) {
-						}
-					});
-				} catch (RequestException e1) {
-					e1.printStackTrace();
+		try {
+			requestBuilder.sendRequest(new RequestCallback() {
+				public void onError(Request request, Throwable exception) {
+					GWT.log("Error logging remotely: " + exception.toString(), exception);
 				}
-			}
-		});
+				
+				public void onResponseReceived(Request request, Response response) {
+					System.out.println("Successfully logged error remotely...");
+					System.out.println("Response: " + response.getText());
+				}
+			});
+		} catch (RequestException e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 }

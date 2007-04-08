@@ -3,11 +3,17 @@
  */
 package com.jonosoft.ftpbrowser.web.client;
 
+import org.gwtwidgets.client.wrap.Callback;
+import org.gwtwidgets.client.wrap.Effect;
+import org.gwtwidgets.client.wrap.EffectOption;
+
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author Jkelling
@@ -15,12 +21,8 @@ import com.google.gwt.user.client.ui.PopupPanel;
  */
 public class PopupOverlayPanel extends PopupPanel {
 	
-	private static int	defaultOverlayOpacity			= 70;
-	private static String	defaultOverlayBackgroundColor	= "#e2e2e2";
-	
-	private final Element	overlayDiv	= DOM.createElement("div");
-	private int	overlayOpacity			= defaultOverlayOpacity;
-	private String	overlayBackgroundColor	= defaultOverlayBackgroundColor;
+	private final Command effectCommand	= new EffectCommand(this);
+	private final OverlayPanel overlayPanel = new OverlayPanel();
 	
 	public PopupOverlayPanel() {
 		super();
@@ -49,58 +51,69 @@ public class PopupOverlayPanel extends PopupPanel {
 	}
 	
 	public void show() {
+		overlayPanel.show();
 		super.show();
+		
 		DOM.setStyleAttribute(getElement(), "zIndex", "99999");
 		
-		DOM.insertChild(DOM.getParent(getElement()), overlayDiv, DOM.getChildIndex(DOM.getParent(getElement()), getElement()));
+		DOM.setStyleAttribute(getElement(), "visibility", "hidden");
+		DOM.setStyleAttribute(getElement(), "display", "block");
 		
-		DOM.setStyleAttribute(overlayDiv, "position", "absolute");
-		DOM.setStyleAttribute(overlayDiv, "zIndex", "99998");
-		DOM.setStyleAttribute(overlayDiv, "top", "0px");
-		DOM.setStyleAttribute(overlayDiv, "left", "0px");
-		DOM.setStyleAttribute(overlayDiv, "opacity", "0.70");
-		DOM.setStyleAttribute(overlayDiv, "backgroundColor", overlayBackgroundColor);
-		DOM.setStyleAttribute(overlayDiv, "width", Integer.toString(Window.getClientWidth()));
-		DOM.setStyleAttribute(overlayDiv, "height", Integer.toString(Window.getClientHeight()));
-		DOM.setStyleAttribute(overlayDiv, "filter", "alpha(opacity="+overlayOpacity+")");
+		DeferredCommand.add(new Command() {
+			public void execute() {
+				setPopupPosition((Window.getClientWidth() / 2)- (getOffsetWidth() / 2), (Window.getClientHeight() / 2) - (getOffsetHeight() / 2));
+				DOM.setStyleAttribute(getElement(), "visibility", "visible");
+				DOM.setStyleAttribute(getElement(), "display", "none");
+				DeferredCommand.add(effectCommand);
+			}
+		});
+	}
+	
+	public void hide() {
+		overlayPanel.hide();
+		Effect.fade(this, new EffectOption[] {new EffectOption("duration", "0.2"), new EffectOption("afterFinish", new Callback() {
+			public void execute() {
+				finishHide();
+			}
+		})});
+	}
+	
+	private void finishHide() {
+		super.hide();
 	}
 	
 	private class OverlayPopupListener implements PopupListener {
 		public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
-			DOM.removeChild(DOM.getParent(overlayDiv), overlayDiv);
+			overlayPanel.hide();
 		}
 	}
 	
-	public static int getDefaultOverlayOpacity() {
-		return defaultOverlayOpacity;
-	}
-	
-	public static void setDefaultOverlayOpacity(int defaultOverlayOpacity) {
-		PopupOverlayPanel.defaultOverlayOpacity = defaultOverlayOpacity;
-	}
-	
-	public static String getDefaultOverlayBackgroundColor() {
-		return defaultOverlayBackgroundColor;
-	}
-	
-	public static void setDefaultOverlayBackgroundColor(String defaultOverlayBackgroundColor) {
-		PopupOverlayPanel.defaultOverlayBackgroundColor = defaultOverlayBackgroundColor;
-	}
-	
 	public int getOverlayOpacity() {
-		return overlayOpacity;
+		return overlayPanel.getOverlayOpacity();
 	}
 	
 	public void setOverlayOpacity(int overlayOpacity) {
-		this.overlayOpacity = overlayOpacity;
+		overlayPanel.setOverlayOpacity(overlayOpacity);
 	}
 	
 	public String getOverlayBackgroundColor() {
-		return overlayBackgroundColor;
+		return overlayPanel.getOverlayBackgroundColor();
 	}
 	
 	public void setOverlayBackgroundColor(String overlayBackgroundColor) {
-		this.overlayBackgroundColor = overlayBackgroundColor;
+		overlayPanel.setOverlayBackgroundColor(overlayBackgroundColor);
+	}
+	
+	private class EffectCommand implements Command {
+		private Widget widget = null;
+		
+		public EffectCommand(Widget widget) {
+			this.widget = widget;
+		}
+		
+		public void execute() {
+			Effect.appear(widget, new EffectOption[] {new EffectOption("duration", "0.2")});
+		}
 	}
 	
 }

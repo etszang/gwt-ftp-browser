@@ -3,10 +3,11 @@
  */
 package com.jonosoft.ftpbrowser.web.client;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -61,10 +62,27 @@ public class ItemSelectGrid extends Grid {
 		super();
 		init();
 	}
-
+	
 	public ItemSelectGrid(int rows, int columns) {
 		super(rows, columns);
 		init();
+	}
+	
+	public void sort() {
+		final List list = new Vector();
+		list.addAll(rowsByItem.keySet());
+		
+		Collections.sort(list);
+		
+		for (Iterator it = list.iterator(); it.hasNext();) {
+			Object item = it.next();
+		    DOM.removeChild(getBodyElement(), (Element) rowsByItem.get(item));
+		    DOM.appendChild(getBodyElement(), (Element) rowsByItem.get(item));
+		}
+	}
+	
+	protected Element getRowElement(int row) {
+		return getRowFormatter().getElement(row);
 	}
 	
 	public void addItemSelectGridListener(ItemSelectGridListener listener) {
@@ -346,14 +364,14 @@ public class ItemSelectGrid extends Grid {
 	private void setupRows(int startRowIndex) {
 		if (startRowIndex >= 0) {
 			for (int r = startRowIndex; r < getRowCount(); r++) {
-				final int rowIndex = r;
 				final Element rowElement = getRowFormatter().getElement(r);
 	
-				makeCellTextUnselectableForRow(rowIndex);
+				makeCellTextUnselectableForRow(r);
 	
 				DOM.sinkEvents(rowElement, (Event.MOUSEEVENTS | DOM.getEventsSunk(rowElement)) ^ Event.ONMOUSEUP);
 				DOM.setEventListener(rowElement, new EventListener() {
 					public void onBrowserEvent(Event event) {
+						final int rowIndex = DOM.getChildIndex(getBodyElement(), rowElement);
 						switch (DOM.eventGetType(event)) {
 						case Event.ONMOUSEOVER:
 							if (! isRowSelected(rowElement))

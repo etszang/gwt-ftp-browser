@@ -6,24 +6,25 @@ package com.jonosoft.ftpbrowser.web.client;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.SourcesTreeEvents;
+import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.TreeListener;
 
 /**
  * @author Jkelling
  * 
  */
-public class FTPTree extends Composite implements TreeListener, SourcesTreeEvents {
+public class FTPTree extends Composite implements TreeListener {
 	private final Tree ftpTree = new Tree();
 	//private final VerticalPanel myPan = new VerticalPanel();
-	private final Tree tempTree = new Tree();
 	private FTPConnection ftpConnection = null;
 	// private String fileExtension[];
 	private ArrayList myList;
+	private FTPTreeListenerCollection listeners = null;
 
 	public FTPTree() {
 		initWidget(ftpTree);
@@ -35,7 +36,6 @@ public class FTPTree extends Composite implements TreeListener, SourcesTreeEvent
 		myList.add("css");
 		
 		ftpTree.addTreeListener(this);
-		tempTree.addTreeListener(this);
 	}
 	
 	public void setFTPConnection(FTPConnection ftpConnection) {
@@ -46,7 +46,7 @@ public class FTPTree extends Composite implements TreeListener, SourcesTreeEvent
 		ftpTreeItem.setData();
 		ftpTreeItem.setNeedsToLoad(false);
 		ftpTree.addItem(ftpTreeItem);
-		ftpConnection.getList("/", new FTPGetDirectoryContentsResponseHandler((HasTreeItems) ftpTreeItem));
+		ftpConnection.getList("/", new FTPGetDirectoryContentsResponseHandler(ftpTreeItem));
 		DeferredCommand.add(new Command() {
 			// When setFTPConnection is called from the constructor isAttached() won't be true right away
 			public void execute() {
@@ -55,11 +55,11 @@ public class FTPTree extends Composite implements TreeListener, SourcesTreeEvent
 			}
 		});
 	}
-
-	public void setRootPath() {
-		ftpTree.addTreeListener(this);
+	
+	public com.google.gwt.user.client.ui.TreeItem getSelectedItem() {
+		return ftpTree.getSelectedItem();
 	}
-
+	
 	/*public void extenList(ArrayList iList) {
 		myList = iList;
 	}*/
@@ -103,11 +103,6 @@ public class FTPTree extends Composite implements TreeListener, SourcesTreeEvent
 	}
 	
 	private void onTreeItemSelected(final FTPTreeItem item) {
-		final ItemSelectGrid selectGrid = Web.getFTPBrowser().getFTPFileItemSelectGrid();;
-		
-		if (selectGrid != null)
-			selectGrid.clear();
-		
 		if (! item.hasData() && item.getNeedsToLoad()) {
 			// if item.getNeedsToLoad() is true, then there should be a temporary child
 			// TreeItem that needs to be removed, but it's safe to remove them all anyway
@@ -117,33 +112,15 @@ public class FTPTree extends Composite implements TreeListener, SourcesTreeEvent
 					// Using a DeferredCommand to execute this makes for a
 					// snappier UI; oherwise, there would be a short delay
 					// after clicking before the items appears selected.
-					ftpConnection.getList(item.getFTPFileItem().getFullPath(), new FTPGetDirectoryContentsResponseHandler((HasTreeItems) item));
+					ftpConnection.getList(item.getFTPFileItem().getFullPath(), new FTPGetDirectoryContentsResponseHandler(item));
 				}
 			});
 			item.setData();
 			item.setNeedsToLoad(false);
 		}
-		else {
-			final com.google.gwt.user.client.ui.TreeItem selectedTreeItem = ftpTree.getSelectedItem();
-			DeferredCommand.add(new Command() {
-				public void execute() {
-					if (selectGrid != null)
-						selectGrid.clear();
-					else
-						return;
-					
-					FTPTreeItem ftpTreeItem = null;
-					
-					for (Iterator it = item.getFileItems().iterator(); it.hasNext();) {
-						if (! selectedTreeItem.equals(ftpTree.getSelectedItem()))
-							return; // Prevents unnecessary processing
-						ftpTreeItem = (FTPTreeItem) it.next();
-						if (selectGrid != null && ftpTreeItem.getFTPFileItem().getType().equals("f"))
-							selectGrid.addItem(ftpTreeItem.getFTPFileItem().clone());
-					}
-				}
-			});
-		}
+		
+		if (listeners != null)
+			listeners.fireItemSelected(item);
 	}
 
 	/*public VerticalPanel myPanel() {
@@ -167,7 +144,7 @@ public class FTPTree extends Composite implements TreeListener, SourcesTreeEvent
 						// Using a DeferredCommand to execute this makes for a
 						// snappier UI; oherwise, there would be a short delay
 						// after clicking before the items appears selected.
-						ftpConnection.getList(item.getFTPFileItem().getFullPath(), new FTPGetDirectoryContentsResponseHandler((HasTreeItems) item));
+						ftpConnection.getList(item.getFTPFileItem().getFullPath(), new FTPGetDirectoryContentsResponseHandler(item));
 					}
 				});
 				item.setData();
@@ -175,13 +152,16 @@ public class FTPTree extends Composite implements TreeListener, SourcesTreeEvent
 			}
 			ftpTree.setSelectedItem(item);
 		}
+
+		if (listeners != null)
+			listeners.fireItemSelected(item);
 	}
 
 	protected class FTPGetDirectoryContentsResponseHandler implements
 			FTPAsyncCallback {
-		private HasTreeItems parentTreeItem = null;
+		private FTPTreeItem parentTreeItem = null;
 
-		public FTPGetDirectoryContentsResponseHandler(HasTreeItems parentTreeItem) {
+		public FTPGetDirectoryContentsResponseHandler(FTPTreeItem parentTreeItem) {
 			this.parentTreeItem = parentTreeItem;
 		}
 
@@ -198,15 +178,8 @@ public class FTPTree extends Composite implements TreeListener, SourcesTreeEvent
 			if (result instanceof List) {
 				final List ar = (List) result;
 				final Iterator it = ar.iterator();
-				ItemSelectGrid selectGrid = null;
-				
-				if (Web.getFTPBrowser() != null)
-					selectGrid = Web.getFTPBrowser().getFTPFileItemSelectGrid();
 				
 				parentTreeItem.removeItems();
-
-				if (selectGrid != null && parentTreeItem.equals(ftpTree.getSelectedItem()))
-					selectGrid.clear();
 				
 				while (it.hasNext()) {
 					FTPFileItem ftpFileItem = (FTPFileItem) it.next();
@@ -227,24 +200,55 @@ public class FTPTree extends Composite implements TreeListener, SourcesTreeEvent
 					}
 					else {
 						ftpTreeItem = new FTPTreeItem(ftpFileItem);
+						
 						ftpTreeItem.setVisible(false);
 						parentTreeItem.addItem(ftpTreeItem);
-						
-						if (selectGrid != null && parentTreeItem.equals(ftpTree.getSelectedItem()))
-							selectGrid.addItem((FTPFileItem) ftpFileItem);
 					}
 				}
 			} else {
 			}
+
+			if (listeners != null)
+				listeners.fireAfterDataReceived(parentTreeItem);
 		}
 	}
-
-	public void addTreeListener(TreeListener listener) {
-		ftpTree.addTreeListener(listener);
+	
+	public void addTreeListener(FTPTreeListener listener) {
+		if (listeners == null) {
+			listeners = new FTPTreeListenerCollection();
+		}
+		listeners.add(listener);
 	}
 
-	public void removeTreeListener(TreeListener listener) {
-		ftpTree.removeTreeListener(listener);
+	public void removeTreeListener(FTPTreeListener listener) {
+		if (listeners != null) {
+			listeners.remove(listener);
+		}
+	}
+	
+	private class FTPTreeListenerCollection extends Vector {
+		private static final long serialVersionUID = 5521187734427175581L;
+
+		public void fireItemSelected(TreeItem item) {
+			for (Iterator it = iterator(); it.hasNext();) {
+				TreeListener listener = (TreeListener) it.next();
+				listener.onTreeItemSelected(item);
+			}
+		}
+
+		public void fireItemStateChanged(TreeItem item) {
+			for (Iterator it = iterator(); it.hasNext();) {
+				TreeListener listener = (TreeListener) it.next();
+				listener.onTreeItemStateChanged(item);
+			}
+		}
+		
+		public void fireAfterDataReceived(FTPTreeItem parentTreeItem) {
+			for (Iterator it = iterator(); it.hasNext();) {
+				FTPTreeListener listener = (FTPTreeListener) it.next();
+				listener.afterDataReceived(parentTreeItem);
+			}
+		}
 	}
 
 }

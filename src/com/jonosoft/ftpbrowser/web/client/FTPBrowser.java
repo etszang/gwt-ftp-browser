@@ -3,13 +3,16 @@
  */
 package com.jonosoft.ftpbrowser.web.client;
 
+import java.util.Iterator;
+
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TreeItem;
-import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -24,19 +27,20 @@ public class FTPBrowser extends Composite {
 	/*private final Button parentLevelButton = new Button("Go up one directory");
 	private final Button openDirectoryButton = new Button("Open selection");*/
 
-	private final FTPFileItemSelectGrid ftpFileSelectGrid = new FTPFileItemSelectGrid();
-	private final FTPConnectionsMenuBar ftpConnectionsMenuBar = new FTPConnectionsMenuBar();
+	private final FTPFileItemSelectGrid selectGrid = new FTPFileItemSelectGrid();
+	private FTPConnectionsMenuBar ftpConnectionsMenuBar = null;
 	private FTPTree ftpTree = null;
-	
-	private final FTPFileGroupWidget fileGroupWidget = new FTPFileGroupWidget(ftpFileSelectGrid);
 
 	public FTPBrowser() {
 		initWidget(vertPanel);
 
 		addStyleName("gwt-ftpbrowser");
+		
+		ftpTree = new FTPTree();
+		ftpConnectionsMenuBar = new FTPConnectionsMenuBar(ftpTree);
 
-		ScrollPanel sc2 = new ScrollPanel(ftpFileSelectGrid);
-		ScrollPanel sc1 = new ScrollPanel(ftpTree = new FTPTree());
+		ScrollPanel sc2 = new ScrollPanel(selectGrid);
+		ScrollPanel sc1 = new ScrollPanel(ftpTree);
 
 		sc1.setPixelSize(350, 300);
 		sc2.setPixelSize(200, 300);
@@ -49,7 +53,6 @@ public class FTPBrowser extends Composite {
 		
 		vertPanel.add(ftpBrowserMenuBar);
 		vertPanel.add(directoryBrowserPanel);
-		vertPanel.add(fileGroupWidget);
 
 		directoryBrowserPanel.add(sc1);
 		directoryBrowserPanel.add(sc2);
@@ -61,7 +64,7 @@ public class FTPBrowser extends Composite {
 		/*parentLevelButton.addClickListener(this);
 		openDirectoryButton.addClickListener(this);*/
 
-		ftpTree.addTreeListener(new FTPTreeListener());
+		ftpTree.addTreeListener(new TreeListener());
 	}
 
 	public void changeDirectory(String path) {
@@ -81,18 +84,58 @@ public class FTPBrowser extends Composite {
 	}
 
 	public FTPFileItemSelectGrid getFTPFileItemSelectGrid() {
-		return ftpFileSelectGrid;
+		return selectGrid;
 	}
 
-	private class FTPTreeListener implements TreeListener {
+	private class TreeListener implements FTPTreeListener {
 
-		public void onTreeItemSelected(TreeItem item) {
-			
+		public void onTreeItemSelected(final TreeItem item) {
+			if (item instanceof FTPTreeItem)
+				onTreeItemSelected((FTPTreeItem) item);
+		}
+		
+		private void onTreeItemSelected(final FTPTreeItem item) {
+			if (selectGrid != null)
+				selectGrid.clear();
+
+			if (item.hasData() || ! item.getNeedsToLoad()) {
+				final com.google.gwt.user.client.ui.TreeItem selectedTreeItem = ftpTree.getSelectedItem();
+				DeferredCommand.add(new Command() {
+					public void execute() {
+						if (selectGrid != null)
+							selectGrid.clear();
+						else
+							return;
+
+						FTPTreeItem ftpTreeItem = null;
+
+						for (Iterator it = item.getFileItems().iterator(); it.hasNext();) {
+							if (! selectedTreeItem.equals(ftpTree.getSelectedItem()))
+								return; // Prevents unnecessary processing
+							ftpTreeItem = (FTPTreeItem) it.next();
+							if (selectGrid != null && ftpTreeItem.getFTPFileItem().getType().equals("f"))
+								selectGrid.addItem(ftpTreeItem.getFTPFileItem().clone());
+						}
+					}
+				});
+			}
 		}
 
 		public void onTreeItemStateChanged(TreeItem item) {
-			// TODO Auto-generated method stub
+		}
 
+		public void afterDataReceived(final FTPTreeItem parentTreeItem) {
+			FTPFileItem ftpFileItem = null;
+			
+			if (selectGrid != null && parentTreeItem.equals(ftpTree.getSelectedItem()))
+				selectGrid.clear();
+			
+			for (Iterator it = parentTreeItem.getFileItems().iterator(); it.hasNext();) {
+				ftpFileItem = ((FTPTreeItem) it.next()).getFTPFileItem();
+				
+				if (selectGrid != null && parentTreeItem.equals(ftpTree.getSelectedItem()))
+					selectGrid.addItem((FTPFileItem) ftpFileItem);
+			}
 		}
 
 	}

@@ -8,7 +8,7 @@
 </p>
 
 
-<div id="gwt-content"></div>
+<div id="gwt-content" style="position:relative;width:100%;height:100%;z-index:1"></div>
 
 
 <? include("footer.php5"); ?>
