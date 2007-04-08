@@ -11,7 +11,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author Jkelling
  *
  */
-public class FTPFileItem implements IsSerializable {
+public class FTPFileItem implements IsSerializable, Comparable {
 	
 	private FTPConnection ftpConnection = null;
 	private String name = null;
@@ -123,6 +123,20 @@ public class FTPFileItem implements IsSerializable {
 	
 	public void setFTPConnection(FTPConnection ftpConnection) {
 		this.ftpConnection = ftpConnection;
+	}
+
+	/**
+	 * @see java.lang.Comparable#compareTo(T)
+	 */
+	public int compareTo(Object arg0) {
+		if (arg0 instanceof FTPFileItem) {
+			return compareTo((FTPFileItem) arg0);
+		}
+		return 0;
+	}
+	
+	public int compareTo(FTPFileItem ftpFileItem) {
+		return getFullPath().compareTo(ftpFileItem.getFullPath());
 	}
 	
 }

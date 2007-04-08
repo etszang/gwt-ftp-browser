@@ -1,13 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?><module>
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
 
 	<!-- Inherit the core Web Toolkit stuff.                  -->
-	<inherits name="com.google.gwt.user.User"/>
-	<inherits name="com.google.gwt.json.JSON"/>
-	<inherits name="com.google.gwt.i18n.I18N"/>
-	<inherits name="com.google.gwt.http.HTTP"/>
-	<inherits name="org.gwtwidgets.WidgetLibrary"/>
+	<inherits name="com.google.gwt.user.User" />
+	<inherits name="com.google.gwt.json.JSON" />
+	<inherits name="com.google.gwt.i18n.I18N" />
+	<inherits name="com.google.gwt.http.HTTP" />
+	<inherits name="org.gwtwidgets.WidgetLibrary" />
 
 	<!-- Specify the app entry point class.                   -->
-	<entry-point class="com.jonosoft.ftpbrowser.web.client.Web"/>
-  
-<servlet class="com.jonosoft.ftpbrowser.web.server.FTPServiceImpl" path="/FTPService"/></module>
+	<!-- entry-point class="com.jonosoft.ftpbrowser.web.client.Web" / -->
+
+	<servlet class="com.jonosoft.ftpbrowser.web.server.FTPServiceImpl" path="/FTPService" />
+
+	<script src="javascripts/prototype.js"><![CDATA[
+		return true;
+	]]>
+	</script>
+	<script src="javascripts/effects.js"><![CDATA[
+		return true;
+	]]>
+	</script>
+	
+	<stylesheet src="ftpBrowser.css"/>
+
+</module>	

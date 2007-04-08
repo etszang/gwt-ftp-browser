@@ -20,10 +20,13 @@ import com.google.gwt.user.client.ui.MenuItem;
 public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSettingsListener   {
 	
 	private final FTPConnectionSettingsPopupPanel myFtp = new FTPConnectionSettingsPopupPanel(true);
-	private  FTPConnection myConnect;
+	private FTPTree ftpTree = null;
+	private FTPConnection myConnect = null;
 	
-	public FTPConnectionsMenuBar() {
+	public FTPConnectionsMenuBar(FTPTree ftpTree) {
 		super(true);
+		
+		this.ftpTree = ftpTree;
 		
 		setAutoOpen(true);
 		addStyleName("ftpconnections-menubar");
@@ -43,6 +46,10 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 	
 	public void onFTPConnectionSettingsCancel() {
 		myFtp.hide();
+	}
+	
+	protected FTPTree getFTPTree() {
+		return ftpTree;
 	}
 	
 	private void refreshListFromServer() {
@@ -76,7 +83,8 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 			
 			addItem("Connect", new Command() {
 				public void execute() {
-					Web.getFTPBrowser().getFTPTree().setFTPConnection(ftpConnection);
+					if (getFTPTree() != null)
+						getFTPTree().setFTPConnection(ftpConnection);
 				}
 			});
 			

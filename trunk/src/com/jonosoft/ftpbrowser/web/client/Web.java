@@ -6,8 +6,6 @@ package com.jonosoft.ftpbrowser.web.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 /**
@@ -16,7 +14,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class Web implements EntryPoint {
 	private final VerticalPanel vertPanel = new VerticalPanel();
-	private static final FTPBrowser ftpBrowser = new FTPBrowser();
+	private final FTPBrowser ftpBrowser = new FTPBrowser();
     //private CheckFile myCheck ;
 	
 	/**
@@ -33,18 +31,15 @@ public class Web implements EntryPoint {
 		//selectGrid.addItemSelectGridListener(new Responder());
 		
 		vertPanel.add(ftpBrowser);
-
-		RootPanel.get("gwt-content").add(vertPanel);
+		
+		if (RootPanel.get("gwt-content") != null)
+			RootPanel.get("gwt-content").add(vertPanel);
 		
 		GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			public void onUncaughtException(final Throwable e) {
 				GWTErrorLogger.logError(e);
 			}
 		});
-	}
-	
-	public static FTPBrowser getFTPBrowser() {
-		return ftpBrowser;
 	}
 
 }

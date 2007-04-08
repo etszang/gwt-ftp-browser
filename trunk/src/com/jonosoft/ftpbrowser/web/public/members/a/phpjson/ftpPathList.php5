@@ -36,12 +36,14 @@ else {
 				foreach ($paths as $path) {
 					$parts = explode(":", $path, 2);
 					$name = preg_replace('/^.+\\/([^\\/]+)$/', '$1', $parts[1]);
-					array_push($arOut, array(
-						 "ftp_site_id" => $pathRecord->getFtpSiteId()
-						,"name" => $name
-						,"type" => $parts[0]
-						,"path" => $parts[1]
-					));
+					if (strlen($parts[1]) > 0) {
+						array_push($arOut, array(
+							 "ftp_site_id" => $pathRecord->getFtpSiteId()
+							,"name" => $name
+							,"type" => $parts[0]
+							,"path" => $parts[1]
+						));
+					}
 				}
 			}
 			

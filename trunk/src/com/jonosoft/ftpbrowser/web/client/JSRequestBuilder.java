@@ -11,6 +11,7 @@ import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
 
 /**
@@ -23,13 +24,7 @@ public class JSRequestBuilder extends RequestBuilder {
 	
 	public JSRequestBuilder(Method httpMethod, String url) {
 		super(httpMethod, url);
-		if (POST.toString().equals(httpMethod.toString()))
-			setHeader("Content-Type", "application/x-www-form-urlencoded");
-	}
-
-	public JSRequestBuilder(String httpMethod, String url) {
-		super(httpMethod, url);
-		if (POST.toString().equals(httpMethod.toString()))
+		//if (POST.toString().equals(httpMethod.toString()))
 			setHeader("Content-Type", "application/x-www-form-urlencoded");
 	}
 	
@@ -41,8 +36,22 @@ public class JSRequestBuilder extends RequestBuilder {
 		parameterCollection.add(nvp);
 	}
 
-	public Request sendRequest(RequestCallback callback) throws RequestException {
-		return super.sendRequest(getRequestDataAsString(), callback);
+	public Request sendRequest(final RequestCallback callback) throws RequestException {
+		return super.sendRequest(getRequestDataAsString(), new RequestCallback() {
+			public void onError(Request request, Throwable exception) {
+				callback.onError(request, exception);
+			}
+			public void onResponseReceived(Request request, Response response) {
+				try {
+					JSONResponse jsonResponse = JSONResponse.newInstance(response.getText());
+					jsonResponse.handleErrors();
+					callback.onResponseReceived(request, response);
+				}
+				catch (Throwable e) {
+					callback.onError(request, new Exception("JSONResponse Parser Error; Response Text: " + response.getText(), e));
+				}
+			}
+		});
 	}
 
 	public String getRequestDataAsString() {
