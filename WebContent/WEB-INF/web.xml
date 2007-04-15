@@ -6,15 +6,18 @@
 	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	
 	<display-name>gwt-ftp-browser</display-name>
+	
 	<servlet>
 		<servlet-name>FTPService</servlet-name>
 		<servlet-class>com.jonosoft.ftpbrowser.web.server.FTPServiceImpl</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>FTPService</servlet-name>
-		<url-pattern>/FTPService</url-pattern>
+		<url-pattern>FTPService</url-pattern>
 	</servlet-mapping>
+	
 	<welcome-file-list>
+	
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
@@ -23,6 +26,7 @@
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
 	
+	<!-- 
 	<filter>
 		<filter-name>all</filter-name>
 		<filter-class>com.jonosoft.ftpbrowser.server.dev.RequestProxy</filter-class>
@@ -35,5 +39,5 @@
 		<filter-name>all</filter-name>
 		<url-pattern>*.php5</url-pattern>
 	</filter-mapping>
-	
+	-->
 </web-app>
