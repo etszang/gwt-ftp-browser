@@ -6,10 +6,7 @@ package com.jonosoft.ftpbrowser.web.client;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ResponseTextHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -23,7 +20,6 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 	
 	private final FTPConnectionSettingsPopupPanel myFtp = new FTPConnectionSettingsPopupPanel(true);
 	private FTPTree ftpTree = null;
-	private FTPSite myConnect = null;
 	
 	public FTPConnectionsMenuBar(FTPTree ftpTree) {
 		super(true);
@@ -39,10 +35,18 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 	}
 	
 	public void onFTPConnectionSettingsSave(FTPSite result) {
-		myConnect.setUsername(result.getUsername());
-		myConnect.setPort(result.getPort());
-		myConnect.setPassword(result.getPassword());
-		myConnect.setHost(result.getHost());
+		FTPService.Util.getInstance().saveUserFTPSite(result, new AsyncCallback() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unexpected failure saving the FTP Connection. If this continues, please contact our staff.\n\nMessage:\n" + caught.getMessage());
+				refreshListFromServer();
+			}
+
+			public void onSuccess(Object result) {
+				refreshListFromServer();
+				Window.alert("FTP site has been saved.\n\n" + result.toString());
+			}
+		});
+		
 		myFtp.hide();
 	}
 	
@@ -50,56 +54,63 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 		myFtp.hide();
 	}
 	
-	protected FTPTree getFTPTree() {
-		return ftpTree;
-	}
-	
 	private void refreshListFromServer() {
-		//HTTPRequest.asyncGet(GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.ftpConnectionListURL(), new ListBuilder());
-		
-		FTPService.Util.getInstance().getUserFTPSites(7, new ListBuilder());
-	}
-	
-	private class ListBuilder implements ResponseTextHandler, AsyncCallback {
-		public void onCompletion(String responseText) {
-			final JSONResponse jsonResponse = JSONResponse.newInstance(responseText);
-			final JSONArray connections = (JSONArray) jsonResponse.getResult().get("connectionList");
-			FTPSite conn = null;
-			
-			for (int i = 0; i < connections.size(); i++) {
-				conn = FTPSiteFactory.getInstance((JSONObject) connections.get(i));
-				addItem(new ConnectionMenuItem(conn));
+		FTPService.Util.getInstance().getUserFTPSites(7, new AsyncCallback() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Unexpected failure retrieving your saved FTP connections. If this continues, please contact our staff.\n\nMessage:\n" + caught.getMessage());
 			}
-		}
-
-		public void onFailure(Throwable caught) {
-			Window.alert(caught.getMessage());
-		}
-
-		public void onSuccess(Object result) {
-			List ftpSites = (List) result;
-			FTPSite conn = null;
-			for (Iterator it = ftpSites.iterator(); it.hasNext();)
-				addItem(new ConnectionMenuItem((FTPSite) it.next()));
-		}
+			
+			public void onSuccess(Object result) {
+				clearItems();
+				List ftpSites = (List) result;
+				for (Iterator it = ftpSites.iterator(); it.hasNext();)
+					addItem(new FTPConnectionMenuItem((FTPSite) it.next()));
+			}
+			
+		});
 	}
 	
-	private class ConnectionMenuItem extends MenuItem {
-		public ConnectionMenuItem(FTPSite ftpConnection) {
-			super(ftpConnection.getHost(), true, new SubMenu(ftpConnection));
+	public void clearItems() {
+		super.clearItems();
+		rebuildMenuBar();
+	}
+	
+	private void rebuildMenuBar() {
+		MenuItem newFTPSiteMenuItem = new MenuItem("New FTP Site...", new Command() {
+			public void execute() {
+				FTPSite newFTPSite = new FTPSite();
+				
+				// XXX All of the userId stuff should be server-side, I don't know what I was thinking...
+				newFTPSite.setUserId(7);
+				
+				// The default port for FTP is 21
+				newFTPSite.setPort(21);
+				
+				myFtp.show();
+				myFtp.setFTPSite(newFTPSite);
+			}
+		});
+		
+		addItem(newFTPSiteMenuItem);
+		addItem("<hr>", true, (Command)null);
+	}
+	
+	private class FTPConnectionMenuItem extends MenuItem {
+		public FTPConnectionMenuItem(FTPSite ftpConnection) {
+			super(ftpConnection.getHost(), true, new FTPConnectionSubMenu(ftpConnection));
 			addStyleName("ftpconnections-menuitem");
 		}
 	}
 	
-	private class SubMenu extends MenuBar {
-		public SubMenu(final FTPSite ftpConnection) {
+	private class FTPConnectionSubMenu extends MenuBar {
+		public FTPConnectionSubMenu(final FTPSite ftpSite) {
 			super(true);
 			addStyleName("ftpconnections-submenubar");
 			
 			addItem("Connect", new Command() {
 				public void execute() {
-					if (getFTPTree() != null)
-						getFTPTree().setFTPConnection(ftpConnection);
+					if (ftpTree != null)
+						ftpTree.setFTPConnection(ftpSite);
 				}
 			});
 			
@@ -108,9 +119,7 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 					// TODO Auto-generated method stub
 					// Settings window (at this time) doesn't work as an "edit" only a "new"
 					myFtp.show();
-					myFtp.getSettings(ftpConnection);
-					myConnect = ftpConnection;
-					//Window.alert("TODO Settings window (at this time) doesn't work as an \"edit\" only a \"new\"");
+					myFtp.setFTPSite(ftpSite);
 				}
 			});
 			
@@ -118,11 +127,16 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 				public void execute() {
 					// TODO Auto-generated method stub
 					// Should add a new connection and automatically bring up settings window
-					addItem(new ConnectionMenuItem(ftpConnection));
+					FTPSite duplicateFTPSite = new FTPSite();
+					
+					duplicateFTPSite.setUserId(ftpSite.getUserId());
+					duplicateFTPSite.setHost(ftpSite.getHost());
+					duplicateFTPSite.setPort(ftpSite.getPort());
+					duplicateFTPSite.setUsername(ftpSite.getUsername());
+					duplicateFTPSite.setPassword(ftpSite.getPassword());
+					
 					myFtp.show();
-					myFtp.getSettings(ftpConnection);
-					myConnect = ftpConnection;
-					Window.alert("TODO: Should add a new connection (PHP) and automatically bring up settings window");
+					myFtp.setFTPSite(duplicateFTPSite);
 				}
 			});
 			
@@ -130,8 +144,15 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 				public void execute() {
 					// TODO Auto-generated method stub
 					// obviously should have a confirmation
-					if(Window.confirm("Delete Ftp Connection?")){
-						
+					if(Window.confirm("Delete FTP Connection?\n\n" + ftpSite.toString())){
+						FTPService.Util.getInstance().deleteUserFTPSite(ftpSite, new AsyncCallback() {
+							public void onFailure(Throwable caught) {
+								Window.alert("Failed to delete FTP connection:\n" + ftpSite.toString() + "\n\nMessage:\n" + caught.getMessage());
+							}
+							public void onSuccess(Object result) {
+								refreshListFromServer();
+							}
+						});
 					}
 				}
 			});
