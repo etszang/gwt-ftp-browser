@@ -51,31 +51,32 @@ public class PopupOverlayPanel extends PopupPanel {
 	}
 	
 	public void show() {
-		overlayPanel.show();
+		//overlayPanel.show();
 		super.show();
 		
 		DOM.setStyleAttribute(getElement(), "zIndex", "99999");
 		
-		DOM.setStyleAttribute(getElement(), "visibility", "hidden");
-		DOM.setStyleAttribute(getElement(), "display", "block");
+		/*DOM.setStyleAttribute(getElement(), "visibility", "hidden");
+		DOM.setStyleAttribute(getElement(), "display", "block");*/
 		
 		DeferredCommand.add(new Command() {
 			public void execute() {
 				setPopupPosition((Window.getClientWidth() / 2)- (getOffsetWidth() / 2), (Window.getClientHeight() / 2) - (getOffsetHeight() / 2));
-				DOM.setStyleAttribute(getElement(), "visibility", "visible");
-				DOM.setStyleAttribute(getElement(), "display", "none");
-				DeferredCommand.add(effectCommand);
+				/*DOM.setStyleAttribute(getElement(), "visibility", "visible");
+				DOM.setStyleAttribute(getElement(), "display", "none");*/
+				//DeferredCommand.add(effectCommand);
 			}
 		});
 	}
 	
 	public void hide() {
-		overlayPanel.hide();
+		/*overlayPanel.hide();
 		Effect.fade(this, new EffectOption[] {new EffectOption("duration", "0.2"), new EffectOption("afterFinish", new Callback() {
 			public void execute() {
 				finishHide();
 			}
-		})});
+		})});*/
+		finishHide();
 	}
 	
 	private void finishHide() {

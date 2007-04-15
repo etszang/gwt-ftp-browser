@@ -12,12 +12,17 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class FTPSite implements IsSerializable {
 	private int ftpSiteId;
 	private String host;
-	private int port;
-	private String username;
 	private String password;
+	private int port;
+	private int userId;
+	private String username;
 	
-	public void setFtpSiteId(int ftpSiteId) {
-		this.ftpSiteId = ftpSiteId;
+	public boolean equals(Object arg0) {
+		if (arg0 instanceof FTPSite) {
+			FTPSite ftpSite = (FTPSite) arg0;
+			return getFtpSiteId() == ftpSite.getFtpSiteId();
+		}
+		return false;
 	}
 
 	public int getFtpSiteId() {
@@ -28,34 +33,46 @@ public class FTPSite implements IsSerializable {
 		return host;
 	}
 
-	public void setHost(String host) {
-		this.host = host;
-	}
-
 	public String getPassword() {
 		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public int getPort() {
 		return port;
 	}
 
-	public void setPort(int port) {
-		this.port = port;
+	public int getUserId() {
+		return userId;
 	}
 
 	public String getUsername() {
 		return username;
 	}
 
+	public void setFtpSiteId(int ftpSiteId) {
+		this.ftpSiteId = ftpSiteId;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public void setPort(int port) {
+		this.port = port;
+	}
+	
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
 	public String toString() {
 		final String LS = String.valueOf((char)13);
 		final StringBuffer sb = new StringBuffer();
@@ -66,13 +83,5 @@ public class FTPSite implements IsSerializable {
 		sb.append("Password: " + password);
 		
 		return sb.toString();
-	}
-	
-	public boolean equals(Object arg0) {
-		if (arg0 instanceof FTPSite) {
-			FTPSite ftpSite = (FTPSite) arg0;
-			return getFtpSiteId() == ftpSite.getFtpSiteId();
-		}
-		return false;
 	}
 }

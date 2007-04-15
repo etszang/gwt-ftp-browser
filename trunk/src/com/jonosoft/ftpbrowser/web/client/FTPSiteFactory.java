@@ -16,6 +16,7 @@ public class FTPSiteFactory {
 		FTPSite conn = new FTPSite();
 		
 		conn.setFtpSiteId(Integer.parseInt(((JSONString) jsonObject.get("ftp_site_id")).stringValue()));
+		conn.setUserId(Integer.parseInt(((JSONString) jsonObject.get("user_id")).stringValue()));
 		conn.setHost(((JSONString) jsonObject.get("host")).stringValue());
 		conn.setPort(Integer.parseInt(((JSONString) jsonObject.get("port")).stringValue()));
 		conn.setUsername(((JSONString) jsonObject.get("username")).stringValue());

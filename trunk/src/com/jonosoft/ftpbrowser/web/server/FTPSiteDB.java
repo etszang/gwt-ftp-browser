@@ -23,6 +23,7 @@ public class FTPSiteDB extends ObjectDB {
 		FTPSite site = new FTPSite();
 		
 		site.setFtpSiteId(rs.getInt("ftp_site_id"));
+		site.setUserId(rs.getInt("user_id"));
 		site.setHost(rs.getString("server"));
 		site.setPort(rs.getInt("port"));
 		site.setUsername(rs.getString("username"));
@@ -59,6 +60,99 @@ public class FTPSiteDB extends ObjectDB {
 		}
 		finally {
 			cleanup(ps, rs);
+		}
+	}
+	
+	public static FTPSite save(DBConnection dbConnection, FTPSite site) throws FTPBrowserFatalException {
+		if (site != null) {
+			try {
+				if (site.getFtpSiteId() == 0)
+					return insert(dbConnection, site);
+				else
+					return update(dbConnection, site);
+			}
+			catch (SQLException e) {
+				throw new FTPBrowserFatalException("Error saving FTPSite: " + site.toString() + "; Error Message: " + e.getMessage());
+			}
+		}
+		return null;
+	}
+	
+	private static FTPSite insert(DBConnection dbConnection, FTPSite site) throws SQLException {
+		final String sql;
+		final Connection conn;
+		PreparedStatement ps = null;
+		
+		sql = "insert into ftp_site (user_id,server,port,username,password) values (?,?,?,?,?)";
+		
+		try {
+			conn = dbConnection.getConnection();
+			ps = conn.prepareStatement(sql);
+			
+			ps.setInt(1, site.getUserId());
+			ps.setString(2, site.getHost());
+			ps.setInt(3, site.getPort());
+			ps.setString(4, site.getUsername());
+			ps.setString(5, site.getPassword());
+			
+			ps.executeUpdate();
+			
+			site.setFtpSiteId(StatementLastInsertId.executeGetLastInsertId(dbConnection));
+			
+			return site;
+		}
+		finally {
+			cleanup(ps);
+		}
+	}
+	
+	private static FTPSite update(DBConnection dbConnection, FTPSite site) throws SQLException {
+		final String sql;
+		final Connection conn;
+		PreparedStatement ps = null;
+		
+		sql = "update ftp_site set user_id=?,server=?,port=?,username=?,password=? where ftp_site_id=?";
+		
+		try {
+			conn = dbConnection.getConnection();
+			ps = conn.prepareStatement(sql);
+			
+			ps.setInt(1, site.getUserId());
+			ps.setString(2, site.getHost());
+			ps.setInt(3, site.getPort());
+			ps.setString(4, site.getUsername());
+			ps.setString(5, site.getPassword());
+			ps.setInt(6, site.getFtpSiteId());
+			
+			ps.executeUpdate();
+			
+			return site;
+		}
+		finally {
+			cleanup(ps);
+		}
+	}
+	
+	public static void delete(DBConnection dbConnection, FTPSite site) throws FTPBrowserFatalException {
+		final String sql;
+		final Connection conn;
+		PreparedStatement ps = null;
+		
+		sql = "delete from ftp_site where ftp_site_id=?";
+		
+		try {
+			conn = dbConnection.getConnection();
+			ps = conn.prepareStatement(sql);
+			
+			ps.setInt(1, site.getFtpSiteId());
+			
+			ps.executeUpdate();
+		}
+		catch (SQLException e) {
+			throw new FTPBrowserFatalException("Error deleting FTPSite: " + site.toString() + "; Error Message: " + e.getMessage()); 
+		}
+		finally {
+			cleanup(ps);
 		}
 	}
 	
