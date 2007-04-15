@@ -12,13 +12,14 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author Jkelling
  *
  */
-public class OverlayPanel extends WPanel {
+public class OverlayPanel extends SimplePanel {
 	
 	private static int	defaultOverlayOpacity			= 70;
 	private static String	defaultOverlayBackgroundColor	= "#e2e2e2";
@@ -28,13 +29,13 @@ public class OverlayPanel extends WPanel {
 	private final Command effectCommand	= new EffectCommand(this);
 	
 	public OverlayPanel() {
-		super("overlay");
+		//super("overlay");
 	}
 	
 	public OverlayPanel(int overlayOpacity, String overlayBackgroundColor) {
 		this();
-		setOverlayOpacity(overlayOpacity);
-		setOverlayBackgroundColor(overlayBackgroundColor);
+		/*setOverlayOpacity(overlayOpacity);
+		setOverlayBackgroundColor(overlayBackgroundColor);*/
 	}
 	
 	public static int getDefaultOverlayOpacity() {
@@ -84,7 +85,7 @@ public class OverlayPanel extends WPanel {
 		DOM.setStyleAttribute(getElement(), "filter", "alpha(opacity="+overlayOpacity+")");*/
 		
 
-		setPixelSize(Window.getClientWidth(), Window.getClientHeight());
+		/*setPixelSize(Window.getClientWidth(), Window.getClientHeight());
 		DOM.setStyleAttribute(getElement(), "backgroundColor", overlayBackgroundColor);
 		DOM.setStyleAttribute(getElement(), "display", "none");
 		DOM.setStyleAttribute(getElement(), "zIndex", "99998");
@@ -93,20 +94,20 @@ public class OverlayPanel extends WPanel {
 		
 		DeferredCommand.add(new Command() {
 			public void execute() {
-				/*DOM.setStyleAttribute(getElement(), "visibility", "visible");
-				DOM.setStyleAttribute(getElement(), "display", "none");*/
+				DOM.setStyleAttribute(getElement(), "visibility", "visible");
+				DOM.setStyleAttribute(getElement(), "display", "none");
 				DeferredCommand.add(effectCommand);
 			}
-		});
+		});*/
 	}
 	
-	public void hide() {
+	public void hide() {/*
 		Effect.fade(this, new EffectOption[] {new EffectOption("duration", "0.2"), new EffectOption("afterFinish", new Callback() {
 			public void execute() {
 				finishHide();
 			}
 		})});
-	}
+	*/}
 	
 	private void finishHide() {
 		//super.hide();

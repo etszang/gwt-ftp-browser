@@ -1,0 +1,5 @@
+#Sat Apr 14 23:12:36 CDT 2007
+war.name=Web.war
+compiler.style=OBFUSCATED
+server.path=C\:\\Program Files\\Apache Software Foundation\\apache-tomcat-4.1.36\\webapps
+compiler.memory.max=64m

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="ImageViewer" default="all" basedir="C:\workspace\gwt-ftp-browser">
+	<description>
+		This is build file for GWT module 'com.jonosoft.ftpbrowser.web.Web' deployment.
+		GWT Designer generates it each time when you initiate deployment.
+		
+		You can use this file later for manual deployment, but keep in mind, that
+		classpath is hardcoded in it, so after changes in classpath you should
+		regenerate build file.
+	</description>
+
+	<property name="gwt.home" value="C:\Program Files\gwt" />
+	<property name="gwt.module.id" value="com.jonosoft.ftpbrowser.web.Web" />
+	<property name="war.name" value="Web.war" />
+
+	<target name="jars" description="Package up the module project and required projects as jars">
+		<delete dir="@dot" />
+		<mkdir dir="@dot/${gwt.module.id}/WEB-INF/lib" />
+		<!--=== gwt-ftp-browser ===-->
+		<jar destfile="@dot/${gwt.module.id}/WEB-INF/lib/gwt-ftp-browser.jar">
+			<fileset dir="C:/workspace/gwt-ftp-browser/src">
+				<include name="**"/>
+			</fileset>
+			<fileset dir="C:/workspace/gwt-ftp-browser/build/classes">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+		<copy todir="@dot/${gwt.module.id}/WEB-INF/lib">
+			<fileset file="C:\Program Files\gwt\gwt-widgets-0.1.3.jar"/>
+		</copy>		
+	</target>
+
+	<target name="gwt-compile" description="Compile to JavaScript">
+		<java classname="com.google.gwt.dev.GWTCompiler" fork="yes" failonerror="true" maxmemory="64m">
+			<classpath>
+				<pathelement location="C:/workspace/gwt-ftp-browser/src" />
+				<pathelement location="C:/workspace/.metadata/.plugins/com.swtdesigner.gwt/gwt-user-patch.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/build/classes" />
+				<pathelement location="C:/Program Files/gwt/gwt-user.jar" />
+				<pathelement location="C:/Program Files/gwt/gwt-widgets-0.1.3.jar" />
+				<pathelement location="C:/Program Files/gwt/gwt-dev-windows.jar" />
+			</classpath>
+			<arg value="-style"/>
+			<arg value="OBFUSCATED"/>
+			<arg value="-out" />
+			<arg file="@dot" />
+			<arg value="${gwt.module.id}" />
+		</java>
+	</target>
+
+	<target name="web-xml">
+		<mkdir dir="@dot/${gwt.module.id}/WEB-INF" />
+		<echo file="@dot/${gwt.module.id}/WEB-INF/web.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+	<servlet>
+		<servlet-name>com.jonosoft.ftpbrowser.web.server.GWTLoggerServiceImpl</servlet-name>
+		<servlet-class>com.jonosoft.ftpbrowser.web.server.GWTLoggerServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>com.jonosoft.ftpbrowser.web.server.GWTLoggerServiceImpl</servlet-name>
+		<url-pattern>/GWTLoggerService</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>com.jonosoft.ftpbrowser.web.server.FTPServiceImpl</servlet-name>
+		<servlet-class>com.jonosoft.ftpbrowser.web.server.FTPServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>com.jonosoft.ftpbrowser.web.server.FTPServiceImpl</servlet-name>
+		<url-pattern>/FTPService</url-pattern>
+	</servlet-mapping>
+
+</web-app>
+]]></echo>
+	</target>
+
+	<target name="war" depends="jars, gwt-compile, web-xml">
+		<delete file="${war.name}" />
+		<copy file="${gwt.home}/gwt-servlet.jar" todir="@dot/${gwt.module.id}/WEB-INF/lib" />
+		<jar destfile="${war.name}" basedir="@dot/${gwt.module.id}" duplicate="preserve" />
+		<delete dir="@dot" />
+	</target>
+	
+	<target name="deploy" depends="war">
+		<move file="${war.name}" todir="C:/Program Files/Apache Software Foundation/apache-tomcat-4.1.36/webapps" />
+	</target>
+
+	<target name="all" depends="deploy" />
+
+</project>

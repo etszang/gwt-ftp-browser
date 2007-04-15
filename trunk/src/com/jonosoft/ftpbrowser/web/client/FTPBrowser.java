@@ -39,14 +39,14 @@ public class FTPBrowser extends Composite {
 		ftpTree = new FTPTree();
 		ftpConnectionsMenuBar = new FTPConnectionsMenuBar(ftpTree);
 
-		ScrollPanel sc2 = new ScrollPanel(selectGrid);
 		ScrollPanel sc1 = new ScrollPanel(ftpTree);
+		ScrollPanel sc2 = new ScrollPanel(selectGrid);
 
-		sc1.setPixelSize(350, 300);
-		sc2.setPixelSize(200, 300);
+		sc1.setPixelSize(375, 196);
+		sc2.setPixelSize(325, 196);
 		
 		final MenuBar ftpBrowserMenuBar = new MenuBar(false);
-		final MenuItem ftpSitesMenuItem = new MenuItem("FTP Sites", (MenuBar) ftpConnectionsMenuBar);
+		final MenuItem ftpSitesMenuItem = new MenuItem("<a href=\"javascript:void(0);\"><span>FTP Sites</span></a>", true, (MenuBar) ftpConnectionsMenuBar);
 		ftpBrowserMenuBar.addStyleName("ftpbrowser-menubar");
 		ftpSitesMenuItem.addStyleName("ftpbrowser-menuitem");
 		ftpBrowserMenuBar.addItem(ftpSitesMenuItem);
@@ -63,7 +63,7 @@ public class FTPBrowser extends Composite {
 
 		/*parentLevelButton.addClickListener(this);
 		openDirectoryButton.addClickListener(this);*/
-
+		
 		ftpTree.addTreeListener(new TreeListener());
 	}
 

@@ -3,12 +3,7 @@
  */
 package com.jonosoft.ftpbrowser.web.client;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  * @author Jkelling
@@ -17,7 +12,18 @@ import com.google.gwt.http.client.Response;
 public class GWTErrorLogger {
 	
 	public static void logError(Throwable e) {
-		final JSRequestBuilder requestBuilder = new JSRequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.gwtErrorSaveURL());
+		GWTLoggerService.Util.getInstance().error("", e, new AsyncCallback() {
+
+			public void onFailure(Throwable caught) {
+				System.out.println(caught.toString());
+			}
+
+			public void onSuccess(Object result) {
+			}
+			
+		});
+		
+		/*final JSRequestBuilder requestBuilder = new JSRequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.gwtErrorSaveURL());
 		
 		requestBuilder.addParameter("stack_trace", e.toString());
 		
@@ -34,7 +40,7 @@ public class GWTErrorLogger {
 			});
 		} catch (RequestException e1) {
 			e1.printStackTrace();
-		}
+		}*/
 	}
 	
 }

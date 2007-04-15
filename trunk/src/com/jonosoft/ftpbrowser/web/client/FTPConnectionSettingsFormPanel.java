@@ -48,10 +48,10 @@ public class FTPConnectionSettingsFormPanel extends Composite implements ClickLi
 		
 		layoutPanel.add(buttonsPanel);
 	}
-	public void setFTPConnection(FTPConnection conn){
+	public void setFTPConnection(FTPSite conn){
 		fieldsGrid.setFTPConnection(conn);
 	}
-	public void getFTPConnection(FTPConnection conn){
+	public void getFTPConnection(FTPSite conn){
 		fieldsGrid.getFTPConnection(conn);
 	}
 	public void addFTPConnectionSettingsListener(FTPConnectionSettingsListener listener) {
@@ -112,19 +112,19 @@ public class FTPConnectionSettingsFormPanel extends Composite implements ClickLi
 			grid.setWidget(3, 1, password);
 		}
 		
-		public FTPConnection getFTPConnection() {
-			FTPConnection conn = new FTPConnection();
+		public FTPSite getFTPConnection() {
+			FTPSite conn = new FTPSite();
 			getFTPConnection(conn);
 			return conn;
 		}
-		public void setFTPConnection(FTPConnection conn){
+		public void setFTPConnection(FTPSite conn){
 		//host.setText(conn.getPort());
 			password.setText(conn.getPassword());
-			host.setText(conn.getServer());
+			host.setText(conn.getHost());
 			username.setText(conn.getUsername());
 		}
-		public void getFTPConnection(FTPConnection conn) {
-			conn.setServer(host.getText());
+		public void getFTPConnection(FTPSite conn) {
+			conn.setHost(host.getText());
 			conn.setPort(Integer.parseInt(port.getText()));
 			conn.setUsername(username.getText());
 			conn.setPassword(password.getText());
