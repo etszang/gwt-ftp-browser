@@ -4,6 +4,7 @@
 package com.jonosoft.ftpbrowser.web.client;
 
 import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONException;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
@@ -24,7 +25,7 @@ public class JSONResponse {
 			return jsonResponse;
 		}
 		catch (Throwable e) {
-			throw new RuntimeException("JSONResponse couldn't parse text: " + responseText, e);
+			throw new JSONException("JSONResponse couldn't parse text: " + responseText, e);
 		}
 	}
 	

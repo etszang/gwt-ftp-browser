@@ -3,13 +3,15 @@
  */
 package com.jonosoft.ftpbrowser.web.client;
 
-import com.google.gwt.core.client.GWT;
+import java.util.Iterator;
+import java.util.List;
+
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.HTTPRequest;
 import com.google.gwt.user.client.ResponseTextHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
@@ -21,7 +23,7 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 	
 	private final FTPConnectionSettingsPopupPanel myFtp = new FTPConnectionSettingsPopupPanel(true);
 	private FTPTree ftpTree = null;
-	private FTPConnection myConnect = null;
+	private FTPSite myConnect = null;
 	
 	public FTPConnectionsMenuBar(FTPTree ftpTree) {
 		super(true);
@@ -36,11 +38,11 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 		refreshListFromServer();
 	}
 	
-	public void onFTPConnectionSettingsSave(FTPConnection result) {
+	public void onFTPConnectionSettingsSave(FTPSite result) {
 		myConnect.setUsername(result.getUsername());
 		myConnect.setPort(result.getPort());
 		myConnect.setPassword(result.getPassword());
-		myConnect.setServer(result.getServer());
+		myConnect.setHost(result.getHost());
 		myFtp.hide();
 	}
 	
@@ -53,31 +55,44 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 	}
 	
 	private void refreshListFromServer() {
-		HTTPRequest.asyncGet(GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.ftpConnectionListURL(), new ListBuilder());
+		//HTTPRequest.asyncGet(GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.ftpConnectionListURL(), new ListBuilder());
+		
+		FTPService.Util.getInstance().getUserFTPSites(7, new ListBuilder());
 	}
 	
-	private class ListBuilder implements ResponseTextHandler {
+	private class ListBuilder implements ResponseTextHandler, AsyncCallback {
 		public void onCompletion(String responseText) {
 			final JSONResponse jsonResponse = JSONResponse.newInstance(responseText);
 			final JSONArray connections = (JSONArray) jsonResponse.getResult().get("connectionList");
-			FTPConnection conn = null;
+			FTPSite conn = null;
 			
 			for (int i = 0; i < connections.size(); i++) {
-				conn = FTPConnection.getInstance((JSONObject) connections.get(i));
+				conn = FTPSiteFactory.getInstance((JSONObject) connections.get(i));
 				addItem(new ConnectionMenuItem(conn));
 			}
+		}
+
+		public void onFailure(Throwable caught) {
+			Window.alert(caught.getMessage());
+		}
+
+		public void onSuccess(Object result) {
+			List ftpSites = (List) result;
+			FTPSite conn = null;
+			for (Iterator it = ftpSites.iterator(); it.hasNext();)
+				addItem(new ConnectionMenuItem((FTPSite) it.next()));
 		}
 	}
 	
 	private class ConnectionMenuItem extends MenuItem {
-		public ConnectionMenuItem(FTPConnection ftpConnection) {
-			super(ftpConnection.getServer(), new SubMenu(ftpConnection));
+		public ConnectionMenuItem(FTPSite ftpConnection) {
+			super(ftpConnection.getHost(), true, new SubMenu(ftpConnection));
 			addStyleName("ftpconnections-menuitem");
 		}
 	}
 	
 	private class SubMenu extends MenuBar {
-		public SubMenu(final FTPConnection ftpConnection) {
+		public SubMenu(final FTPSite ftpConnection) {
 			super(true);
 			addStyleName("ftpconnections-submenubar");
 			
@@ -122,5 +137,4 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 			});
 		}
 	}
-	
 }

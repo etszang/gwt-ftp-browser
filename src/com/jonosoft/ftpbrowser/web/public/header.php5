@@ -2,11 +2,8 @@
 
 	<head>
 		<meta http-equiv="Content-Language" content="en-us">
-		<meta http-equiv="Content-Type"
-			content="text/html; charset=windows-1252">
-		<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
-		<meta name="ProgId" content="FrontPage.Editor.Document">
-		<LINK href="/inf1.css" type=text/css rel=stylesheet>
+		<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+		<LINK href="/inf1.css" type="text/css" rel="stylesheet">
 
 		<!--                                           -->
 		<!-- The module reference below is the link    -->
@@ -27,6 +24,8 @@
 		<!-- OPTIONAL: include this if you want history support -->
 		<iframe id="__gwt_historyFrame" style="width:0;height:0;border:0"></iframe>
 
+		<div id="overlay" style="position:absolute;z-index:99998;display:none;"></div>
+		
 		<div align="center">
 			<center>
 				<table border="0" cellpadding="0" cellspacing="0"
@@ -81,4 +80,5 @@
 						</td>
 					</tr>
 					<tr>
-						<td width="726" valign="top" colspan="2">
+						<td width="726" valign="top" colspan="2" style="padding:5px;">
+							<div id="gwt-content" class="gainlayout" style="position:relative;z-index:0;">

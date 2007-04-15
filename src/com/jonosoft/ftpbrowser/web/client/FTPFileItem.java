@@ -11,17 +11,17 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author Jkelling
  *
  */
-public class FTPFileItem implements IsSerializable, Comparable {
+public class FTPFileItem implements Comparable, IsSerializable {
 	
-	private FTPConnection ftpConnection = null;
+	private FTPSite ftpSite = null;
 	private String name = null;
 	private String type = null; // "f" = file; "d" = directory
 	private String fullPath = null;
 	
 	public static FTPFileItem getInstance(JSONObject json) {
-		FTPFileItem ftpFileItem = new FTPFileItem(new FTPConnection());
+		FTPFileItem ftpFileItem = new FTPFileItem(new FTPSite());
 		
-		ftpFileItem.ftpConnection.setFtpSiteId(Integer.parseInt(((JSONString) json.get("ftp_site_id")).stringValue()));
+		ftpFileItem.ftpSite.setFtpSiteId(Integer.parseInt(((JSONString) json.get("ftp_site_id")).stringValue()));
 		ftpFileItem.name = ((JSONString) json.get("name")).stringValue();
 		ftpFileItem.type = ((JSONString) json.get("type")).stringValue();
 		ftpFileItem.fullPath = ((JSONString) json.get("path")).stringValue();
@@ -29,23 +29,25 @@ public class FTPFileItem implements IsSerializable, Comparable {
 		return ftpFileItem;
 	}
 	
-	public FTPFileItem(FTPConnection ftpConnection) {
-		this.ftpConnection = ftpConnection;
+	public FTPFileItem() {
 	}
 	
-	public FTPFileItem(FTPConnection ftpConnection, String name, String type) {
+	public FTPFileItem(FTPSite ftpConnection) {
+		this.ftpSite = ftpConnection;
+	}
+	
+	public FTPFileItem(FTPSite ftpConnection, String name, String type) {
+		this(ftpConnection, name, type, name);
+	}
+	
+	public FTPFileItem(FTPSite ftpConnection, String name, String type, String fullPath) {
 		this(ftpConnection);
-		setName(name);
-		setType(type);
-		setFullPath("/" + name);
+		this.name = name;
+		this.type = type;
+		this.fullPath = getFullPath(fullPath, name);
 	}
 	
-	public FTPFileItem(FTPConnection ftpConnection, String name, String type, String fullPath) {
-		this(ftpConnection, name, type);
-		setFullPath(getFullPath(fullPath, name));
-	}
-	
-	public FTPFileItem(FTPConnection ftpConnection, String name, String type, FTPFileItem parent) {
+	public FTPFileItem(FTPSite ftpConnection, String name, String type, FTPFileItem parent) {
 		this(ftpConnection, name, type, getFullPath(parent.getFullPath(), name));
 	}
 	
@@ -113,16 +115,17 @@ public class FTPFileItem implements IsSerializable, Comparable {
 		return fullPath;
 	}
 	
-	public void setFullPath(String fullPath) {
+	/* Currently, this can cause inconsistencies
+	 * public void setFullPath(String fullPath) {
 		this.fullPath = fullPath;
+	}*/
+	
+	public FTPSite getFTPConnection() {
+		return ftpSite;
 	}
 	
-	public FTPConnection getFTPConnection() {
-		return ftpConnection;
-	}
-	
-	public void setFTPConnection(FTPConnection ftpConnection) {
-		this.ftpConnection = ftpConnection;
+	public void setFTPConnection(FTPSite ftpConnection) {
+		this.ftpSite = ftpConnection;
 	}
 
 	/**
@@ -136,7 +139,11 @@ public class FTPFileItem implements IsSerializable, Comparable {
 	}
 	
 	public int compareTo(FTPFileItem ftpFileItem) {
-		return getFullPath().compareTo(ftpFileItem.getFullPath());
+		int compare = getType().compareTo(ftpFileItem.getType());
+		if (compare != 0)
+			return compare;
+		else
+			return getFullPath().compareTo(ftpFileItem.getFullPath());
 	}
 	
 }

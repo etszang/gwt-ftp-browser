@@ -9,10 +9,9 @@
 	<inherits name="org.gwtwidgets.WidgetLibrary" />
 
 	<!-- Specify the app entry point class.                   -->
-	<!-- entry-point class="com.jonosoft.ftpbrowser.web.client.Web" / -->
+	<entry-point class="com.jonosoft.ftpbrowser.web.client.Web" />
 
-	<servlet class="com.jonosoft.ftpbrowser.web.server.FTPServiceImpl" path="/FTPService" />
-
+	<!-- Effects are causing too many problems right now
 	<script src="javascripts/prototype.js"><![CDATA[
 		return true;
 	]]>
@@ -21,7 +20,10 @@
 		return true;
 	]]>
 	</script>
+	-->
 	
 	<stylesheet src="ftpBrowser.css"/>
+	<servlet path="/GWTLoggerService" class="com.jonosoft.ftpbrowser.web.server.GWTLoggerServiceImpl"/>
+	<servlet path="/FTPService" class="com.jonosoft.ftpbrowser.web.server.FTPServiceImpl"/>
 
 </module>	

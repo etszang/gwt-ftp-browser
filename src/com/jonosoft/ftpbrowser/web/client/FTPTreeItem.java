@@ -22,6 +22,11 @@ public class FTPTreeItem extends TreeItem {
 		addStyleName("gwt-ftptreeitem-" + getFTPFileItem().getType());
 	}
 	
+	public FTPTreeItem(FTPFileItem ftpFileItem, String displayText) {
+		this(ftpFileItem);
+		setText(displayText);
+	}
+	
 	private void setupTempSubItem() {
 		setNeedsToLoad(true);
 		addItem("loading...");

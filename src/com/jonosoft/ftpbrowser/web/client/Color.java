@@ -4,6 +4,7 @@
 package com.jonosoft.ftpbrowser.web.client;
 
 
+
 /**
  * @author Jkelling
  *
@@ -12,6 +13,7 @@ public class Color extends org.gwtwidgets.client.style.Color {
 	
 	private static final String PARSE_COLOR_TEXT_REGEXP_1 = "^rgb\\s*\\(\\s*(\\d+?)\\s*,\\s*?(\\d+?)\\s*,\\s*?(\\d+?)\\s*\\)$";
 	private static final String PARSE_COLOR_TEXT_REGEXP_2 = "^#([a-f0-9]{1,2})([a-f0-9]{1,2})([a-f0-9]{1,2})$";
+    public final static Color MY_COLOR = new Color(1, 2, 3);
 	
 	/**
 	 * @param r

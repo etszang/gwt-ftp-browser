@@ -9,7 +9,7 @@ package com.jonosoft.ftpbrowser.web.client;
  */
 public interface FTPConnectionSettingsListener {
 	
-	public void onFTPConnectionSettingsSave(FTPConnection result);
+	public void onFTPConnectionSettingsSave(FTPSite result);
 	
 	public void onFTPConnectionSettingsCancel();
 	

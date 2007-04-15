@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.TreeListener;
@@ -21,7 +22,7 @@ import com.google.gwt.user.client.ui.TreeListener;
 public class FTPTree extends Composite implements TreeListener {
 	private final Tree ftpTree = new Tree();
 	//private final VerticalPanel myPan = new VerticalPanel();
-	private FTPConnection ftpConnection = null;
+	private FTPSite ftpConnection = null;
 	// private String fileExtension[];
 	private ArrayList myList;
 	private FTPTreeListenerCollection listeners = null;
@@ -38,20 +39,77 @@ public class FTPTree extends Composite implements TreeListener {
 		ftpTree.addTreeListener(this);
 	}
 	
-	public void setFTPConnection(FTPConnection ftpConnection) {
+	public void setFTPConnection(FTPSite ftpConnection) {
 		this.ftpConnection = ftpConnection;
+		resetConnection();
+	}
+	
+	private void resetConnection() {
 		ftpTree.clear();
-		//ftpConnection.getList("/", new FTPGetDirectoryContentsResponseHandler((HasTreeItems) ftpTree));
-		final FTPTreeItem ftpTreeItem = new FTPTreeItem(new FTPFileItem(ftpConnection, "/" + ftpConnection.getServer(), "d", "/"));
+		final FTPTreeItem ftpTreeItem = new FTPTreeItem(new FTPFileItem(ftpConnection, "/", "d"), "/" + ftpConnection.getHost());
 		ftpTreeItem.setData();
 		ftpTreeItem.setNeedsToLoad(false);
 		ftpTree.addItem(ftpTreeItem);
-		ftpConnection.getList("/", new FTPGetDirectoryContentsResponseHandler(ftpTreeItem));
+		
+		//ftpConnection.getList("/", new FTPGetDirectoryContentsResponseHandler((HasTreeItems) ftpTree));
+		fetchContents(ftpTreeItem);
 		DeferredCommand.add(new Command() {
 			// When setFTPConnection is called from the constructor isAttached() won't be true right away
 			public void execute() {
 				if (isAttached())
 					ftpTreeItem.setState(true);
+			}
+		});
+	}
+	
+	private void fetchContents(final FTPTreeItem parentTreeItem) {
+		FTPConnectionController.getList(ftpConnection, parentTreeItem.getFTPFileItem().getFullPath(), new FTPAsyncCallback() {
+			public void onFailure(Throwable caught) {
+				try {
+					throw caught;
+				} catch (Throwable ignoredException) {
+					Window.alert(ignoredException.getMessage());
+				}
+			}
+
+			public void onSuccess(Object result) {
+				FTPTreeItem ftpTreeItem = null;
+				
+				if (result instanceof List) {
+					final List ar = (List) result;
+					final Iterator it = ar.iterator();
+					
+					parentTreeItem.removeItems();
+					
+					while (it.hasNext()) {
+						FTPFileItem ftpFileItem = (FTPFileItem) it.next();
+						
+						if (ftpFileItem.getType().equals("d")) {
+							/*if (!ftpFileItem.getName().equals(".") && !ftpFileItem.getName().equals("..")) {
+								String[] test = ftpFileItem.getName().split("\\.");
+								if (test.length > 1) {
+									ftpTreeItem = new FTPTreeItem(ftpFileItem.getName());
+									System.out.println();
+								} else {
+									ftpTreeItem = new FTPTreeItem(ftpFileItem.getName(), parentTreeItem);
+								}
+								parentTreeItem.addItem(ftpTreeItem);
+							}*/
+							ftpTreeItem = new FTPTreeItem(ftpFileItem);
+							parentTreeItem.addItem(ftpTreeItem);
+						}
+						else {
+							ftpTreeItem = new FTPTreeItem(ftpFileItem);
+							
+							ftpTreeItem.setVisible(false);
+							parentTreeItem.addItem(ftpTreeItem);
+						}
+					}
+				} else {
+				}
+
+				if (listeners != null)
+					listeners.fireAfterDataReceived(parentTreeItem);
 			}
 		});
 	}
@@ -112,7 +170,7 @@ public class FTPTree extends Composite implements TreeListener {
 					// Using a DeferredCommand to execute this makes for a
 					// snappier UI; oherwise, there would be a short delay
 					// after clicking before the items appears selected.
-					ftpConnection.getList(item.getFTPFileItem().getFullPath(), new FTPGetDirectoryContentsResponseHandler(item));
+					fetchContents(item);
 				}
 			});
 			item.setData();
@@ -144,7 +202,7 @@ public class FTPTree extends Composite implements TreeListener {
 						// Using a DeferredCommand to execute this makes for a
 						// snappier UI; oherwise, there would be a short delay
 						// after clicking before the items appears selected.
-						ftpConnection.getList(item.getFTPFileItem().getFullPath(), new FTPGetDirectoryContentsResponseHandler(item));
+						fetchContents(item);
 					}
 				});
 				item.setData();
@@ -157,62 +215,6 @@ public class FTPTree extends Composite implements TreeListener {
 			listeners.fireItemSelected(item);
 	}
 
-	protected class FTPGetDirectoryContentsResponseHandler implements
-			FTPAsyncCallback {
-		private FTPTreeItem parentTreeItem = null;
-
-		public FTPGetDirectoryContentsResponseHandler(FTPTreeItem parentTreeItem) {
-			this.parentTreeItem = parentTreeItem;
-		}
-
-		public void onFailure(Throwable caught) {
-			try {
-				throw caught;
-			} catch (Throwable ignoredException) {
-			}
-		}
-
-		public void onSuccess(Object result) {
-			FTPTreeItem ftpTreeItem = null;
-			
-			if (result instanceof List) {
-				final List ar = (List) result;
-				final Iterator it = ar.iterator();
-				
-				parentTreeItem.removeItems();
-				
-				while (it.hasNext()) {
-					FTPFileItem ftpFileItem = (FTPFileItem) it.next();
-					
-					if (ftpFileItem.getType().equals("d")) {
-						/*if (!ftpFileItem.getName().equals(".") && !ftpFileItem.getName().equals("..")) {
-							String[] test = ftpFileItem.getName().split("\\.");
-							if (test.length > 1) {
-								ftpTreeItem = new FTPTreeItem(ftpFileItem.getName());
-								System.out.println();
-							} else {
-								ftpTreeItem = new FTPTreeItem(ftpFileItem.getName(), parentTreeItem);
-							}
-							parentTreeItem.addItem(ftpTreeItem);
-						}*/
-						ftpTreeItem = new FTPTreeItem(ftpFileItem);
-						parentTreeItem.addItem(ftpTreeItem);
-					}
-					else {
-						ftpTreeItem = new FTPTreeItem(ftpFileItem);
-						
-						ftpTreeItem.setVisible(false);
-						parentTreeItem.addItem(ftpTreeItem);
-					}
-				}
-			} else {
-			}
-
-			if (listeners != null)
-				listeners.fireAfterDataReceived(parentTreeItem);
-		}
-	}
-	
 	public void addTreeListener(FTPTreeListener listener) {
 		if (listeners == null) {
 			listeners = new FTPTreeListenerCollection();

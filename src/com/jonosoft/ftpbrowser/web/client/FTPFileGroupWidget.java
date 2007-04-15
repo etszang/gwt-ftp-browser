@@ -63,14 +63,9 @@ public class FTPFileGroupWidget extends Composite {
 	
 	private boolean containsFTPFileItem(FTPFileItem itemToFind) {
 		return fileGrid.getItems().contains(itemToFind);
-		/*for (Iterator it = fileGrid.getItems().iterator(); it.hasNext();) {
-			FTPFileItem ftpFileItem = (FTPFileItem) it.next();
-			if (ftpFileItem.equals(itemToFind))
-				return true;
-		}
-		return false;*/
 	}
 	
+	// TODO Name this class
 	private class FDAS implements ItemSelectGridListener {
 		public void onItemsSelectStateChanged(ItemSelectGrid sender, List items, boolean state) {
 			if (! state) {
@@ -134,7 +129,7 @@ public class FTPFileGroupWidget extends Composite {
 
 			public String onWindowClosing() {
 				if ((isSaveBeingDelayed && isSaveAfterDelay) || isSaveInProgress)
-					return "Not all data has finished saving. This should only take a few more seconds. Close anyway?";
+					return "Not all data has finished saving. This should only take a few more seconds. Close anyway and lose changes?";
 				return null;
 			}
 		}

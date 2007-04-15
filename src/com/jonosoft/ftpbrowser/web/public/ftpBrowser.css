@@ -70,11 +70,28 @@ a:active {
 .ftpbrowser-menubar {
 }
 
-.ftpbrowser-menuitem {
+.ftpbrowser-menuitem span {
 	background-image: url("images/black-down-arrow.gif");
 	background-position: right center;
 	background-repeat: no-repeat;
 	padding-right: 14px;
+}
+
+.ftpbrowser-menuitem a {
+	text-decoration: none;
+	display: block;
+	width: 100%;
+	height: 100%;
+	color: black;
+	border-width: 1px;
+	border-style: solid;
+	border-color: transparent;
+	padding: 3px;
+}
+
+.ftpbrowser-menuitem a:hover {
+	background-color: rgb(245, 242, 228);
+	border-color: #999;
 }
 
 .ftpconnections-menubar {
@@ -113,3 +130,7 @@ a:active {
 .cc-filegroupwidget td {
 	font-family: Monaco, ProFontWindows, "lucida console", monospace;
 }
+
+/* \*/
+ * html .gainlayout { height: 1%; }
+/* */
