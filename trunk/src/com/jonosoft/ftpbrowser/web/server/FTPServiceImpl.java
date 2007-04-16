@@ -15,6 +15,7 @@ import com.jonosoft.ftpbrowser.web.client.FTPFileItem;
 import com.jonosoft.ftpbrowser.web.client.FTPIOException;
 import com.jonosoft.ftpbrowser.web.client.FTPService;
 import com.jonosoft.ftpbrowser.web.client.FTPSite;
+import com.jonosoft.ftpbrowser.web.server.data.FTPSiteDAO;
 
 public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 	
@@ -74,17 +75,25 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 	}
 	
 
-	public List getUserFTPSites(int userId) throws FTPBrowserFatalException {
+	public List getUserFTPSites(Integer userId) throws FTPBrowserFatalException {
 		DBConnection conn = null;
 
 		try {
-			conn = new FTPBrowserDBConnection();
-			return FTPSiteDB.retrieveForUserID(conn, userId);
+			/*conn = new FTPBrowserDBConnection();
+			return FTPSiteDB.retrieveForUserID(conn, userId);*/
+			
+			FTPSiteDAO dao = new FTPSiteDAO();
+			
+			List list = dao.findByUserId(userId);
+			
+			HibernateSessionFactory.closeSession();
+			
+			return list;
 		}
-		catch (FTPBrowserFatalException e) {
+		/*catch (FTPBrowserFatalException e) {
 			System.out.println(e.toString());
 			throw e;
-		}
+		}*/
 		finally {
 			cleanup(conn);
 		}
@@ -94,11 +103,22 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 		DBConnection conn = null;
 		
 		try {
-			conn = new FTPBrowserDBConnection();
-			FTPSite retSite = FTPSiteDB.save(conn, site);
+			/*conn = new FTPBrowserDBConnection();
+			FTPSite retSite = FTPSiteDB.save(conn, site);*/
+			
+			FTPSiteDAO dao = new FTPSiteDAO();
+			
+			HibernateSessionFactory.getSession().beginTransaction();
+			
+			dao.save(site);
+			
+			HibernateSessionFactory.getSession().getTransaction().commit();
+			HibernateSessionFactory.closeSession();
+			
 			//auto-commit is on
 			//conn.getConnection().commit();
-			return retSite;
+			//return retSite;
+			return site;
 		}
 		/*catch (SQLException e) {
 			throw new FTPBrowserFatalException("Error committing record");
@@ -112,13 +132,27 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 		DBConnection conn = null;
 		
 		try {
-			conn = new FTPBrowserDBConnection();
-			FTPSiteDB.delete(conn, site);
+			/*conn = new FTPBrowserDBConnection();
+			FTPSiteDB.delete(conn, site);*/
+			/*FTPSiteManager mgr = new FTPSiteManager();
+			
+			mgr.delete(site);
+			
+			HibernateUtil.getSessionFactory().close();*/
+			
+			FTPSiteDAO dao = new FTPSiteDAO();
+			
+			HibernateSessionFactory.getSession().beginTransaction();
+			
+			dao.delete(site);
+			
+			HibernateSessionFactory.getSession().getTransaction().commit();
+			HibernateSessionFactory.closeSession();
 		}
-		catch (FTPBrowserFatalException e) {
+		/*catch (FTPBrowserFatalException e) {
 			System.out.println(e.toString());
 			throw e;
-		}
+		}*/
 		finally {
 			cleanup(conn);
 		}

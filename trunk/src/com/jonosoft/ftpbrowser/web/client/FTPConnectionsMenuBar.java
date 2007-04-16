@@ -55,7 +55,7 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 	}
 	
 	private void refreshListFromServer() {
-		FTPService.Util.getInstance().getUserFTPSites(7, new AsyncCallback() {
+		FTPService.Util.getInstance().getUserFTPSites(new Integer(7), new AsyncCallback() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Unexpected failure retrieving your saved FTP connections. If this continues, please contact our staff.\n\nMessage:\n" + caught.getMessage());
 			}
@@ -81,10 +81,10 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 				FTPSite newFTPSite = new FTPSite();
 				
 				// XXX All of the userId stuff should be server-side, I don't know what I was thinking...
-				newFTPSite.setUserId(7);
+				newFTPSite.setUserId(new Integer(7));
 				
 				// The default port for FTP is 21
-				newFTPSite.setPort(21);
+				newFTPSite.setPort(new Integer(21));
 				
 				myFtp.show();
 				myFtp.setFTPSite(newFTPSite);

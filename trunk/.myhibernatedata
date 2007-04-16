@@ -1,0 +1,21 @@
+#
+#Sun Apr 15 22:43:51 CDT 2007
+genBasicCompId=false
+sessionFactoryName=com.jonosoft.ftpbrowser.web.server.HibernateSessionFactory
+profile=
+daoSFId=
+version=3.1
+jndiPath=
+springDaoFile=
+useJavaTypes=true
+keyGenerator=native
+libInstallFolder=/WebContent/WEB-INF/lib
+addLibs2Project=true
+genVersionTag=false
+sessionFactoryId=
+basePersistenceClass=com.jonosoft.ftpbrowser.web.client.FTPSite
+reSettingsFile=/gwt-ftp-browser/hibernate.reveng.xml
+configFile=/gwt-ftp-browser/src/com/jonosoft/ftpbrowser/web/client/hibernate.cfg.xml
+createConfigFile=false
+addLibs2Classpath=true
+baseDaoClass=com.jonosoft.ftpbrowser.web.server.data.BaseHibernateDAO

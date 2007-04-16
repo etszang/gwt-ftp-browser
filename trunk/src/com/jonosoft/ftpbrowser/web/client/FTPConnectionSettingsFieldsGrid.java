@@ -34,7 +34,7 @@ public class FTPConnectionSettingsFieldsGrid extends Composite {
 	
 	public FTPSite getFTPSiteUpdated() {
 		ftpSite.setHost(host.getText());
-		ftpSite.setPort(Integer.parseInt(port.getText()));
+		ftpSite.setPort(new Integer(port.getText()));
 		ftpSite.setUsername(username.getText());
 		ftpSite.setPassword(password.getText());
 		return ftpSite;
@@ -44,7 +44,7 @@ public class FTPConnectionSettingsFieldsGrid extends Composite {
 		site.setFtpSiteId(this.ftpSite.getFtpSiteId());
 		site.setUserId(this.ftpSite.getUserId());
 		site.setHost(host.getText());
-		site.setPort(Integer.parseInt(port.getText()));
+		site.setPort(new Integer(port.getText()));
 		site.setUsername(username.getText());
 		site.setPassword(password.getText());
 	}
@@ -52,7 +52,7 @@ public class FTPConnectionSettingsFieldsGrid extends Composite {
 	public void setFTPSite(FTPSite site){
 		this.ftpSite = site;
 		host.setText(emptyIfNull(site.getHost()));
-		port.setText(emptyIfNull(Integer.toString(site.getPort())));
+		port.setText(emptyIfNull(site.getPort().toString()));
 		username.setText(emptyIfNull(site.getUsername()));
 		password.setText(emptyIfNull(site.getPassword()));
 	}

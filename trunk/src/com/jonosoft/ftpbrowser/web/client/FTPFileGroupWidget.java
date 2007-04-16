@@ -182,7 +182,7 @@ public class FTPFileGroupWidget extends Composite {
 			
 			while (it.hasNext()) {
 				ftpFileItem = (FTPFileItem) it.next();
-				ftpSiteId = new Integer(ftpFileItem.getFTPConnection().getFtpSiteId());
+				ftpSiteId = ftpFileItem.getFTPConnection().getFtpSiteId();
 				
 				if ((sb = (StringBuffer) paramStringBySiteId.get(ftpSiteId)) == null)
 					paramStringBySiteId.put(ftpSiteId, sb = new StringBuffer());

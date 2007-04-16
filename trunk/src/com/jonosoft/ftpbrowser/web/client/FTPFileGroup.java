@@ -17,16 +17,6 @@ public class FTPFileGroup implements IsSerializable {
 	private int userId = 0;
 	private String name = null;
 	
-	public static FTPFileGroup getInstance(JSONObject json) {
-		FTPFileGroup newGroup = new FTPFileGroup();
-		
-		newGroup.setGroupId(Integer.parseInt(((JSONString) json.get("group_id")).stringValue()));
-		newGroup.setUserId(Integer.parseInt(((JSONString) json.get("user_id")).stringValue()));
-		newGroup.setName(((JSONString) json.get("name")).stringValue());
-		
-		return newGroup;
-	}
-
 	public int getGroupId() {
 		return groupId;
 	}

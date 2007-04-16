@@ -22,10 +22,10 @@ public class FTPSiteDB extends ObjectDB {
 	private static FTPSite build(ResultSet rs) throws SQLException {
 		FTPSite site = new FTPSite();
 		
-		site.setFtpSiteId(rs.getInt("ftp_site_id"));
-		site.setUserId(rs.getInt("user_id"));
+		site.setFtpSiteId(getInt(rs, "ftp_site_id"));
+		site.setUserId(getInt(rs, "user_id"));
 		site.setHost(rs.getString("server"));
-		site.setPort(rs.getInt("port"));
+		site.setPort(getInt(rs, "port"));
 		site.setUsername(rs.getString("username"));
 		site.setPassword(rs.getString("password"));
 		
@@ -66,7 +66,7 @@ public class FTPSiteDB extends ObjectDB {
 	public static FTPSite save(DBConnection dbConnection, FTPSite site) throws FTPBrowserFatalException {
 		if (site != null) {
 			try {
-				if (site.getFtpSiteId() == 0)
+				if (site.getFtpSiteId() == null || site.getFtpSiteId().intValue() == 0)
 					return insert(dbConnection, site);
 				else
 					return update(dbConnection, site);
@@ -89,15 +89,15 @@ public class FTPSiteDB extends ObjectDB {
 			conn = dbConnection.getConnection();
 			ps = conn.prepareStatement(sql);
 			
-			ps.setInt(1, site.getUserId());
+			setInt(ps, 1, site.getUserId());
 			ps.setString(2, site.getHost());
-			ps.setInt(3, site.getPort());
+			setInt(ps, 3, site.getPort());
 			ps.setString(4, site.getUsername());
 			ps.setString(5, site.getPassword());
 			
 			ps.executeUpdate();
 			
-			site.setFtpSiteId(StatementLastInsertId.executeGetLastInsertId(dbConnection));
+			site.setFtpSiteId(new Integer(StatementLastInsertId.executeGetLastInsertId(dbConnection)));
 			
 			return site;
 		}
@@ -117,12 +117,12 @@ public class FTPSiteDB extends ObjectDB {
 			conn = dbConnection.getConnection();
 			ps = conn.prepareStatement(sql);
 			
-			ps.setInt(1, site.getUserId());
+			setInt(ps, 1, site.getUserId());
 			ps.setString(2, site.getHost());
-			ps.setInt(3, site.getPort());
+			setInt(ps, 3, site.getPort());
 			ps.setString(4, site.getUsername());
 			ps.setString(5, site.getPassword());
-			ps.setInt(6, site.getFtpSiteId());
+			setInt(ps, 6, site.getFtpSiteId());
 			
 			ps.executeUpdate();
 			
@@ -144,7 +144,7 @@ public class FTPSiteDB extends ObjectDB {
 			conn = dbConnection.getConnection();
 			ps = conn.prepareStatement(sql);
 			
-			ps.setInt(1, site.getFtpSiteId());
+			setInt(ps, 1, site.getFtpSiteId());
 			
 			ps.executeUpdate();
 		}
