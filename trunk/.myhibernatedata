@@ -1,5 +1,5 @@
 #
-#Sun Apr 15 22:43:51 CDT 2007
+#Sun Apr 15 23:37:49 CDT 2007
 genBasicCompId=false
 sessionFactoryName=com.jonosoft.ftpbrowser.web.server.HibernateSessionFactory
 profile=

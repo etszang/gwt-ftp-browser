@@ -2,7 +2,6 @@ package com.jonosoft.ftpbrowser.web.server;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -11,10 +10,13 @@ import sun.net.ftp.FtpClient;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jonosoft.ftpbrowser.web.client.FTPBrowserFatalException;
+import com.jonosoft.ftpbrowser.web.client.FTPFileGroup;
 import com.jonosoft.ftpbrowser.web.client.FTPFileItem;
 import com.jonosoft.ftpbrowser.web.client.FTPIOException;
 import com.jonosoft.ftpbrowser.web.client.FTPService;
 import com.jonosoft.ftpbrowser.web.client.FTPSite;
+import com.jonosoft.ftpbrowser.web.server.data.FTPFileGroupDAO;
+import com.jonosoft.ftpbrowser.web.server.data.FTPFileGroupItemDAO;
 import com.jonosoft.ftpbrowser.web.server.data.FTPSiteDAO;
 
 public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
@@ -75,71 +77,30 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 	}
 	
 
-	public List getUserFTPSites(Integer userId) throws FTPBrowserFatalException {
-		DBConnection conn = null;
-
+	public List getUserFTPSites() throws FTPBrowserFatalException {
 		try {
-			/*conn = new FTPBrowserDBConnection();
-			return FTPSiteDB.retrieveForUserID(conn, userId);*/
-			
-			FTPSiteDAO dao = new FTPSiteDAO();
-			
-			List list = dao.findByUserId(userId);
-			
-			HibernateSessionFactory.closeSession();
-			
-			return list;
+			return new FTPSiteDAO().findByUserId(getUserId());
 		}
-		/*catch (FTPBrowserFatalException e) {
-			System.out.println(e.toString());
-			throw e;
-		}*/
 		finally {
-			cleanup(conn);
+//			HibernateSessionFactory.closeSession();
 		}
 	}
 
 	public FTPSite saveUserFTPSite(FTPSite site) throws FTPBrowserFatalException {
-		DBConnection conn = null;
-		
 		try {
-			/*conn = new FTPBrowserDBConnection();
-			FTPSite retSite = FTPSiteDB.save(conn, site);*/
-			
-			FTPSiteDAO dao = new FTPSiteDAO();
-			
 			HibernateSessionFactory.getSession().beginTransaction();
-			
-			dao.save(site);
-			
+			new FTPSiteDAO().attachDirty(site);
 			HibernateSessionFactory.getSession().getTransaction().commit();
-			HibernateSessionFactory.closeSession();
-			
-			//auto-commit is on
-			//conn.getConnection().commit();
-			//return retSite;
 			return site;
 		}
-		/*catch (SQLException e) {
-			throw new FTPBrowserFatalException("Error committing record");
-		}*/
 		finally {
-			cleanup(conn);
+//			HibernateSessionFactory.closeSession();
 		}
 	}
 	
 	public void deleteUserFTPSite(FTPSite site) throws FTPBrowserFatalException {
-		DBConnection conn = null;
 		
 		try {
-			/*conn = new FTPBrowserDBConnection();
-			FTPSiteDB.delete(conn, site);*/
-			/*FTPSiteManager mgr = new FTPSiteManager();
-			
-			mgr.delete(site);
-			
-			HibernateUtil.getSessionFactory().close();*/
-			
 			FTPSiteDAO dao = new FTPSiteDAO();
 			
 			HibernateSessionFactory.getSession().beginTransaction();
@@ -147,27 +108,49 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 			dao.delete(site);
 			
 			HibernateSessionFactory.getSession().getTransaction().commit();
-			HibernateSessionFactory.closeSession();
 		}
-		/*catch (FTPBrowserFatalException e) {
+		finally {
+			//HibernateSessionFactory.closeSession();
+		}
+	}
+	
+	public List getUserFTPFileItems(Integer groupId) throws FTPBrowserFatalException {
+		try {
+			HibernateSessionFactory.getSession().beginTransaction();
+			
+			FTPFileGroupDAO groupDAO = new FTPFileGroupDAO();
+			FTPFileGroup group = new FTPFileGroup();
+			group.setName("Default");
+			group.setUserId(getUserId());
+			
+			List groups = groupDAO.findByExample(group);
+			
+			if (groups.size() == 0) {
+				groupDAO.attachDirty(group);
+			}
+			else {
+				group = (FTPFileGroup) groups.get(0);
+			}
+			
+			FTPFileGroupItemDAO dao = new FTPFileGroupItemDAO();
+			
+			List list = dao.findByFtpFileGroupId(group.getFtpFileGroupId());
+			
+			HibernateSessionFactory.getSession().getTransaction().commit();
+			
+			return list;
+		}
+		catch (RuntimeException e) {
 			System.out.println(e.toString());
 			throw e;
-		}*/
+		}
 		finally {
-			cleanup(conn);
+			//HibernateSessionFactory.closeSession();
 		}
+		
 	}
 	
-	private int getUserId() {
-		return 7;
-	}
-	
-	protected void cleanup(DBConnection conn) {
-		try {
-			if (conn != null)
-				conn.closeConnection();
-		}
-		catch (SQLException ignoredException) {
-		}
+	protected Integer getUserId() {
+		return new Integer(7);
 	}
 }

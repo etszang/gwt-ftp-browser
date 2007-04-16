@@ -24,6 +24,10 @@ public class HibernateSessionFactory {
     private  static Configuration configuration = new Configuration();
     private static org.hibernate.SessionFactory sessionFactory;
     private static String configFile = CONFIG_FILE_LOCATION;
+    
+    static {
+    	rebuildSessionFactory();
+    }
 
     private HibernateSessionFactory() {
     }

@@ -11,16 +11,12 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.HTTPRequest;
-import com.google.gwt.user.client.ResponseTextHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowCloseListener;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 
 /**
@@ -88,7 +84,18 @@ public class FTPFileGroupWidget extends Composite {
 	
 	private class FTPFileGroupFilesDataProvider {
 		public void load() {
-			HTTPRequest.asyncGet(GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.ftpPathListURL(), new ResponseTextHandler() {
+			FTPService.Util.getInstance().getUserFTPFileItems(new Integer(1), new AsyncCallback() {
+
+				public void onFailure(Throwable caught) {
+				}
+
+				public void onSuccess(Object result) {
+					List list = (List) result;
+				}
+				
+			});
+			
+			/*HTTPRequest.asyncGet(GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.ftpPathListURL(), new ResponseTextHandler() {
 				public void onCompletion(String responseText) {
 					fileGrid.clear();
 					
@@ -111,7 +118,7 @@ public class FTPFileGroupWidget extends Composite {
 						e.printStackTrace();
 					}
 				}
-			});
+			});*/
 		}
 	}
 	
@@ -182,7 +189,7 @@ public class FTPFileGroupWidget extends Composite {
 			
 			while (it.hasNext()) {
 				ftpFileItem = (FTPFileItem) it.next();
-				ftpSiteId = ftpFileItem.getFTPConnection().getFtpSiteId();
+				ftpSiteId = ftpFileItem.getFtpSite().getFtpSiteId();
 				
 				if ((sb = (StringBuffer) paramStringBySiteId.get(ftpSiteId)) == null)
 					paramStringBySiteId.put(ftpSiteId, sb = new StringBuffer());

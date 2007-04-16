@@ -7,27 +7,26 @@ import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.criterion.Example;
 
-import com.jonosoft.ftpbrowser.web.client.FTPSite;
+import com.jonosoft.ftpbrowser.web.client.FTPFileItem;
 
 /**
- * Data access object (DAO) for domain model class FTPSite.
- * @see com.jonosoft.ftpbrowser.web.client.FTPSite
+ * Data access object (DAO) for domain model class FTPFileGroupItem.
+ * @see com.jonosoft.ftpbrowser.web.client.FTPFileGroupItem
  * @author MyEclipse - Hibernate Tools
  */
-public class FTPSiteDAO extends BaseHibernateDAO {
+public class FTPFileGroupItemDAO extends BaseHibernateDAO {
 
-    private static final Log log = LogFactory.getLog(FTPSiteDAO.class);
+    private static final Log log = LogFactory.getLog(FTPFileGroupItemDAO.class);
 
 	//property constants
-	public static final String USER_ID = "userId";
-	public static final String SERVER = "server";
-	public static final String PORT = "port";
-	public static final String USERNAME = "username";
-	public static final String PASSWORD = "password";
+	public static final String FTP_SITE_ID = "ftpSiteId";
+	public static final String FTP_FILE_GROUP_ID = "ftpFileGroupId";
+	public static final String TYPE = "type";
+	public static final String PATH = "path";
 
     
-    public void save(FTPSite transientInstance) {
-        log.debug("saving FTPSite instance");
+    public void save(FTPFileItem transientInstance) {
+        log.debug("saving FTPFileGroupItem instance");
         try {
             getSession().save(transientInstance);
             log.debug("save successful");
@@ -37,8 +36,8 @@ public class FTPSiteDAO extends BaseHibernateDAO {
         }
     }
     
-	public void delete(FTPSite persistentInstance) {
-        log.debug("deleting FTPSite instance");
+	public void delete(FTPFileItem persistentInstance) {
+        log.debug("deleting FTPFileGroupItem instance");
         try {
             getSession().delete(persistentInstance);
             log.debug("delete successful");
@@ -48,11 +47,11 @@ public class FTPSiteDAO extends BaseHibernateDAO {
         }
     }
     
-    public FTPSite findById( java.lang.Integer id) {
-        log.debug("getting FTPSite instance with id: " + id);
+    public FTPFileItem findById( java.lang.Integer id) {
+        log.debug("getting FTPFileGroupItem instance with id: " + id);
         try {
-            FTPSite instance = (FTPSite) getSession()
-                    .get("com.jonosoft.ftpbrowser.web.client.FTPSite", id);
+            FTPFileItem instance = (FTPFileItem) getSession()
+                    .get("com.jonosoft.ftpbrowser.web.client.FTPFileGroupItem", id);
             return instance;
         } catch (RuntimeException re) {
             log.error("get failed", re);
@@ -61,11 +60,11 @@ public class FTPSiteDAO extends BaseHibernateDAO {
     }
     
     
-    public List findByExample(FTPSite instance) {
-        log.debug("finding FTPSite instance by example");
+    public List findByExample(FTPFileItem instance) {
+        log.debug("finding FTPFileGroupItem instance by example");
         try {
             List results = getSession()
-                    .createCriteria("com.jonosoft.ftpbrowser.web.client.FTPSite")
+                    .createCriteria("com.jonosoft.ftpbrowser.web.client.FTPFileGroupItem")
                     .add(Example.create(instance))
             .list();
             log.debug("find by example successful, result size: " + results.size());
@@ -77,10 +76,10 @@ public class FTPSiteDAO extends BaseHibernateDAO {
     }    
     
     public List findByProperty(String propertyName, Object value) {
-      log.debug("finding FTPSite instance with property: " + propertyName
+      log.debug("finding FTPFileGroupItem instance with property: " + propertyName
             + ", value: " + value);
       try {
-         String queryString = "from FTPSite as model where model." 
+         String queryString = "from FTPFileGroupItem as model where model." 
          						+ propertyName + "= ?";
          Query queryObject = getSession().createQuery(queryString);
 		 queryObject.setParameter(0, value);
@@ -91,30 +90,26 @@ public class FTPSiteDAO extends BaseHibernateDAO {
       }
 	}
 
-	public List findByUserId(Object userId) {
-		return findByProperty(USER_ID, userId);
+	public List findByFtpSiteId(Object ftpSiteId) {
+		return findByProperty(FTP_SITE_ID, ftpSiteId);
 	}
 	
-	public List findByServer(Object server) {
-		return findByProperty(SERVER, server);
+	public List findByFtpFileGroupId(Object ftpFileGroupId) {
+		return findByProperty(FTP_FILE_GROUP_ID, ftpFileGroupId);
 	}
 	
-	public List findByPort(Object port) {
-		return findByProperty(PORT, port);
+	public List findByType(Object type) {
+		return findByProperty(TYPE, type);
 	}
 	
-	public List findByUsername(Object username) {
-		return findByProperty(USERNAME, username);
+	public List findByPath(Object path) {
+		return findByProperty(PATH, path);
 	}
 	
-	public List findByPassword(Object password) {
-		return findByProperty(PASSWORD, password);
-	}
-	
-    public FTPSite merge(FTPSite detachedInstance) {
-        log.debug("merging FTPSite instance");
+    public FTPFileItem merge(FTPFileItem detachedInstance) {
+        log.debug("merging FTPFileGroupItem instance");
         try {
-            FTPSite result = (FTPSite) getSession()
+            FTPFileItem result = (FTPFileItem) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -124,8 +119,8 @@ public class FTPSiteDAO extends BaseHibernateDAO {
         }
     }
 
-    public void attachDirty(FTPSite instance) {
-        log.debug("attaching dirty FTPSite instance");
+    public void attachDirty(FTPFileItem instance) {
+        log.debug("attaching dirty FTPFileGroupItem instance");
         try {
             getSession().saveOrUpdate(instance);
             log.debug("attach successful");
@@ -135,8 +130,8 @@ public class FTPSiteDAO extends BaseHibernateDAO {
         }
     }
     
-    public void attachClean(FTPSite instance) {
-        log.debug("attaching clean FTPSite instance");
+    public void attachClean(FTPFileItem instance) {
+        log.debug("attaching clean FTPFileGroupItem instance");
         try {
             getSession().lock(instance, LockMode.NONE);
             log.debug("attach successful");
