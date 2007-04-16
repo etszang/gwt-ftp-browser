@@ -36,17 +36,13 @@ public class FTPConnectionController {
 				}
 			}
 		});
-		
-		/*String params = getFTPAndURLQueryParamsAsString(this, path, "dir", null);
-		System.out.println("Requesting: " + path);
-		HTTPRequest.asyncGet(GWT.getModuleBaseURL()+FTP.DEFAULT_INSTANCE.phpFtpJsonUrlBase()+params, new FTPResponseHandler(this, path, callback));*/
 	}
 	
 	private static String getFTPAndURLQueryParamsAsString(FTPSite site, String path, String function, final String [] params) {
 		List paramArray = new ArrayList();
 		
 		paramArray.add("server");	paramArray.add(site.getHost());
-		paramArray.add("port");		paramArray.add(Integer.toString(site.getPort()));
+		paramArray.add("port");		paramArray.add(site.getPort().toString());
 		paramArray.add("username");	paramArray.add(site.getUsername());
 		paramArray.add("password");	paramArray.add(site.getPassword());
 		paramArray.add("dir");		paramArray.add(path);

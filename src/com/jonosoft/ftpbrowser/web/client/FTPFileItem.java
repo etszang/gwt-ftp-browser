@@ -21,7 +21,7 @@ public class FTPFileItem implements Comparable, IsSerializable {
 	public static FTPFileItem getInstance(JSONObject json) {
 		FTPFileItem ftpFileItem = new FTPFileItem(new FTPSite());
 		
-		ftpFileItem.ftpSite.setFtpSiteId(Integer.parseInt(((JSONString) json.get("ftp_site_id")).stringValue()));
+		ftpFileItem.ftpSite.setFtpSiteId(new Integer(((JSONString) json.get("ftp_site_id")).stringValue()));
 		ftpFileItem.name = ((JSONString) json.get("name")).stringValue();
 		ftpFileItem.type = ((JSONString) json.get("type")).stringValue();
 		ftpFileItem.fullPath = ((JSONString) json.get("path")).stringValue();

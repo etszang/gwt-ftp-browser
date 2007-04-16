@@ -10,14 +10,8 @@ import com.google.gwt.user.client.HTTPRequest;
 import com.google.gwt.user.client.ResponseTextHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class FTPFileGroupController {
+public class FTPFileGroupController {/*
 	
-	/**
-	 * If successful, the callback will receive a {@link List} of
-	 * {@link FTPFileGroup} items.
-	 * 
-	 * @param callback
-	 */
 	public static void getFTPFileGroupListForActiveUser(AsyncCallback callback) {
 		HTTPRequest.asyncGet(GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.ftpFileGroupListURL(), new GroupListResponseTextHandler(callback));
 	}
@@ -54,4 +48,4 @@ public class FTPFileGroupController {
 		}
 	}
 
-}
+*/}

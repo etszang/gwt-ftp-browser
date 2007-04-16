@@ -10,11 +10,11 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * 
  */
 public class FTPSite implements IsSerializable {
-	private int ftpSiteId;
+	private Integer ftpSiteId;
 	private String host;
 	private String password;
-	private int port;
-	private int userId;
+	private Integer port;
+	private Integer userId;
 	private String username;
 	
 	public boolean equals(Object arg0) {
@@ -25,7 +25,7 @@ public class FTPSite implements IsSerializable {
 		return false;
 	}
 
-	public int getFtpSiteId() {
+	public Integer getFtpSiteId() {
 		return ftpSiteId;
 	}
 
@@ -37,11 +37,11 @@ public class FTPSite implements IsSerializable {
 		return password;
 	}
 
-	public int getPort() {
+	public Integer getPort() {
 		return port;
 	}
 
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
@@ -49,7 +49,7 @@ public class FTPSite implements IsSerializable {
 		return username;
 	}
 
-	public void setFtpSiteId(int ftpSiteId) {
+	public void setFtpSiteId(Integer ftpSiteId) {
 		this.ftpSiteId = ftpSiteId;
 	}
 
@@ -61,11 +61,11 @@ public class FTPSite implements IsSerializable {
 		this.password = password;
 	}
 	
-	public void setPort(int port) {
+	public void setPort(Integer port) {
 		this.port = port;
 	}
 	
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 

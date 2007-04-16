@@ -20,7 +20,7 @@ public interface FTPServiceAsync {
 	 * @param userId
 	 * @return List {@link FTPSite}s
 	 */
-	public void getUserFTPSites(int userId, AsyncCallback callback);
+	public void getUserFTPSites(Integer userId, AsyncCallback callback);
 	
 	
 	/**

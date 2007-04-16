@@ -24,7 +24,7 @@ public interface FTPService extends RemoteService {
 	 * @return List {@link FTPSite}s
 	 * @gwt.typeArgs <com.jonosoft.ftpbrowser.web.client.FTPSite>
 	 */
-	public List getUserFTPSites(int userId) throws FTPBrowserFatalException;
+	public List getUserFTPSites(Integer userId) throws FTPBrowserFatalException;
 	
 	
 	/**
