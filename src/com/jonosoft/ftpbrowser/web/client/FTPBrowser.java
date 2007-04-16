@@ -53,6 +53,7 @@ public class FTPBrowser extends Composite {
 		
 		vertPanel.add(ftpBrowserMenuBar);
 		vertPanel.add(directoryBrowserPanel);
+		vertPanel.add(new FTPFileGroupWidget(selectGrid));
 
 		directoryBrowserPanel.add(sc1);
 		directoryBrowserPanel.add(sc2);

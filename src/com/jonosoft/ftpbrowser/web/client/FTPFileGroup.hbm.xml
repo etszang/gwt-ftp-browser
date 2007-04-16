@@ -6,8 +6,8 @@
 -->
 <hibernate-mapping>
     <class name="com.jonosoft.ftpbrowser.web.client.FTPFileGroup" table="ftp_file_group" catalog="cookiecloaker">
-        <id name="groupId" type="java.lang.Integer">
-            <column name="group_id" />
+        <id name="ftpFileGroupId" type="java.lang.Integer">
+            <column name="ftp_file_group_id" />
             <generator class="native"></generator>
         </id>
         <property name="userId" type="java.lang.Integer">
@@ -16,5 +16,9 @@
         <property name="name" type="java.lang.String">
             <column name="name" not-null="true" />
         </property>
+        <set name="ftpFileGroupItems" inverse="true" lazy="true">
+            <key column="ftp_file_group_id"/>
+            <one-to-many class="com.jonosoft.ftpbrowser.web.client.FTPFileGroupItem"/>
+        </set>
     </class>
 </hibernate-mapping>

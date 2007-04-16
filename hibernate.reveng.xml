@@ -8,8 +8,14 @@
 			<generator class="native"></generator>
 		</primary-key>
 	</table>
-<table name="ftp_file_group" catalog="cookiecloaker"
-	class="com.jonosoft.ftpbrowser.web.client.FTPFileGroup">
+	<table name="ftp_file_group" catalog="cookiecloaker"
+		class="com.jonosoft.ftpbrowser.web.client.FTPFileGroup">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+	</table>
+<table name="ftp_file_group_item" catalog="cookiecloaker"
+	class="com.jonosoft.ftpbrowser.web.client.FTPFileGroupItem">
 	<primary-key>
 		<generator class="native"></generator>
 	</primary-key>

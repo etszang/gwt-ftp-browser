@@ -17,10 +17,9 @@ public interface FTPServiceAsync {
 	
 	
 	/**
-	 * @param userId
 	 * @return List {@link FTPSite}s
 	 */
-	public void getUserFTPSites(Integer userId, AsyncCallback callback);
+	public void getUserFTPSites(AsyncCallback callback);
 	
 	
 	/**
@@ -36,4 +35,12 @@ public interface FTPServiceAsync {
 	 * @throws FTPBrowserFatalException
 	 */
 	public void deleteUserFTPSite(FTPSite site, AsyncCallback callback);
+	
+	
+	/**
+	 * @param groupId
+	 * @return
+	 * @throws FTPBrowserFatalException
+	 */
+	public void getUserFTPFileItems(Integer groupId, AsyncCallback callback);
 }

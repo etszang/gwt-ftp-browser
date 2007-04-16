@@ -3,8 +3,6 @@
  */
 package com.jonosoft.ftpbrowser.web.client;
 
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
@@ -17,17 +15,6 @@ public class FTPFileItem implements Comparable, IsSerializable {
 	private String name = null;
 	private String type = null; // "f" = file; "d" = directory
 	private String fullPath = null;
-	
-	public static FTPFileItem getInstance(JSONObject json) {
-		FTPFileItem ftpFileItem = new FTPFileItem(new FTPSite());
-		
-		ftpFileItem.ftpSite.setFtpSiteId(new Integer(((JSONString) json.get("ftp_site_id")).stringValue()));
-		ftpFileItem.name = ((JSONString) json.get("name")).stringValue();
-		ftpFileItem.type = ((JSONString) json.get("type")).stringValue();
-		ftpFileItem.fullPath = ((JSONString) json.get("path")).stringValue();
-		
-		return ftpFileItem;
-	}
 	
 	public FTPFileItem() {
 	}
@@ -56,7 +43,7 @@ public class FTPFileItem implements Comparable, IsSerializable {
 	}
 	
 	public Object clone() {
-		FTPFileItem ftpFileItem = new FTPFileItem(getFTPConnection());
+		FTPFileItem ftpFileItem = new FTPFileItem(getFtpSite());
 		ftpFileItem.name = getName();
 		ftpFileItem.type = getType();
 		ftpFileItem.fullPath = getFullPath();
@@ -68,10 +55,10 @@ public class FTPFileItem implements Comparable, IsSerializable {
 			FTPFileItem ftpFileItem = (FTPFileItem) arg0;
 			boolean ftpConnectionsAreEqual = false;
 			boolean pathsAreEqual = false;
-			if (getFTPConnection() == null)
-				ftpConnectionsAreEqual = (ftpFileItem.getFTPConnection() == null);
+			if (getFtpSite() == null)
+				ftpConnectionsAreEqual = (ftpFileItem.getFtpSite() == null);
 			else
-				ftpConnectionsAreEqual = (getFTPConnection().equals(ftpFileItem.getFTPConnection()));
+				ftpConnectionsAreEqual = (getFtpSite().equals(ftpFileItem.getFtpSite()));
 			if (getFullPath() == null)
 				pathsAreEqual = (ftpFileItem.getFullPath() == null);
 			else
@@ -83,8 +70,8 @@ public class FTPFileItem implements Comparable, IsSerializable {
 	
 	public int hashCode() {
 		StringBuffer sb = new StringBuffer();
-		if (getFTPConnection() != null)
-			sb.append(getFTPConnection().getFtpSiteId()+":");
+		if (getFtpSite() != null)
+			sb.append(getFtpSite().getFtpSiteId()+":");
 		else
 			sb.append("null:");
 		if (getFullPath() == null)
@@ -115,16 +102,22 @@ public class FTPFileItem implements Comparable, IsSerializable {
 		return fullPath;
 	}
 	
+	public void setFullPath(String fullPath) {
+		this.fullPath = fullPath;
+		if (fullPath != null)
+			setName(fullPath.replaceFirst("([^/]+$)", "$1"));
+	}
+	
 	/* Currently, this can cause inconsistencies
 	 * public void setFullPath(String fullPath) {
 		this.fullPath = fullPath;
 	}*/
 	
-	public FTPSite getFTPConnection() {
+	public FTPSite getFtpSite() {
 		return ftpSite;
 	}
 	
-	public void setFTPConnection(FTPSite ftpConnection) {
+	public void setFtpSite(FTPSite ftpConnection) {
 		this.ftpSite = ftpConnection;
 	}
 

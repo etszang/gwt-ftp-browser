@@ -17,7 +17,7 @@ import com.jonosoft.ftpbrowser.web.client.FTPFileGroup;
  * @author Jkelling
  *
  */
-public class FTPFileGroupDB extends ObjectDB {
+public class FTPFileGroupDB extends ObjectDB {/*
 	
 	private static FTPFileGroup build(ResultSet rs) throws SQLException {
 		FTPFileGroup group = new FTPFileGroup();
@@ -120,4 +120,4 @@ public class FTPFileGroupDB extends ObjectDB {
 			cleanup(ps);
 		}
 	}
-}
+*/}

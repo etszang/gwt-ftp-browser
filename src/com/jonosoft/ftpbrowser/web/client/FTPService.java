@@ -20,11 +20,10 @@ public interface FTPService extends RemoteService {
 	
 	
 	/**
-	 * @param userId
 	 * @return List {@link FTPSite}s
 	 * @gwt.typeArgs <com.jonosoft.ftpbrowser.web.client.FTPSite>
 	 */
-	public List getUserFTPSites(Integer userId) throws FTPBrowserFatalException;
+	public List getUserFTPSites() throws FTPBrowserFatalException;
 	
 	
 	/**
@@ -40,6 +39,15 @@ public interface FTPService extends RemoteService {
 	 * @throws FTPBrowserFatalException
 	 */
 	public void deleteUserFTPSite(FTPSite site) throws FTPBrowserFatalException;
+	
+	
+	/**
+	 * @param groupId
+	 * @return
+	 * @throws FTPBrowserFatalException
+	 * @gwt.typeArgs <com.jonosoft.ftpbrowser.web.client.FTPFileItem>
+	 */
+	public List getUserFTPFileItems(Integer groupId) throws FTPBrowserFatalException;
 	
 	
 	/**
