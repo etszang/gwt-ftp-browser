@@ -70,7 +70,7 @@ public class FTPConnectionController {
 		String name = null;
 		for (int i = 0; i < jsonArray.size(); i++) {
 			name = ((JSONString) jsonArray.get(i)).stringValue();
-			ar.add(new FTPFileItem(site, name, type, path));
+			ar.add(new FTPFileItem(site.getFtpSiteId(), name, type, path));
 		}
 		return ar;
 	}

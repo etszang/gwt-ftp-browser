@@ -46,7 +46,7 @@ public class FTPTree extends Composite implements TreeListener {
 	
 	private void resetConnection() {
 		ftpTree.clear();
-		final FTPTreeItem ftpTreeItem = new FTPTreeItem(new FTPFileItem(ftpConnection, "/", "d"), "/" + ftpConnection.getHost());
+		final FTPTreeItem ftpTreeItem = new FTPTreeItem(new FTPFileItem(ftpConnection.getFtpSiteId() , "/", "d"), "/" + ftpConnection.getHost());
 		ftpTreeItem.setData();
 		ftpTreeItem.setNeedsToLoad(false);
 		ftpTree.addItem(ftpTreeItem);
