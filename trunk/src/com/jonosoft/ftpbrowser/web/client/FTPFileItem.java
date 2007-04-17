@@ -11,7 +11,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class FTPFileItem implements Comparable, IsSerializable {
 	
-	private FTPSite ftpSite = null;
+	private Integer ftpSiteId = null;
 	private String name = null;
 	private String type = null; // "f" = file; "d" = directory
 	private String fullPath = null;
@@ -19,22 +19,22 @@ public class FTPFileItem implements Comparable, IsSerializable {
 	public FTPFileItem() {
 	}
 	
-	public FTPFileItem(FTPSite ftpConnection) {
-		this.ftpSite = ftpConnection;
+	public FTPFileItem(Integer ftpConnection) {
+		this.ftpSiteId = ftpConnection;
 	}
 	
-	public FTPFileItem(FTPSite ftpConnection, String name, String type) {
+	public FTPFileItem(Integer ftpConnection, String name, String type) {
 		this(ftpConnection, name, type, name);
 	}
 	
-	public FTPFileItem(FTPSite ftpConnection, String name, String type, String fullPath) {
+	public FTPFileItem(Integer ftpConnection, String name, String type, String fullPath) {
 		this(ftpConnection);
 		this.name = name;
 		this.type = type;
 		this.fullPath = getFullPath(fullPath, name);
 	}
 	
-	public FTPFileItem(FTPSite ftpConnection, String name, String type, FTPFileItem parent) {
+	public FTPFileItem(Integer ftpConnection, String name, String type, FTPFileItem parent) {
 		this(ftpConnection, name, type, getFullPath(parent.getFullPath(), name));
 	}
 	
@@ -43,7 +43,7 @@ public class FTPFileItem implements Comparable, IsSerializable {
 	}
 	
 	public Object clone() {
-		FTPFileItem ftpFileItem = new FTPFileItem(getFtpSite());
+		FTPFileItem ftpFileItem = new FTPFileItem(getFtpSiteId());
 		ftpFileItem.name = getName();
 		ftpFileItem.type = getType();
 		ftpFileItem.fullPath = getFullPath();
@@ -55,10 +55,10 @@ public class FTPFileItem implements Comparable, IsSerializable {
 			FTPFileItem ftpFileItem = (FTPFileItem) arg0;
 			boolean ftpConnectionsAreEqual = false;
 			boolean pathsAreEqual = false;
-			if (getFtpSite() == null)
-				ftpConnectionsAreEqual = (ftpFileItem.getFtpSite() == null);
+			if (getFtpSiteId() == null)
+				ftpConnectionsAreEqual = (ftpFileItem.getFtpSiteId() == null);
 			else
-				ftpConnectionsAreEqual = (getFtpSite().equals(ftpFileItem.getFtpSite()));
+				ftpConnectionsAreEqual = (getFtpSiteId().equals(ftpFileItem.getFtpSiteId()));
 			if (getFullPath() == null)
 				pathsAreEqual = (ftpFileItem.getFullPath() == null);
 			else
@@ -70,8 +70,8 @@ public class FTPFileItem implements Comparable, IsSerializable {
 	
 	public int hashCode() {
 		StringBuffer sb = new StringBuffer();
-		if (getFtpSite() != null)
-			sb.append(getFtpSite().getFtpSiteId()+":");
+		if (getFtpSiteId() != null)
+			sb.append(getFtpSiteId()+":");
 		else
 			sb.append("null:");
 		if (getFullPath() == null)
@@ -113,12 +113,12 @@ public class FTPFileItem implements Comparable, IsSerializable {
 		this.fullPath = fullPath;
 	}*/
 	
-	public FTPSite getFtpSite() {
-		return ftpSite;
+	public Integer getFtpSiteId() {
+		return ftpSiteId;
 	}
 	
-	public void setFtpSite(FTPSite ftpConnection) {
-		this.ftpSite = ftpConnection;
+	public void setFtpSiteId(Integer ftpConnection) {
+		this.ftpSiteId = ftpConnection;
 	}
 
 	/**

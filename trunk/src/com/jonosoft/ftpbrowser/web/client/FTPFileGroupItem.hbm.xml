@@ -10,10 +10,10 @@
             <column name="ftp_file_group_item_id" />
             <generator class="native"></generator>
         </id>
-        <property name="ftpSiteId" type="java.lang.Integer" insert="false" update="false">
+        <property name="ftpSiteId" type="java.lang.Integer">
             <column name="ftp_site_id" not-null="true" />
         </property>
-        <property name="ftpFileGroupId" type="java.lang.Integer" insert="false" update="false">
+        <property name="ftpFileGroupId" type="java.lang.Integer">
             <column name="ftp_file_group_id" not-null="true" />
         </property>
         <property name="type" type="java.lang.String">
@@ -22,7 +22,6 @@
         <property name="fullPath" type="java.lang.String">
             <column name="path" length="16777215" />
         </property>
-		<many-to-one name="ftpFileGroup" class="com.jonosoft.ftpbrowser.web.client.FTPFileGroup" column="ftp_file_group_id" not-null="true"/>
-		<many-to-one name="ftpSite" class="com.jonosoft.ftpbrowser.web.client.FTPSite" column="ftp_site_id" not-null="true"/>
+		
     </class>
 </hibernate-mapping>

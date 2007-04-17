@@ -60,7 +60,7 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 			
 			for (i = 0; i < lines.length; i++) {
 				items = PATTERN_SPLIT_BY_WHITESPACE.split(lines[i]);
-				fileList.add(new FTPFileItem(site, items[8], items[0].startsWith("d") ? "d" : "f", path));
+				fileList.add(new FTPFileItem(site.getFtpSiteId() , items[8], items[0].startsWith("d") ? "d" : "f", path));
 			}
 			
 			return fileList;

@@ -9,15 +9,12 @@ package com.jonosoft.ftpbrowser.web.client;
  */
 public class FTPFileGroupItem extends FTPFileItem {
 
-	private FTPFileGroup ftpFileGroup = null;
+	
 	private Integer ftpFileGroupId = null;
 	private Integer ftpFileGroupItemId = null;
-	private Integer ftpSiteId = null;
-
-	public FTPFileGroup getFtpFileGroup() {
-		return ftpFileGroup;
-	}
-
+	private Integer ftpSite = null;
+	
+	
 	public Integer getFtpFileGroupId() {
 		return ftpFileGroupId;
 	}
@@ -26,12 +23,8 @@ public class FTPFileGroupItem extends FTPFileItem {
 		return ftpFileGroupItemId;
 	}
 
-	public Integer getFtpSiteId() {
-		return ftpSiteId;
-	}
-
-	public void setFtpFileGroup(FTPFileGroup ftpFileGroup) {
-		this.ftpFileGroup = ftpFileGroup;
+	public Integer getFtpSite() {
+		return ftpSite;
 	}
 
 	public void setFtpFileGroupId(Integer ftpFileGroupId) {
@@ -42,8 +35,8 @@ public class FTPFileGroupItem extends FTPFileItem {
 		this.ftpFileGroupItemId = ftpFileGroupItemId;
 	}
 
-	public void setFtpSiteId(Integer ftpSiteId) {
-		this.ftpSiteId = ftpSiteId;
+	public void setFtpSite(Integer ftpSiteId) {
+		this.ftpSite= ftpSiteId;
 	}
 	
 	
