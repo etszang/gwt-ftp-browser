@@ -1,6 +1,7 @@
 package com.jonosoft.ftpbrowser.web.client;
 
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -48,6 +49,15 @@ public interface FTPService extends RemoteService {
 	 * @gwt.typeArgs <com.jonosoft.ftpbrowser.web.client.FTPFileItem>
 	 */
 	public List getUserFTPFileItems(Integer groupId) throws FTPBrowserFatalException;
+	
+	
+	/**
+	 * @param groupId
+	 * @param ftpFileItems
+	 * @throws FTPBrowserFatalException
+	 * @gwt.typeArgs ftpFileItems<com.jonosoft.ftpbrowser.web.client.FTPFileItem>
+	 */
+	public void saveUserFTPFileItems(Integer groupId, List ftpFileItems) throws FTPBrowserFatalException;
 	
 	
 	/**

@@ -31,7 +31,7 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 		
 		myFtp.addFTPConnectionSettingsListener(this);
 		
-		refreshListFromServer();
+		rebuildMenuBar();
 	}
 	
 	public void onFTPConnectionSettingsSave(FTPSite result) {
@@ -54,7 +54,7 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 		myFtp.hide();
 	}
 	
-	private void refreshListFromServer() {
+	public void refreshListFromServer() {
 		FTPService.Util.getInstance().getUserFTPSites(new AsyncCallback() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Unexpected failure retrieving your saved FTP connections. If this continues, please contact our staff.\n\nMessage:\n" + caught.getMessage());
