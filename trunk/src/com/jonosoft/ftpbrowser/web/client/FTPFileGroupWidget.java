@@ -1,21 +1,10 @@
 package com.jonosoft.ftpbrowser.web.client;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.WindowCloseListener;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 
@@ -73,7 +62,7 @@ public class FTPFileGroupWidget extends Composite {
 					fileGrid.addItem((FTPFileItem) it.next());
 			}
 			
-			fileSaver.save();
+			//fileSaver.save();
 			fileGrid.sort();
 		}
 
@@ -122,7 +111,7 @@ public class FTPFileGroupWidget extends Composite {
 		}
 	}
 	
-	private class FileSaver {
+	private class FileSaver {/*
 		private static final int SAVE_DELAY = 2000;
 		
 		private boolean isSaveInProgress = false;
@@ -231,5 +220,5 @@ public class FTPFileGroupWidget extends Composite {
 				}
 			}
 		}
-	}
+	*/}
 }
