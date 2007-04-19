@@ -1,10 +1,15 @@
 package com.jonosoft.ftpbrowser.web.client;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.WindowCloseListener;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 
@@ -13,43 +18,43 @@ import com.google.gwt.user.client.ui.Composite;
  */
 public class FTPFileGroupWidget extends Composite {
 	private static final String LINE_SEPARATOR = String.valueOf((char)13);
-	
+
 	private final FTPFileItemSelectGrid fileGrid = new FTPFileItemSelectGrid();
 	private final FileSaver fileSaver = new FileSaver();
 	private FTPFileItemSelectGrid sourceFileGrid = null;
 	private final FDAS fdsa = new FDAS();
-	
+
 	public FTPFileGroupWidget(FTPFileItemSelectGrid sourceFileGrid) {
 		initWidget(fileGrid);
-		
+
 		setSourceFileGrid(sourceFileGrid);
-		
+
 		fileGrid.setDisplayFullPaths(true);
-		
+
 		addStyleName("cc-filegroupwidget");
-		
+
 		DeferredCommand.add(new Command() {
 			public void execute() {
-				new FTPFileGroupFilesDataProvider().load();
+				//new FTPFileGroupFilesDataProvider().load();
 			}
 		});
 	}
-	
+
 	private FTPFileItemSelectGrid getSourceFileGrid() {
 		return sourceFileGrid;
 	}
-	
+
 	private void setSourceFileGrid(final FTPFileItemSelectGrid sourceFileGrid) {
 		if (this.sourceFileGrid != null && this.sourceFileGrid != sourceFileGrid)
 			this.sourceFileGrid.removeItemSelectGridListener(fdsa);
 		this.sourceFileGrid = sourceFileGrid;
 		this.sourceFileGrid.addItemSelectGridListener(fdsa);
 	}
-	
+
 	private boolean containsFTPFileItem(FTPFileItem itemToFind) {
 		return fileGrid.getItems().contains(itemToFind);
 	}
-	
+
 	// TODO Name this class
 	private class FDAS implements ItemSelectGridListener {
 		public void onItemsSelectStateChanged(ItemSelectGrid sender, List items, boolean state) {
@@ -61,8 +66,8 @@ public class FTPFileGroupWidget extends Composite {
 				for (Iterator it = items.iterator(); it.hasNext();)
 					fileGrid.addItem((FTPFileItem) it.next());
 			}
-			
-			//fileSaver.save();
+
+			fileSaver.save();
 			fileGrid.sort();
 		}
 
@@ -70,55 +75,39 @@ public class FTPFileGroupWidget extends Composite {
 			sender.setItemSelected(item, containsFTPFileItem((FTPFileItem) item));
 		}
 	}
-	
+
 	private class FTPFileGroupFilesDataProvider {
 		public void load() {
 			FTPService.Util.getInstance().getUserFTPFileItems(new Integer(1), new AsyncCallback() {
 
 				public void onFailure(Throwable caught) {
+					GWTErrorLogger.logError(caught);
+					caught.printStackTrace();
 				}
 
 				public void onSuccess(Object result) {
-					List list = (List) result;
-				}
-				
-			});
-			
-			/*HTTPRequest.asyncGet(GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.ftpPathListURL(), new ResponseTextHandler() {
-				public void onCompletion(String responseText) {
 					fileGrid.clear();
-					
-					try {
-						JSONResponse jsonResponse = JSONResponse.newInstance(responseText);
-						jsonResponse.handleErrors();
-						
-						if (jsonResponse.getResult().get("pathList").isNull() == null) {
-							JSONArray arPaths = (JSONArray) jsonResponse.getResult().get("pathList");
-							
-							for (int i = 0; i < arPaths.size(); i++)
-								if (((JSONValue) arPaths.get(i)).isNull() == null)
-									fileGrid.addItem(FTPFileItem.getInstance((JSONObject) arPaths.get(i)));
-							
-							fileGrid.sort();
-						}
-					}
-					catch (Throwable e) {
-						GWTErrorLogger.logError(e);
-						e.printStackTrace();
-					}
+
+					List list = (List) result;
+
+					for (Iterator it = list.iterator(); it.hasNext();)
+						fileGrid.addItem((FTPFileItem) it.next());
+
+					fileGrid.sort();
 				}
-			});*/
+
+			});
 		}
 	}
-	
-	private class FileSaver {/*
+
+	private class FileSaver {
 		private static final int SAVE_DELAY = 2000;
-		
+
 		private boolean isSaveInProgress = false;
 		private boolean isSaveBeingDelayed = false;
 		private boolean isSaveAfterDelay = false;
 		private final DirtyPage dirtyPage = new DirtyPage();
-		
+
 		private class DirtyPage implements WindowCloseListener {
 			public void onWindowClosed() {
 			}
@@ -129,7 +118,7 @@ public class FTPFileGroupWidget extends Composite {
 				return null;
 			}
 		}
-		
+
 		public void save() {
 			if (isSaveBeingDelayed || isSaveInProgress) {
 				isSaveAfterDelay = true;
@@ -141,12 +130,12 @@ public class FTPFileGroupWidget extends Composite {
 			try {
 				saveNow();
 			}
-			catch (RequestException e) {
+			catch (Exception e) {
 				Window.alert("Failed to save FTP file data. " + e.toString());
 			}
 			delaySave();
 		}
-		
+
 		private void delaySave() {
 			if (isSaveBeingDelayed)
 				return;
@@ -160,65 +149,28 @@ public class FTPFileGroupWidget extends Composite {
 						System.out.println("calling save");
 						try {
 							saveNow();
-						} catch (RequestException e) {
+						} catch (Exception e) {
 							Window.alert("Failed to save FTP file data. " + e.toString());
 						}
 					}
 				}
 			}.schedule(SAVE_DELAY);
 		}
-		
-		private void saveNow() throws RequestException {
-			Map paramStringBySiteId = new HashMap();
-			Iterator it = fileGrid.getItems().iterator();
-			StringBuffer sb = null;
-			Integer ftpSiteId = null;
-			FTPFileItem ftpFileItem = null;
-			JSRequestBuilder requestBuilder = new JSRequestBuilder(RequestBuilder.POST, GWT.getModuleBaseURL()+CookieCloaker.DEFAULT_INSTANCE.ftpPathSaveURL());
-			
-			while (it.hasNext()) {
-				ftpFileItem = (FTPFileItem) it.next();
-				ftpSiteId = ftpFileItem.getFtpSiteId();
-				
-				if ((sb = (StringBuffer) paramStringBySiteId.get(ftpSiteId)) == null)
-					paramStringBySiteId.put(ftpSiteId, sb = new StringBuffer());
-				
-				if (sb.length() != 0)
-					sb.append(LINE_SEPARATOR);
-				
-				sb.append(ftpFileItem.getType() + ":" + ftpFileItem.getFullPath());
-			}
-			
-			for (it = paramStringBySiteId.keySet().iterator(); it.hasNext();) {
-				ftpSiteId = (Integer) it.next();
-				sb = (StringBuffer) paramStringBySiteId.get(ftpSiteId);
-				//requestBuilder.addParameter(ftpSiteId.toString(), sb.toString());
-				requestBuilder.addParameter(ftpSiteId.toString(), Base64Util.encode(sb.toString()));
-			}
-			
-			requestBuilder.setTimeoutMillis(10000);
-			requestBuilder.sendRequest(new SaveResponseHandler());
+
+		private void saveNow() {
+			FTPService.Util.getInstance().saveUserFTPFileItems(new Integer(1), new ArrayList(fileGrid.getItems()), new SaveResponseHandler());
 		}
-		
-		private class SaveResponseHandler implements RequestCallback {
-			public void onError(Request request, Throwable exception) {
-				GWTErrorLogger.logError(exception);
+
+		private class SaveResponseHandler implements AsyncCallback {
+			public void onFailure(Throwable caught) {
+				GWTErrorLogger.logError(caught);
+				GWT.log("Saving FTPFileGroup contents failed", caught);
 			}
 
-			public void onResponseReceived(Request request, Response response) {
+			public void onSuccess(Object result) {
 				if (isSaveInProgress = isSaveAfterDelay)
 					Window.removeWindowCloseListener(dirtyPage);
-				
-				try {
-					JSONResponse jsonResponse = JSONResponse.newInstance(response.getText());
-					jsonResponse.handleErrors();
-				}
-				catch (Throwable caught) {
-					GWTErrorLogger.logError(caught);
-					GWT.log("Saving FTPFileGroup contents failed", caught);
-					// TODO Display some kind of error to the user
-				}
 			}
 		}
-	*/}
+	 }
 }

@@ -20,6 +20,8 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class FTPConnectionSettingsFormPanel extends Composite implements ClickListener {
 	
+	private Label instructions;
+	private final HeaderLabel headerLabelForSettingsPanel;
 	private final VerticalPanel layoutPanel = new VerticalPanel();
 	private final FTPConnectionSettingsFieldsGrid fieldsGrid = new FTPConnectionSettingsFieldsGrid();
 	private final Button saveButton = new Button("Save", this);
@@ -29,10 +31,12 @@ public class FTPConnectionSettingsFormPanel extends Composite implements ClickLi
 	public FTPConnectionSettingsFormPanel() {
 		initWidget(layoutPanel);
 		
-		Label headerLabelForSettingsPanel = new Label("FTP Connection Settings", false);
+		headerLabelForSettingsPanel = new HeaderLabel("FTP Connection Settings", false);
 		headerLabelForSettingsPanel.addStyleName("settings-panel-header");
 		
 		layoutPanel.add(headerLabelForSettingsPanel);
+		instructions = new Label("");
+		layoutPanel.add(instructions);
 		layoutPanel.add(fieldsGrid);
 		
 		HorizontalPanel buttonsPanel = new HorizontalPanel();
@@ -81,5 +85,17 @@ public class FTPConnectionSettingsFormPanel extends Composite implements ClickLi
 			//layoutPanel.setVisible(false);
 			fireFTPConnectionSettingsCancel();
 		}
+	}
+	public String getTitle() {
+		return headerLabelForSettingsPanel.getText();
+	}
+	public void setTitle(String text) {
+		headerLabelForSettingsPanel.setText(text);
+	}
+	public String getInstructionsText() {
+		return instructions.getText();
+	}
+	public void setInstructionsText(String text) {
+		instructions.setText(text);
 	}
 }

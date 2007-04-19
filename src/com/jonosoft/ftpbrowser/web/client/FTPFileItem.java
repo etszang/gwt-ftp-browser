@@ -139,4 +139,15 @@ public class FTPFileItem implements Comparable, IsSerializable {
 			return getFullPath().compareTo(ftpFileItem.getFullPath());
 	}
 	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("FTPSiteId: " + ftpSiteId + "\n");
+		sb.append("Full Path: " + fullPath + "\n");
+		sb.append("Name: " + name + "\n");
+		sb.append("Type: " + type + "\n");
+		
+		return sb.toString();
+	}
+	
 }
