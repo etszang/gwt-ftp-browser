@@ -16,9 +16,5 @@
         <property name="name" type="java.lang.String">
             <column name="name" not-null="true" />
         </property>
-        <set name="ftpFileGroupItems" inverse="true" lazy="true">
-            <key column="ftp_file_group_id"/>
-            <one-to-many class="com.jonosoft.ftpbrowser.web.client.FTPFileGroupItem"/>
-        </set>
     </class>
 </hibernate-mapping>

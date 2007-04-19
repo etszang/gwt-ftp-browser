@@ -26,6 +26,23 @@
 			</fileset>
 		</jar>
 		<copy todir="@dot/${gwt.module.id}/WEB-INF/lib">
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\antlr-2.7.5H3.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\antlr-2.7.6.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\asm-attrs.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\asm.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\cglib-2.1.3.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\commons-collections-2.1.1.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\commons-logging-1.0.4.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\dom4j-1.6.1.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\ehcache-1.1.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\hibernate3.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\jaas.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\jaxen-1.1-beta-7.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\jdbc2_0-stdext.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\jta.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\log4j-1.2.11.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\xerces-2.6.2.jar"/>
+			<fileset file="C:\workspace\gwt-ftp-browser\WebContent\WEB-INF\lib\xml-apis.jar"/>
 			<fileset file="C:\Program Files\gwt\gwt-widgets-0.1.3.jar"/>
 		</copy>		
 	</target>
@@ -36,6 +53,23 @@
 				<pathelement location="C:/workspace/gwt-ftp-browser/src" />
 				<pathelement location="C:/workspace/.metadata/.plugins/com.swtdesigner.gwt/gwt-user-patch.jar" />
 				<pathelement location="C:/workspace/gwt-ftp-browser/build/classes" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/antlr-2.7.5H3.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/antlr-2.7.6.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/asm-attrs.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/asm.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/cglib-2.1.3.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/commons-collections-2.1.1.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/commons-logging-1.0.4.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/dom4j-1.6.1.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/ehcache-1.1.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/hibernate3.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/jaas.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/jaxen-1.1-beta-7.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/jdbc2_0-stdext.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/jta.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/log4j-1.2.11.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/xerces-2.6.2.jar" />
+				<pathelement location="C:/workspace/gwt-ftp-browser/WebContent/WEB-INF/lib/xml-apis.jar" />
 				<pathelement location="C:/Program Files/gwt/gwt-user.jar" />
 				<pathelement location="C:/Program Files/gwt/gwt-widgets-0.1.3.jar" />
 				<pathelement location="C:/Program Files/gwt/gwt-dev-windows.jar" />

@@ -22,6 +22,5 @@
         <property name="fullPath" type="java.lang.String">
             <column name="path" length="16777215" />
         </property>
-		
     </class>
 </hibernate-mapping>

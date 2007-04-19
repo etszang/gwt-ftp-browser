@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import sun.net.ftp.FtpClient;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -20,6 +23,8 @@ import com.jonosoft.ftpbrowser.web.server.data.FTPFileGroupItemDAO;
 import com.jonosoft.ftpbrowser.web.server.data.FTPSiteDAO;
 
 public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
+	
+	private static final Logger LOGGER = LogManager.getLogger(FTPServiceImpl.class);
 	
 	private static final Pattern PATTERN_SPLIT_BY_NEWLINE = Pattern.compile("[\\r\\n]{1,2}");
 	private static final Pattern PATTERN_SPLIT_BY_WHITESPACE = Pattern.compile("\\s+");
@@ -65,13 +70,13 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 			
 			return fileList;
 		} catch (IOException e) {
+			LOGGER.error("FtpClient threw an IOException trying to list contents at path: " + path + "; for FTPSite: " + site.toString(), e);
 			throw new FTPIOException("FtpClient threw an IOException trying to list contents at path: " + path + "; for FTPSite: " + site.toString());
 		}
 		finally {
 			try {
 				client.closeServer();
 			} catch (IOException e) {
-				// TODO Log this
 			}
 		}
 	}
@@ -82,7 +87,7 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 			return new FTPSiteDAO().findByUserId(getUserId());
 		}
 		finally {
-//			HibernateSessionFactory.closeSession();
+			HibernateSessionFactory.closeSession();
 		}
 	}
 
@@ -91,7 +96,12 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 			HibernateSessionFactory.getSession().beginTransaction();
 			new FTPSiteDAO().attachDirty(site);
 			HibernateSessionFactory.getSession().getTransaction().commit();
+			HibernateSessionFactory.closeSession();
 			return site;
+		}
+		catch (RuntimeException e) {
+			LOGGER.fatal(e);
+			throw e;
 		}
 		finally {
 //			HibernateSessionFactory.closeSession();
@@ -102,15 +112,12 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 		
 		try {
 			FTPSiteDAO dao = new FTPSiteDAO();
-			
 			HibernateSessionFactory.getSession().beginTransaction();
-			
 			dao.delete(site);
-			
 			HibernateSessionFactory.getSession().getTransaction().commit();
 		}
 		finally {
-			//HibernateSessionFactory.closeSession();
+			HibernateSessionFactory.closeSession();
 		}
 	}
 	
@@ -141,11 +148,11 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 			return list;
 		}
 		catch (RuntimeException e) {
-			System.out.println(e.toString());
+			LOGGER.fatal(e);
 			throw e;
 		}
 		finally {
-			//HibernateSessionFactory.closeSession();
+			HibernateSessionFactory.closeSession();
 		}
 		
 	}
