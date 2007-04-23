@@ -1,7 +1,9 @@
 package com.jonosoft.ftpbrowser.web.server.data;
 
 import com.jonosoft.ftpbrowser.web.client.FTPFileGroup;
+import com.jonosoft.ftpbrowser.web.client.FTPFileGroupItem;
 
+import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,6 +39,12 @@ public class FTPFileGroupDAO extends BaseHibernateDAO {
 	public void delete(FTPFileGroup persistentInstance) {
         log.debug("deleting FTPFileGroup instance");
         try {
+        	// TODO Configure Hibernate to do this automatically
+        	FTPFileGroupItemDAO dao = new FTPFileGroupItemDAO();
+        	List list = dao.findByFtpFileGroupId(persistentInstance.getFtpFileGroupId());
+        	for (Iterator it = list.iterator(); it.hasNext();)
+        		dao.delete((FTPFileGroupItem) it.next());
+        	
             getSession().delete(persistentInstance);
             log.debug("delete successful");
         } catch (RuntimeException re) {

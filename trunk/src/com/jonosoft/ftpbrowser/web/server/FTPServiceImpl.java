@@ -4,11 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.LogManager;
@@ -108,6 +106,7 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 	public FTPSite saveUserFTPSite(FTPSite site) throws FTPBrowserFatalException {
 		try {
 			HibernateSessionFactory.getSession().beginTransaction();
+			site.setUserId(getUserId(this));
 			new FTPSiteDAO().attachDirty(site);
 			HibernateSessionFactory.getSession().getTransaction().commit();
 			HibernateSessionFactory.closeSession();

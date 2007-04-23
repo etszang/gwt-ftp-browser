@@ -10,7 +10,7 @@ import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
 
 /**
- * TODO Add description JSONResponse (com.macroleads.web.client.json.JSONResponse)
+ * TODO2 Add description JSONResponse (com.macroleads.web.client.json.JSONResponse)
  *
  * @author jon
  *
@@ -54,7 +54,7 @@ public class JSONResponse {
 	/**
 	 * Throws a RuntimeException if this JSONResponse has any errors.
 	 * 
-	 * TODO Create custom Exception
+	 * TODO2 Create custom Exception
 	 */
 	public void handleErrors() {
 		if (hasErrors())

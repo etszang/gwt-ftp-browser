@@ -77,7 +77,6 @@ public class FTPConnectionSettingsFormPanel extends Composite implements ClickLi
 	public void onClick(Widget sender) {
 		if (sender.equals(saveButton))
 		{
-			
 			fireFTPConnectionSettingsSave();
 		}
 		else if (sender.equals(cancelButton))

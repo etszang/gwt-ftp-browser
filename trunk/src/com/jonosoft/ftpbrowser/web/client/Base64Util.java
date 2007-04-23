@@ -13,7 +13,7 @@ public class Base64Util {
 
 	private static final String keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.-"; //+/=
 
-	// TODO Add unit test for kicks
+	// TODO2 Add unit test for kicks
 	/*public static void main(String[] args) {
 		final String [] test = new String[] {
 				"carnal pleasure.",
