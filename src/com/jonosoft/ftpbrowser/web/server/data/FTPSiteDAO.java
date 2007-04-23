@@ -1,12 +1,15 @@
 package com.jonosoft.ftpbrowser.web.server.data;
 
+import java.util.Iterator;
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.criterion.Example;
 
+import com.jonosoft.ftpbrowser.web.client.FTPFileGroupItem;
 import com.jonosoft.ftpbrowser.web.client.FTPSite;
 
 /**
@@ -40,6 +43,12 @@ public class FTPSiteDAO extends BaseHibernateDAO {
 	public void delete(FTPSite persistentInstance) {
         log.debug("deleting FTPSite instance");
         try {
+        	// TODO Configure Hibernate to do this automatically
+        	FTPFileGroupItemDAO dao = new FTPFileGroupItemDAO();
+        	List list = dao.findByFtpSiteId(persistentInstance.getFtpSiteId());
+        	for (Iterator it = list.iterator(); it.hasNext();)
+        		dao.delete((FTPFileGroupItem) it.next());
+        	
             getSession().delete(persistentInstance);
             log.debug("delete successful");
         } catch (RuntimeException re) {

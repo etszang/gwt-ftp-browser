@@ -16,10 +16,11 @@ import com.google.gwt.user.client.ui.MenuItem;
  * @author Jkelling
  *
  */
-public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSettingsListener   {
+public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSettingsListener, LoadsRemoteData {
 	
 	private final FTPConnectionSettingsPopupPanel myFtp = new FTPConnectionSettingsPopupPanel(true);
 	private FTPTree ftpTree = null;
+	private List ftpSites = null;
 	
 	public FTPConnectionsMenuBar(FTPTree ftpTree) {
 		super(true);
@@ -38,11 +39,11 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 		FTPService.Util.getInstance().saveUserFTPSite(result, new AsyncCallback() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Unexpected failure saving the FTP Connection. If this continues, please contact our staff.\n\nMessage:\n" + caught.getMessage());
-				refreshListFromServer();
+				reloadRemoteData();
 			}
 
 			public void onSuccess(Object result) {
-				refreshListFromServer();
+				reloadRemoteData();
 				Window.alert("FTP site has been saved.\n\n" + result.toString());
 			}
 		});
@@ -54,17 +55,25 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 		myFtp.hide();
 	}
 	
-	public void refreshListFromServer() {
+	public void reloadRemoteData() {
+		reloadRemoteData(null);
+	}
+	
+	public void reloadRemoteData(final AsyncCallback callback) {
 		FTPService.Util.getInstance().getUserFTPSites(new AsyncCallback() {
 			public void onFailure(Throwable caught) {
+				if (callback != null)
+					callback.onFailure(caught);
 				Window.alert("Unexpected failure retrieving your saved FTP connections. If this continues, please contact our staff.\n\nMessage:\n" + caught.getMessage());
 			}
 			
 			public void onSuccess(Object result) {
 				clearItems();
-				List ftpSites = (List) result;
+				ftpSites = (List) result;
 				for (Iterator it = ftpSites.iterator(); it.hasNext();)
 					addItem(new FTPConnectionMenuItem((FTPSite) it.next()));
+				if (callback != null)
+					callback.onSuccess(result);
 			}
 			
 		});
@@ -75,13 +84,14 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 		rebuildMenuBar();
 	}
 	
+	public List getFtpSites() {
+		return ftpSites;
+	}
+	
 	private void rebuildMenuBar() {
 		MenuItem newFTPSiteMenuItem = new MenuItem("New FTP Site...", new Command() {
 			public void execute() {
 				FTPSite newFTPSite = new FTPSite();
-				
-				// XXX All of the userId stuff should be server-side, I don't know what I was thinking...
-				newFTPSite.setUserId(new Integer(7));
 				
 				// The default port for FTP is 21
 				newFTPSite.setPort(new Integer(21));
@@ -116,7 +126,6 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 			
 			addItem("Settings...", new Command() {
 				public void execute() {
-					// TODO Auto-generated method stub
 					// Settings window (at this time) doesn't work as an "edit" only a "new"
 					myFtp.show();
 					myFtp.setFTPSite(ftpSite);
@@ -125,7 +134,6 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 			
 			addItem("Duplicate...", new Command() {
 				public void execute() {
-					// TODO Auto-generated method stub
 					// Should add a new connection and automatically bring up settings window
 					FTPSite duplicateFTPSite = new FTPSite();
 					
@@ -142,7 +150,6 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 			
 			addItem("Delete", new Command() {
 				public void execute() {
-					// TODO Auto-generated method stub
 					// obviously should have a confirmation
 					if(Window.confirm("Delete FTP Connection?\n\n" + ftpSite.toString())){
 						FTPService.Util.getInstance().deleteUserFTPSite(ftpSite, new AsyncCallback() {
@@ -150,7 +157,7 @@ public class FTPConnectionsMenuBar extends MenuBar implements FTPConnectionSetti
 								Window.alert("Failed to delete FTP connection:\n" + ftpSite.toString() + "\n\nMessage:\n" + caught.getMessage());
 							}
 							public void onSuccess(Object result) {
-								refreshListFromServer();
+								reloadRemoteData();
 							}
 						});
 					}

@@ -3,6 +3,7 @@ package com.jonosoft.ftpbrowser.web.client;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
@@ -16,35 +17,89 @@ import com.google.gwt.user.client.ui.Composite;
 /**
  * @author Jkelling
  */
-public class FTPFileGroupWidget extends Composite {
-	private static final String LINE_SEPARATOR = String.valueOf((char)13);
-
+public class FTPFileGroupWidget extends Composite implements LoadsRemoteData {
 	private final FTPFileItemSelectGrid fileGrid = new FTPFileItemSelectGrid();
 	private final FileSaver fileSaver = new FileSaver();
 	private FTPFileItemSelectGrid sourceFileGrid = null;
 	private final FDAS fdsa = new FDAS();
-
-	public FTPFileGroupWidget(FTPFileItemSelectGrid sourceFileGrid) {
+	private FTPFileGroup ftpFileGroup = null;
+	
+	public FTPFileGroupWidget() {
 		initWidget(fileGrid);
-
-		setSourceFileGrid(sourceFileGrid);
 
 		fileGrid.setDisplayFullPaths(true);
 
 		addStyleName("cc-filegroupwidget");
-
+	}
+	
+	public void reloadRemoteData() {
+		reloadRemoteData(null);
+	}
+	
+	public void reloadRemoteData(final AsyncCallback callback) {
 		DeferredCommand.add(new Command() {
 			public void execute() {
-				//new FTPFileGroupFilesDataProvider().load();
+				FTPService.Util.getInstance().getUserFTPFileItems(new Integer(1), new AsyncCallback() {
+					public void onFailure(Throwable caught) {
+						GWTErrorLogger.logError(caught);
+						caught.printStackTrace();
+						
+						if (callback != null)
+							callback.onFailure(caught);
+					}
+					public void onSuccess(Object result) {
+						fileGrid.clear();
+
+						List list = (List) result;
+
+						for (Iterator it = list.iterator(); it.hasNext();)
+							fileGrid.addItem((FTPFileItem) it.next());
+
+						fileGrid.sort();
+						
+						if (callback != null)
+							callback.onSuccess(result);
+					}
+				});
 			}
 		});
 	}
 
-	private FTPFileItemSelectGrid getSourceFileGrid() {
+	public FTPFileItemSelectGrid getSourceFileGrid() {
 		return sourceFileGrid;
 	}
+	
+	public FTPFileGroup getFTPFileGroup() {
+		return ftpFileGroup;
+	}
+	
+	public void setFTPFileGroup(FTPFileGroup ftpFileGroup) {
+		this.ftpFileGroup = ftpFileGroup;
+	}
+	
+	public List getFTPFileGroupItems() {
+		final List items = new Vector();
+		FTPFileItem fileItem;
+		FTPFileGroupItem groupItem;
+		
+		for (Iterator it = fileGrid.getItems().iterator(); it.hasNext();) {
+			fileItem = (FTPFileItem) it.next();
+			groupItem = new FTPFileGroupItem();
+			
+			if (getFTPFileGroup() != null)
+				groupItem.setFtpFileGroupId(getFTPFileGroup().getFtpFileGroupId());
+			groupItem.setFtpSiteId(fileItem.getFtpSiteId());
+			groupItem.setName(fileItem.getName());
+			groupItem.setType(fileItem.getType());
+			groupItem.setFullPath(fileItem.getFullPath());
+			
+			items.add(groupItem);
+		}
+		
+		return items;
+	}
 
-	private void setSourceFileGrid(final FTPFileItemSelectGrid sourceFileGrid) {
+	public void setSourceFileGrid(final FTPFileItemSelectGrid sourceFileGrid) {
 		if (this.sourceFileGrid != null && this.sourceFileGrid != sourceFileGrid)
 			this.sourceFileGrid.removeItemSelectGridListener(fdsa);
 		this.sourceFileGrid = sourceFileGrid;
@@ -55,7 +110,7 @@ public class FTPFileGroupWidget extends Composite {
 		return fileGrid.getItems().contains(itemToFind);
 	}
 
-	// TODO Name this class
+	// TODO Rename this ItemSelectGridListener class from FDAS
 	private class FDAS implements ItemSelectGridListener {
 		public void onItemsSelectStateChanged(ItemSelectGrid sender, List items, boolean state) {
 			if (! state) {
@@ -73,30 +128,6 @@ public class FTPFileGroupWidget extends Composite {
 
 		public void onItemAdded(ItemSelectGrid sender, Object item) {
 			sender.setItemSelected(item, containsFTPFileItem((FTPFileItem) item));
-		}
-	}
-
-	private class FTPFileGroupFilesDataProvider {
-		public void load() {
-			FTPService.Util.getInstance().getUserFTPFileItems(new Integer(1), new AsyncCallback() {
-
-				public void onFailure(Throwable caught) {
-					GWTErrorLogger.logError(caught);
-					caught.printStackTrace();
-				}
-
-				public void onSuccess(Object result) {
-					fileGrid.clear();
-
-					List list = (List) result;
-
-					for (Iterator it = list.iterator(); it.hasNext();)
-						fileGrid.addItem((FTPFileItem) it.next());
-
-					fileGrid.sort();
-				}
-
-			});
 		}
 	}
 

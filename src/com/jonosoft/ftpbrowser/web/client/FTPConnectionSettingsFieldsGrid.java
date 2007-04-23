@@ -33,6 +33,8 @@ public class FTPConnectionSettingsFieldsGrid extends Composite {
 	}
 	
 	public FTPSite getFTPSiteUpdated() {
+		if (ftpSite == null)
+			ftpSite = new FTPSite();
 		ftpSite.setHost(host.getText());
 		ftpSite.setPort(new Integer(port.getText()));
 		ftpSite.setUsername(username.getText());

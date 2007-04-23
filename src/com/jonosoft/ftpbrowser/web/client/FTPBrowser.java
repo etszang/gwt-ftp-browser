@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -14,13 +15,12 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author Jkelling
  *
  */
-public class FTPBrowser extends Composite {
+public class FTPBrowser extends Composite implements LoadsRemoteData {
 	
 	private final VerticalPanel vertPanel = new VerticalPanel();
 	private final HorizontalPanel directoryBrowserPanel = new HorizontalPanel();
@@ -51,12 +51,11 @@ public class FTPBrowser extends Composite {
 		ftpSitesMenuItem.addStyleName("ftpbrowser-menuitem");
 		ftpBrowserMenuBar.addItem(ftpSitesMenuItem);
 		
-		vertPanel.add(ftpBrowserMenuBar);
-		vertPanel.add(directoryBrowserPanel);
-		vertPanel.add(new FTPFileGroupWidget(selectGrid));
-
 		directoryBrowserPanel.add(sc1);
 		directoryBrowserPanel.add(sc2);
+		
+		vertPanel.add(ftpBrowserMenuBar);
+		vertPanel.add(directoryBrowserPanel);
 
 		//directoryBrowserPanel.add(parentLevelButton);
 		//directoryBrowserPanel.add(directoryListPanel);
@@ -67,15 +66,7 @@ public class FTPBrowser extends Composite {
 		
 		ftpTree.addTreeListener(new TreeListener());
 	}
-
-	public void changeDirectory(String path) {
-
-	}
-
-	public void onClick(Widget sender) {
-
-	}
-
+	
 	public FTPConnectionsMenuBar getFTPConnectionsMenuBar() {
 		return ftpConnectionsMenuBar;
 	}
@@ -141,4 +132,10 @@ public class FTPBrowser extends Composite {
 
 	}
 	
+	public void reloadRemoteData() {
+		reloadRemoteData(null);
+	}
+	public void reloadRemoteData(AsyncCallback callback) {
+		ftpConnectionsMenuBar.reloadRemoteData(callback);
+	}
 }
