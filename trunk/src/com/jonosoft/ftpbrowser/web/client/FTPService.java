@@ -15,9 +15,10 @@ public interface FTPService extends RemoteService {
 	 * @param path
 	 * @return List of {@link FTPFileItem}s
 	 * @throws FTPIOException 
+	 * @throws CCFtpLoginException 
 	 * @gwt.typeArgs <com.jonosoft.ftpbrowser.web.client.FTPFileItem>
 	 */
-	public List getFileList(FTPSite site, String path) throws FTPIOException;
+	public List getFileList(FTPSite site, String path) throws FTPIOException, CCFtpLoginException;
 	
 	
 	/**

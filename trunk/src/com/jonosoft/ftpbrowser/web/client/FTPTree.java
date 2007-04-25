@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.TreeListener;
  * 
  */
 public class FTPTree extends Composite implements TreeListener {
-	private final Tree ftpTree = new Tree();
+	private final CCTree ftpTree = new CCTree();
 	//private final VerticalPanel myPan = new VerticalPanel();
 	private FTPSite ftpConnection = null;
 	// private String fileExtension[];
@@ -67,6 +67,9 @@ public class FTPTree extends Composite implements TreeListener {
 			public void onFailure(Throwable caught) {
 				try {
 					throw caught;
+				} catch (CCFtpLoginException e) {
+					Window.alert("Login failed for site:\n\n" + ftpConnection.toString());
+					ftpTree.clear();
 				} catch (Throwable ignoredException) {
 					Window.alert(ignoredException.getMessage());
 				}
@@ -114,7 +117,7 @@ public class FTPTree extends Composite implements TreeListener {
 		});
 	}
 	
-	public com.google.gwt.user.client.ui.TreeItem getSelectedItem() {
+	public TreeItem getSelectedItem() {
 		return ftpTree.getSelectedItem();
 	}
 	
@@ -122,7 +125,7 @@ public class FTPTree extends Composite implements TreeListener {
 		myList = iList;
 	}*/
 
-	public void onTreeItemSelected(com.google.gwt.user.client.ui.TreeItem item) {
+	public void onTreeItemSelected(TreeItem item) {
 		if (item instanceof FTPTreeItem) {
 			onTreeItemSelected((FTPTreeItem) item);
 		}
@@ -185,7 +188,7 @@ public class FTPTree extends Composite implements TreeListener {
 		return myPan;
 	}*/
 
-	public void onTreeItemStateChanged(com.google.gwt.user.client.ui.TreeItem item) {
+	public void onTreeItemStateChanged(TreeItem item) {
 		if (item instanceof FTPTreeItem) {
 			onFTPTreeItemStateChanged((FTPTreeItem) item);
 		}
