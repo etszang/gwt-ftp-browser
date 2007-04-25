@@ -1,6 +1,12 @@
+body {
+  background-color: white;
+  margin: 20px 20px 20px 20px;
+}
+
 body,td,a,div,p {
-	font-family: arial, sans-serif;
-	font-size: 12px;
+  color: black;
+  font-family: Arial, sans-serif;
+  font-size: small;
 }
 
 div,td {
@@ -70,14 +76,14 @@ a:active {
 .ftpbrowser-menubar {
 }
 
-.ftpbrowser-menuitem span {
+.ftpbrowser-menuitem {
 	background-image: url("images/black-down-arrow.gif");
 	background-position: right center;
 	background-repeat: no-repeat;
-	padding-right: 14px;
+	padding: 3px 14px 3px 3px;
 }
 
-.ftpbrowser-menuitem a {
+.ftpbrowser-menuitem {
 	text-decoration: none;
 	display: block;
 	width: 100%;
@@ -86,12 +92,11 @@ a:active {
 	border-width: 1px;
 	border-style: solid;
 	border-color: transparent;
-	padding: 3px;
 }
 
 .ftpbrowser-menuitem a:hover {
-	background-color: rgb(245, 242, 228);
-	border-color: #999;
+	/*background-color: rgb(245, 242, 228);
+	border-color: #999;*/
 }
 
 .ftpconnections-menubar {
@@ -111,7 +116,8 @@ a:active {
 }
 
 .ftp-itemselectgrid {
-	width: 100%;/*150px;*/
+	font-size: small;
+	width: 100%;
 }
 
 .gwt-itemselectgrid-item-hover {

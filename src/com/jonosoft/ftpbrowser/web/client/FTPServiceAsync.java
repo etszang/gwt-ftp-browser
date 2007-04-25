@@ -13,6 +13,7 @@ public interface FTPServiceAsync {
 	 * @param path
 	 * @return List of {@link FTPFileItem}s
 	 * @throws FTPIOException 
+	 * @throws CCFtpLoginException 
 	 */
 	public void getFileList(FTPSite site, String path, AsyncCallback callback);
 	

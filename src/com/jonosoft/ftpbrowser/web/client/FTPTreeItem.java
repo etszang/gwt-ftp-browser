@@ -3,7 +3,9 @@ package com.jonosoft.ftpbrowser.web.client;
 import java.util.List;
 import java.util.Vector;
 
-public class FTPTreeItem extends TreeItem {
+import com.google.gwt.user.client.ui.TreeItem;
+
+public class FTPTreeItem extends CCTreeItem {
 	private FTPFileItem ftpFileItem = null;
 	private boolean hasData = false;
 	private boolean needsToLoad = true;
@@ -67,9 +69,9 @@ public class FTPTreeItem extends TreeItem {
 	/**
 	 * This is sort of a hack, just so that 
 	 * 
-	 * @see com.google.gwt.user.client.ui.TreeItem#addItem(com.google.gwt.user.client.ui.TreeItem)
+	 * @see TreeItem#addItem(TreeItem)
 	 */
-	public void addItem(com.google.gwt.user.client.ui.TreeItem item) {
+	public void addItem(TreeItem item) {
 		if (item instanceof FTPTreeItem) {
 			FTPTreeItem ftpTreeItem = (FTPTreeItem) item;
 			if (ftpTreeItem.getFTPFileItem().getType().equals("f")) {
@@ -82,9 +84,9 @@ public class FTPTreeItem extends TreeItem {
 	}
 	
 	/**
-	 * @see com.google.gwt.user.client.ui.TreeItem#removeItem(com.google.gwt.user.client.ui.TreeItem)
+	 * @see TreeItem#removeItem(TreeItem)
 	 */
-	public void removeItem(TreeItem item) {
+	public void removeItem(CCTreeItem item) {
 		fileItems.remove(item);
 		super.removeItem(item);
 	}

@@ -6,6 +6,7 @@ package com.jonosoft.ftpbrowser.web.client;
 import java.util.Iterator;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
@@ -42,11 +43,17 @@ public class FTPBrowser extends Composite implements LoadsRemoteData {
 		ScrollPanel sc1 = new ScrollPanel(ftpTree);
 		ScrollPanel sc2 = new ScrollPanel(selectGrid);
 
-		sc1.setPixelSize(375, 196);
-		sc2.setPixelSize(325, 196);
+		sc1.setSize("100%", "100%");
+		sc2.setSize("100%", "100%");
+		
+		sc1.setAlwaysShowScrollBars(true);
+		sc2.setAlwaysShowScrollBars(true);
+		
+	    DOM.setStyleAttribute(sc1.getElement(), "overflowX", "auto");
+	    DOM.setStyleAttribute(sc2.getElement(), "overflowX", "auto");
 		
 		final MenuBar ftpBrowserMenuBar = new MenuBar(false);
-		final MenuItem ftpSitesMenuItem = new MenuItem("<a href=\"javascript:void(0);\"><span>FTP Sites</span></a>", true, (MenuBar) ftpConnectionsMenuBar);
+		final MenuItem ftpSitesMenuItem = new MenuItem("FTP Sites", false, (MenuBar) ftpConnectionsMenuBar);
 		ftpBrowserMenuBar.addStyleName("ftpbrowser-menubar");
 		ftpSitesMenuItem.addStyleName("ftpbrowser-menuitem");
 		ftpBrowserMenuBar.addItem(ftpSitesMenuItem);
@@ -56,7 +63,16 @@ public class FTPBrowser extends Composite implements LoadsRemoteData {
 		
 		vertPanel.add(ftpBrowserMenuBar);
 		vertPanel.add(directoryBrowserPanel);
-
+		
+		vertPanel.setWidth("100%");
+		directoryBrowserPanel.setWidth("100%");
+		
+		directoryBrowserPanel.setCellWidth(sc1, "50%");
+		directoryBrowserPanel.setCellWidth(sc2, "50%");
+		
+		directoryBrowserPanel.setCellHeight(sc1, "196px");
+		directoryBrowserPanel.setCellHeight(sc2, "196px");
+		
 		//directoryBrowserPanel.add(parentLevelButton);
 		//directoryBrowserPanel.add(directoryListPanel);
 		//directoryBrowserPanel.add(openDirectoryButton);
@@ -91,7 +107,7 @@ public class FTPBrowser extends Composite implements LoadsRemoteData {
 				selectGrid.clear();
 
 			if (item.hasData() || ! item.getNeedsToLoad()) {
-				final com.google.gwt.user.client.ui.TreeItem selectedTreeItem = ftpTree.getSelectedItem();
+				final TreeItem selectedTreeItem = ftpTree.getSelectedItem();
 				DeferredCommand.add(new Command() {
 					public void execute() {
 						if (selectGrid != null)

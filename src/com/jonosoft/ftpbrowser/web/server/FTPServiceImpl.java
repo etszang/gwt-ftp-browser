@@ -13,8 +13,10 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import sun.net.ftp.FtpClient;
+import sun.net.ftp.FtpLoginException;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.jonosoft.ftpbrowser.web.client.CCFtpLoginException;
 import com.jonosoft.ftpbrowser.web.client.FTPBrowserFatalException;
 import com.jonosoft.ftpbrowser.web.client.FTPFileGroup;
 import com.jonosoft.ftpbrowser.web.client.FTPFileGroupItem;
@@ -37,7 +39,7 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 		return new Integer(7);
 	}
 
-	public List getFileList(FTPSite site, String path) throws FTPIOException {
+	public List getFileList(FTPSite site, String path) throws FTPIOException, CCFtpLoginException {
 		final FtpClient client = new FtpClient();
 		final StringBuffer sb;
 		final List fileList;
@@ -77,6 +79,8 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 			}
 
 			return fileList;
+		} catch (FtpLoginException e) {
+			throw new CCFtpLoginException(e);
 		} catch (IOException e) {
 			LOGGER.error("FtpClient threw an IOException trying to list contents at path: " + path + "; for FTPSite: " + site.toString(), e);
 			throw new FTPIOException("FtpClient threw an IOException trying to list contents at path: " + path + "; for FTPSite: " + site.toString());
