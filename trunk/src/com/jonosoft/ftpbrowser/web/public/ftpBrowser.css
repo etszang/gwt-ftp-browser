@@ -1,12 +1,13 @@
 body {
   background-color: white;
   margin: 20px 20px 20px 20px;
+  font-size: smaller;
 }
 
 body,td,a,div,p {
   color: black;
   font-family: Arial, sans-serif;
-  font-size: small;
+  /*font-size: small;*/
 }
 
 div,td {
@@ -44,6 +45,10 @@ a:active {
 
 .gwt-ftptree {
 	width: 100%;/*350px;*/
+}
+
+.gwt-ftptree div, .gwt-ftptree td {
+	font-size: 14px;
 }
 
 .gwt-ftptreeitem .gwt-TreeItem {
@@ -112,11 +117,11 @@ a:active {
 }
 
 .gwt-itemselectgrid {
+	font-size: 14px;
 	cursor: pointer;
 }
 
 .ftp-itemselectgrid {
-	font-size: small;
 	width: 100%;
 }
 
