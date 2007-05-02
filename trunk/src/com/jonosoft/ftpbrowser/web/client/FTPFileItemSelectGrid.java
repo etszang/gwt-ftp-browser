@@ -3,10 +3,6 @@
  */
 package com.jonosoft.ftpbrowser.web.client;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasText;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author Jkelling
