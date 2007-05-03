@@ -64,6 +64,10 @@ public class FTPFileGroupWidget extends Composite implements LoadsRemoteData {
 			}
 		});
 	}
+	
+	public void clear() {
+		fileGrid.clear();
+	}
 
 	public FTPFileItemSelectGrid getSourceFileGrid() {
 		return sourceFileGrid;

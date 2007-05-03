@@ -116,9 +116,9 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 			HibernateSessionFactory.closeSession();
 			return site;
 		}
-		catch (RuntimeException e) {
+		catch (Throwable e) {
 			LOGGER.fatal(e);
-			throw e;
+			throw new FTPBrowserFatalException(e);
 		}
 		finally {
 //			HibernateSessionFactory.closeSession();
@@ -140,15 +140,16 @@ public class FTPServiceImpl extends RemoteServiceServlet implements FTPService {
 
 	public List getUserFTPFileItems(Integer groupId) throws FTPBrowserFatalException {
 		try {
+			if (groupId == null)
+				groupId = getDefaultGroupId();
 			HibernateSessionFactory.getSession().beginTransaction();
-			FTPFileGroupItemDAO dao = new FTPFileGroupItemDAO();
-			List list = dao.findByFtpFileGroupId(getDefaultGroupId());
+			List list = new FTPFileGroupItemDAO().findByFtpFileGroupId(groupId);
 			HibernateSessionFactory.getSession().getTransaction().commit();
 			return list;
 		}
-		catch (RuntimeException e) {
+		catch (Throwable e) {
 			LOGGER.fatal(e);
-			throw e;
+			throw new FTPBrowserFatalException(e);
 		}
 		finally {
 			HibernateSessionFactory.closeSession();

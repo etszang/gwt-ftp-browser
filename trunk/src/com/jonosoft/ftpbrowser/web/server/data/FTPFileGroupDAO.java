@@ -36,6 +36,14 @@ public class FTPFileGroupDAO extends BaseHibernateDAO {
         }
     }
     
+	/**
+	 * <ol>
+	 * <li>Deletes the specified {@link FTPFileGroup}</li>
+	 * <li>Deletes the associated {@link FTPFileGroupItem FTPFileGroupItems}</li>
+	 * </ol>
+	 * 
+	 * @param persistentInstance
+	 */
 	public void delete(FTPFileGroup persistentInstance) {
         log.debug("deleting FTPFileGroup instance");
         try {
