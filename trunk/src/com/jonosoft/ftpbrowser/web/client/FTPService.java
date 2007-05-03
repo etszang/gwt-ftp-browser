@@ -1,7 +1,6 @@
 package com.jonosoft.ftpbrowser.web.client;
 
 import java.util.List;
-import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
