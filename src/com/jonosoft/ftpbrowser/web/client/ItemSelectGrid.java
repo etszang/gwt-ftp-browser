@@ -18,7 +18,6 @@ import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.UIObject;
 
 /**
  * <p>
@@ -34,6 +33,18 @@ import com.google.gwt.user.client.ui.UIObject;
  * @author Jkelling
  */
 public class ItemSelectGrid extends Grid {
+	
+	public interface ItemDoubleClickedListener {
+		public void onItemDoubleClicked(Object item);
+	}
+	
+	private class ItemDoubleClickedListenerCollection extends Vector {
+		private static final long serialVersionUID = -1146581293569786921L;
+		public void fireItemDoubleClicked(Object item) {
+			for (Iterator it = iterator(); it.hasNext();)
+				((ItemDoubleClickedListener) it.next()).onItemDoubleClicked(item);
+		}
+	}
 	
 	private static final String STYLE_NAME_PREFIX = "gwt-itemselectgrid";
 	
@@ -51,6 +62,7 @@ public class ItemSelectGrid extends Grid {
 	private int mouseDownRowIndex;
 	private int mouseMoveRowIndex;
 	private boolean multipleSelect = true;
+	private ItemDoubleClickedListenerCollection itemDoubleClickedListenerCollection = null;
 	
 	private static interface DragMode {
 		int OFF = 0;
@@ -66,6 +78,17 @@ public class ItemSelectGrid extends Grid {
 	public ItemSelectGrid(int rows, int columns) {
 		super(rows, columns);
 		init();
+	}
+	
+	public void addItemDoubleClickedListener(ItemDoubleClickedListener listener) {
+		if (itemDoubleClickedListenerCollection == null)
+			itemDoubleClickedListenerCollection = new ItemDoubleClickedListenerCollection();
+		itemDoubleClickedListenerCollection.add(listener);
+	}
+	
+	public void removeItemDoubleClickedListener(ItemDoubleClickedListener listener) {
+		if (itemDoubleClickedListenerCollection != null)
+			itemDoubleClickedListenerCollection.remove(listener);
 	}
 	
 	public void sort() {
@@ -122,6 +145,7 @@ public class ItemSelectGrid extends Grid {
 	public void setItem(int row, Object item) {
 		itemsByRow.put(getRowFormatter().getElement(row), item);
 		rowsByItem.put(item, getRowFormatter().getElement(row));
+		getRowFormatter().addStyleName(row, "gwt-itemselectgrid-item");
 		buildItemRow(row, item);
 	}
 	
@@ -207,7 +231,10 @@ public class ItemSelectGrid extends Grid {
 		}
 		else
 			selectedRows.remove(row);
-		UIObject.setStyleName(row, STYLE_NAME_PREFIX + "-item-selected", state);
+		if (state)
+			getRowFormatter().addStyleName(DOM.getChildIndex(DOM.getParent(row), row), STYLE_NAME_PREFIX + "-item-selected");
+		else
+			getRowFormatter().removeStyleName(DOM.getChildIndex(DOM.getParent(row), row), STYLE_NAME_PREFIX + "-item-selected");
 	}
 
 	public void setMultipleSelect(boolean multipleSelect) {
@@ -252,6 +279,11 @@ public class ItemSelectGrid extends Grid {
 	
 	private void setRowSelectedFromPreviousSelectState(Element row, boolean matchPreviousSelectState) {
 		setItemSelected(row, getRowSelectedPreviously(row) == matchPreviousSelectState);
+	}
+	
+	public int getRowIndexByItem(Object item) {
+		Element rowElement = (Element) rowsByItem.get(item);
+		return DOM.getChildIndex(DOM.getParent(rowElement), rowElement);
 	}
 	
 	/**
@@ -368,11 +400,16 @@ public class ItemSelectGrid extends Grid {
 	
 				makeCellTextUnselectableForRow(r);
 	
-				DOM.sinkEvents(rowElement, (Event.MOUSEEVENTS | DOM.getEventsSunk(rowElement)) ^ Event.ONMOUSEUP);
+				DOM.sinkEvents(rowElement, (Event.MOUSEEVENTS | Event.ONDBLCLICK | DOM.getEventsSunk(rowElement)) ^ Event.ONMOUSEUP);
 				DOM.setEventListener(rowElement, new EventListener() {
 					public void onBrowserEvent(Event event) {
 						final int rowIndex = DOM.getChildIndex(getBodyElement(), rowElement);
 						switch (DOM.eventGetType(event)) {
+						case Event.ONDBLCLICK:
+							if (itemDoubleClickedListenerCollection != null)
+								itemDoubleClickedListenerCollection.fireItemDoubleClicked(getItem(rowIndex));
+							break;
+							
 						case Event.ONMOUSEOVER:
 							if (! isRowSelected(rowElement))
 								getRowFormatter().addStyleName(rowIndex, STYLE_NAME_PREFIX + "-item-hover");

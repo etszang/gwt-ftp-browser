@@ -117,12 +117,33 @@ a:active {
 }
 
 .gwt-itemselectgrid {
-	font-size: 14px;
+	font-size: 12px;
 	cursor: pointer;
 }
 
 .ftp-itemselectgrid {
 	width: 100%;
+	font-size: 10pt;
+	font-family: Tahoma, Arial, sans-serif;
+}
+
+.gwt-itemselectgrid-item td {
+}
+
+.ftp-itemselectgrid-item td {
+	padding-left: 26px;
+	height: 16px;
+	cursor: default;
+	background-position: 1px center;
+	background-repeat: no-repeat;
+}
+
+.ftp-itemselectgrid-item-d td {
+	background-image: url('images/folder.gif');
+}
+
+.ftp-itemselectgrid-item-f td {
+	background-image: url('images/file_plain.gif');
 }
 
 .gwt-itemselectgrid-item-hover {
