@@ -39,7 +39,9 @@ public class FTPFileItem implements Comparable, IsSerializable {
 	}
 	
 	private static String getFullPath(String path, String name) {
-		return path.replaceFirst("[/]+$", "") + "/" + name;
+		return (path.replaceFirst("[/]+$", "") + "/" + name).replaceAll(
+				"[/]\\.([/]|$)", "/").replaceAll(
+				"[/]([^\\./]|[^/][^\\./][^/]*?)[/]..([/]|$)", "/");
 	}
 	
 	public Object clone() {
