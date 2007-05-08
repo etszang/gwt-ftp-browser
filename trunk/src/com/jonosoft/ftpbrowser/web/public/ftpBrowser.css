@@ -63,6 +63,29 @@ a:active {
 	background-repeat: no-repeat;
 }
 
+.gwt-ftptreeitem-f .gwt-TreeItem		{ background-image: url('images/ic_file_othertype.gif'); }
+.gwt-ftptreeitem-f-xml .gwt-TreeItem	{ background-image: url('images/ic_file_XMLTemplate.gif'); }
+.gwt-ftptreeitem-f-txt .gwt-TreeItem,
+.gwt-ftptreeitem-f-htm .gwt-TreeItem,
+.gwt-ftptreeitem-f-html .gwt-TreeItem,
+.gwt-ftptreeitem-f-shtml .gwt-TreeItem,
+.gwt-ftptreeitem-f-jsp .gwt-TreeItem,
+.gwt-ftptreeitem-f-php .gwt-TreeItem,
+.gwt-ftptreeitem-f-php4 .gwt-TreeItem,
+.gwt-ftptreeitem-f-php5 .gwt-TreeItem,
+.gwt-ftptreeitem-f-asp .gwt-TreeItem,
+.gwt-ftptreeitem-f-aspx .gwt-TreeItem,
+.gwt-ftptreeitem-f-js .gwt-TreeItem	,
+.gwt-ftptreeitem-f-css .gwt-TreeItem	{ background-image: url('images/ic_file_page.gif'); }
+.gwt-ftptreeitem-f-pdf .gwt-TreeItem	{ background-image: url('images/ic_file_pdfpage.gif'); }
+.gwt-ftptreeitem-f-gif .gwt-TreeItem,
+.gwt-ftptreeitem-f-jpg .gwt-TreeItem,
+.gwt-ftptreeitem-f-jpeg .gwt-TreeItem,
+.gwt-ftptreeitem-f-png .gwt-TreeItem,
+.gwt-ftptreeitem-f-bmp .gwt-TreeItem,
+.gwt-ftptreeitem-f-tif .gwt-TreeItem,
+.gwt-ftptreeitem-f-tiff .gwt-TreeItem	{ background-image: url('images/ic_file_image.gif'); }
+
 .ftp-popuppanel {
 	background-color: white;
 	border-color: darkblue;
@@ -142,9 +165,30 @@ a:active {
 	background-image: url('images/folder.gif');
 }
 
-.ftp-itemselectgrid-item-f td {
-	background-image: url('images/file_plain.gif');
-}
+.ftp-itemselectgrid-item-f td		{ background-image: url('images/ic_file_othertype.gif'); }
+.ftp-itemselectgrid-item-hidden,
+.ftp-itemselectgrid-item-hidden td	{ display: none }
+.ftp-itemselectgrid-item-f-xml td	{ background-image: url('images/ic_file_XMLTemplate.gif'); }
+.ftp-itemselectgrid-item-f-txt td,
+.ftp-itemselectgrid-item-f-htm td,
+.ftp-itemselectgrid-item-f-html td,
+.ftp-itemselectgrid-item-f-shtml td,
+.ftp-itemselectgrid-item-f-jsp td,
+.ftp-itemselectgrid-item-f-php td,
+.ftp-itemselectgrid-item-f-php4 td,
+.ftp-itemselectgrid-item-f-php5 td,
+.ftp-itemselectgrid-item-f-asp td,
+.ftp-itemselectgrid-item-f-aspx td,
+.ftp-itemselectgrid-item-f-js td,
+.ftp-itemselectgrid-item-f-css td	{ background-image: url('images/ic_file_page.gif'); }
+.ftp-itemselectgrid-item-f-pdf td	{ background-image: url('images/ic_file_pdfpage.gif'); }
+.ftp-itemselectgrid-item-f-gif td,
+.ftp-itemselectgrid-item-f-jpg td,
+.ftp-itemselectgrid-item-f-jpeg td,
+.ftp-itemselectgrid-item-f-png td,
+.ftp-itemselectgrid-item-f-bmp td,
+.ftp-itemselectgrid-item-f-tif td,
+.ftp-itemselectgrid-item-f-tiff td	{ background-image: url('images/ic_file_image.gif'); }
 
 .gwt-itemselectgrid-item-hover {
 	background-color: lightgray;
