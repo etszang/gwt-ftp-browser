@@ -52,6 +52,7 @@ public class ItemSelectGrid extends Grid {
 	final private HashMap itemsByRow = new HashMap();
 	final private HashMap rowsByItem = new HashMap();
 	final private HashSet selectedRows = new HashSet();
+	final private HashSet selectedItems = new HashSet();
 	final private HashSet previousSelectedRows = new HashSet();
 	
 	private int dragMode = DragMode.OFF;
@@ -139,6 +140,7 @@ public class ItemSelectGrid extends Grid {
 		itemsByRow.clear();
 		rowsByItem.clear();
 		selectedRows.clear();
+		selectedItems.clear();
 		previousSelectedRows.clear();
 	}
 	
@@ -158,7 +160,7 @@ public class ItemSelectGrid extends Grid {
 	}
 	
 	public boolean isItemSelected(Object item) {
-		return selectedRows.contains(rowsByItem.get(item));
+		return selectedItems.contains(item);
 	}
 	
 	public boolean isRowSelected(Element row) {
@@ -228,13 +230,20 @@ public class ItemSelectGrid extends Grid {
 		if (state) {
 			onBeforeSelectRow(row);
 			selectedRows.add(row);
+			selectedItems.add(itemsByRow.get(row));
 		}
-		else
+		else {
 			selectedRows.remove(row);
+			selectedItems.remove(itemsByRow.get(row));
+		}
 		if (state)
 			getRowFormatter().addStyleName(DOM.getChildIndex(DOM.getParent(row), row), STYLE_NAME_PREFIX + "-item-selected");
 		else
 			getRowFormatter().removeStyleName(DOM.getChildIndex(DOM.getParent(row), row), STYLE_NAME_PREFIX + "-item-selected");
+	}
+	
+	public Set getSelectedItems() {
+		return selectedItems;
 	}
 
 	public void setMultipleSelect(boolean multipleSelect) {
@@ -492,6 +501,8 @@ public class ItemSelectGrid extends Grid {
 						default:
 							break;
 						}
+						
+						DOM.eventCancelBubble(event, false);
 					}
 				});
 			}
