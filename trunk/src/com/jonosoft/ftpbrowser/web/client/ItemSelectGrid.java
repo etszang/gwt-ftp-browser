@@ -114,7 +114,7 @@ public class ItemSelectGrid extends Grid {
 	}
 
 	public void addItem(Object item) {
-		if (itemsByRow.containsValue(item))
+		if (rowsByItem.containsKey(item))
 			return;
 		resizeRows(getRowCount()+1);
 		setItem(getRowCount()-1, item);
