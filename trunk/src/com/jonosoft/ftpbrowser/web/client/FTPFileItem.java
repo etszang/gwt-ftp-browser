@@ -122,6 +122,14 @@ public class FTPFileItem implements Comparable, IsSerializable {
 	public void setFtpSiteId(Integer ftpConnection) {
 		this.ftpSiteId = ftpConnection;
 	}
+	
+	public final boolean isFile() {
+		return "f".equalsIgnoreCase(type);
+	}
+	
+	public final boolean isDirectory() {
+		return "d".equalsIgnoreCase(type);
+	}
 
 	/**
 	 * @see java.lang.Comparable#compareTo(T)
