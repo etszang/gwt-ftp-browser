@@ -1,0 +1,1 @@
+Extensible GWT widgets that interface with a JSON or GWT RPC backend to provide easy AJAX-enabled FTP browsing.
